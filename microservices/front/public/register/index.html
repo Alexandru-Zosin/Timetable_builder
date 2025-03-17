@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src localhost:3000">
+    <link rel="stylesheet" href="./index.css">
+    <title>UAIC-Timetable</title>
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <nav class='heading'>
+        <ul class='nav-links'>
+            <li class="method" id="changeMethod"><a href="/login/index.html">Login</a></li>
+            <li class="navBarTitle">UAIC Timetable</li>
+        </ul>
+    </nav>
+    <main class="fullwidth">
+        <div class="container">
+            <div id='changeData' class="data-section">
+                <div class="data-form">
+                    <div class="form-group">
+                        <label for="email">Email</label><br>
+                        <input type="email" id="email" name="email" placeholder="email@uaic.info.ro"><br>
+                    </div>
+                    <div class="form-group">
+                        <label for="pass">Password</label><br>
+                        <input type="password" id="pass" name="pass"><br>
+                    </div>
+                    <div class="form-group">
+                        <label for='confirmCurrentPassword'>Confirm Current Password</label><br>
+                        <input type="password" id="confirmCurrentPassword" name='confirmCurrentPassword'><br>
+                    </div>
+                    <!--<div class="form-group">
+                        <label for="group">Group*</label><br>
+                        <select name="group" id="group">
+                            <option value="1E1">1E1</option>
+                          </select>
+                    </div> -->
+                    <div class="form-group">
+                        <input type="submit" id="submit-button" value="Submit">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>

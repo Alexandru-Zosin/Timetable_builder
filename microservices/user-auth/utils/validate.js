@@ -5,12 +5,10 @@ function validateEmail(email) {
 }
 
 function validatePassword(pass) {
-    return validator.isStrongPassword(pass, {
-        minLength: 6,
-        minLowercase: 1,
-        minUppercase: 1,
-        minSymbols: 1
-    });
+    if (!pass)
+        return false;
+    const pattern = /^[a-zA-Z0-9._%+-]{2,30}$/;
+    return pattern.test(pass);
 }
 
 module.exports = { validateEmail, validatePassword };

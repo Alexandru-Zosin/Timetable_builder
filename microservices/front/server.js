@@ -10,19 +10,11 @@ const PORT = 443;
 
 // static files location
 const filesLocation = path.join(__dirname, 'public');
-let options;
+let options = {
+    key: fs.readFileSync('../key.pem', 'utf8'),
+    cert: fs.readFileSync('../cert.pem', 'utf8')
+};
 
-if (process.env.DEBUG_MODE == 'true') {
-    options = {
-        key: fs.readFileSync('../key.pem', 'utf8'),
-        cert: fs.readFileSync('../cert.pem', 'utf8')
-    };
-} else {
-    options = {
-        key: fs.readFileSync('../key.pem', 'utf8'),
-        cert: fs.readFileSync('../cert.pem', 'utf8')
-    };
-}
 // clientul trimite suita criptografica si prim. rasp de la srv, impreuna cu certif digit (pub key)
 // acesta este verf la autor. centrala dupa care, in caz de accept, se petrece handshakeul:
 // RSA/DH: clientul cript cu pub key_srv, srv decript cu secret_key_srv 
@@ -31,7 +23,8 @@ if (process.env.DEBUG_MODE == 'true') {
 https.createServer(options, (req, res) => { // request handler called each time a req is made
     try {
         let parsedUrl = url.parse(req.url).pathname; // extracts path without query parms
-        let safePath = path.normalize(parsedUrl).replace(/^(\.\.[\/\\])+/, ''); // removes ../
+        let safePath = path.normalize(parsedUrl).replace(/^(\.\.[\/\\])+/, ''); // removes ../, ...
+              // normalizes multiple slashes, ., .. etc.
               // protection against traversal path attack
         const filePath = path.join(filesLocation, safePath);
         // creates and returnes resolved path from given segments
