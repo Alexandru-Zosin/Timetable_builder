@@ -1,12 +1,13 @@
 const { registerUser } = require('../models/user.model');
 const { hashWithKey } = require('../../utils/crypting');
-const { validateEmail, validatePassword } = require('../../utils/validate');
+const { validateEmail, validatePassword, validateGroup } = require('../../utils/validate');
 require("dotenv").config();
 
 async function signup(req, res) {
-    const { email, password, confirmPassword } = req.body;
+    const { email, password, confirmPassword, grouptag } = req.body;
 
-    if (!validateEmail(email) || !validatePassword(password) || !validatePassword(confirmPassword)) {
+    if (!validateEmail(email) || !validatePassword(password) || !validatePassword(confirmPassword)
+    || !validateGroup(grouptag)) {
         res.writeHead(403, {
             'Content-Type': 'application/json',
         });
@@ -28,13 +29,11 @@ async function signup(req, res) {
     const userData = {
         email: email,
         password: hashedPassword,
+        grouptag: grouptag
     };
 
     try {
         const userCreated = await registerUser(userData);
-        /*const userCreated = await new Promise(async (res) => {
-            res(await registerUser(userData));
-        });WIP*/
 
         if (!userCreated) {
             res.writeHead(409, { 'Content-Type': 'application/json' });

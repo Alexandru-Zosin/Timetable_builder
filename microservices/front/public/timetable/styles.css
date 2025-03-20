@@ -1,0 +1,439 @@
+:root {
+    --primary-color: #4a6cff;
+    --primary-light: #e3e9ff;
+    --secondary-color: #ff4d94;
+    --text-color: #333;
+    --light-text: #777;
+    --background: #f8f9fd;
+    --card-bg: #ffffff;
+    --course-color: #4d6dff;
+    --seminar-color: #ff4d94;
+    --mandatory-color: #ffaa00;
+    --shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    --border-radius: 12px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--background);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* Navbar Styles */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background: var(--card-bg);
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.logo i {
+    margin-right: 10px;
+    font-size: 28px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#user-name {
+    font-weight: 600;
+}
+
+#user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.logout-btn {
+    background: var(--primary-light);
+    color: var(--primary-color);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.logout-btn:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Main Container Styles */
+.container {
+    max-width: 1300px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.page-header {
+    margin-bottom: 30px;
+}
+
+.page-header h1 {
+    font-size: 32px;
+    color: var(--text-color);
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.date-selector {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+#current-week {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+#prev-week, #next-week {
+    background: var(--card-bg);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+#prev-week:hover, #next-week:hover {
+    background: var(--primary-light);
+    color: var(--primary-color);
+}
+
+.view-filters {
+    display: flex;
+    gap: 10px;
+}
+
+.filter-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    background: var(--card-bg);
+    color: var(--light-text);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.filter-btn:hover, .filter-btn.active {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Timetable Styles */
+.timetable-container {
+    display: flex;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    margin-bottom: 30px;
+}
+
+.time-axis {
+    width: 60px;
+    background: var(--primary-light);
+    display: flex;
+    flex-direction: column;
+    padding-top: 50px;
+}
+
+.time-slot {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: var(--primary-color);
+    font-weight: 500;
+    border-bottom: 1px dashed rgba(74, 108, 255, 0.3);
+}
+
+.timetable {
+    flex-grow: 1;
+    overflow-x: auto;
+}
+
+.days-header {
+    display: flex;
+    height: 50px;
+    position: sticky;
+    top: 0;
+    background: var(--primary-color);
+    color: white;
+    z-index: 2;
+}
+
+.day-header {
+    flex: 1;
+    min-width: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.timetable-grid {
+    display: flex;
+    position: relative;
+    height: calc(13 * 80px); /* 13 time slots */
+}
+
+.day-column {
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+    border-right: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.class-card {
+    position: absolute;
+    width: calc(100% - 16px);
+    left: 8px;
+    border-radius: 8px;
+    padding: 10px;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.class-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.class-card.course {
+    background: linear-gradient(135deg, var(--course-color), #789bff);
+}
+
+.class-card.seminar {
+    background: linear-gradient(135deg, var(--seminar-color), #ff85b6);
+}
+
+.class-card.mandatory {
+    border-left: 4px solid var(--mandatory-color);
+}
+
+.class-time {
+    font-size: 12px;
+    margin-bottom: 5px;
+    opacity: 0.9;
+}
+
+.class-name {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+
+.class-info {
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+.class-teacher, .class-room, .class-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 3px;
+}
+
+.class-teacher i, .class-room i, .class-group i {
+    font-size: 10px;
+}
+
+/* Legend Styles */
+.legend {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+    padding: 15px;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+}
+
+.legend-color.course {
+    background: var(--course-color);
+}
+
+.legend-color.seminar {
+    background: var(--seminar-color);
+}
+
+.legend-color.mandatory {
+    background: var(--mandatory-color);
+}
+
+/* Footer Styles */
+.footer {
+    background: var(--primary-color);
+    color: white;
+    padding: 40px 20px;
+}
+
+.footer-content {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px;
+}
+
+.footer-section {
+    flex: 1;
+    min-width: 300px;
+}
+
+.footer-section h3 {
+    margin-bottom: 20px;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.suggestion-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 14px;
+}
+
+.form-group input, .form-group select, .form-group textarea {
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.form-group input::placeholder, .form-group textarea::placeholder {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.submit-btn {
+    background: white;
+    color: var(--primary-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-self: flex-start;
+}
+
+.submit-btn:hover {
+    background: var(--secondary-color);
+    color: white;
+}
+
+.footer-section a {
+    color: white;
+    text-decoration: underline;
+}
+
+/* Responsive styles */
+@media (max-width: 900px) {
+    .controls {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    
+    .view-filters {
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 5px;
+    }
+    
+    .footer-content {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 600px) {
+    .navbar {
+        padding: 15px;
+    }
+    
+    .logo span {
+        display: none;
+    }
+    
+    #user-name {
+        display: none;
+    }
+    
+    .timetable-container {
+        overflow-x: auto;
+    }
+}

@@ -1,7 +1,5 @@
 const PORTS = {
-    "technologiesFilter": 3557,
-    "queryHandler": 3556,
-    "openAI": 3555,
+    "timetable": 3557,
     "admin": 3001,
     "front": 443,
     "userProfileHandler": 8090

@@ -1,4 +1,17 @@
 const validator = require('validator');
+const { getGroups } = require('../src/models/user.model');
+
+async function validateGroup(group) {
+    try {
+        const groups = await getGroups();
+        groupsList = groups.map((group) => group.name);
+        if (!groupsList.includes(group))
+            return false;
+        return true;
+    } catch (error) {
+        return false;
+    }
+}
 
 function validateEmail(email) {
     return validator.isEmail(email);
@@ -11,4 +24,4 @@ function validatePassword(pass) {
     return pattern.test(pass);
 }
 
-module.exports = { validateEmail, validatePassword };
+module.exports = { validateEmail, validatePassword, validateGroup };

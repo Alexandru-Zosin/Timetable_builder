@@ -27,8 +27,7 @@ async function login(req, res) {
             }));
         }
 
-        const token = encrypt(`${user.id}|${user.role}|${Date.now() + 3600000 * 24}|
-                               ${(user.openaikey ?? '').replaceAll(/\s/g, '')}`,
+        const token = encrypt(`${user.id}|${user.role}|${user.grouptag ? user.grouptag : String(null)}|${Date.now() + 3600000 * 24}`,
             process.env.SECRET_KEY);
 
         res.writeHead(200, {

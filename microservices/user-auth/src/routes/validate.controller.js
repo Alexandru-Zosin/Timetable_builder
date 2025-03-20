@@ -31,7 +31,7 @@ async function validate(req, res) {
 
     try {
         const decryptedToken = decrypt(sessionToken, process.env.SECRET_KEY);
-        const [userId, role, expiration, openAiKey] = decryptedToken.split('|');
+        const [userId, role, grouptag, expiration] = decryptedToken.split('|');
 
         if (Date.now() > parseInt(expiration)) {
             res.writeHead(401, { 'Content-Type': 'application/json' });
@@ -53,21 +53,20 @@ async function validate(req, res) {
         }
 
         switch (parseInt(originPort)) {
+            case PORTS.timetable:
+                res.end(JSON.stringify({ userId, role }));
             case PORTS.admin:
                 res.end(JSON.stringify({ userId, role }));
                 break;
             case PORTS.userProfileHandler:
                 const hashedPassword = await getHashedPasswordForUserId(userId);
-                res.end(JSON.stringify({ hashedPassword: hashedPassword.password, userId, apiKey: openAiKey.replaceAll(/\s/g,'') }));
+                res.end(JSON.stringify({ hashedPassword: hashedPassword.password, userId}));
                 break;
             case PORTS.front:
-                res.end(JSON.stringify({ userId, role }));
-                break;
-            case PORTS.openAI:
-                res.end(JSON.stringify({ openAiKey: openAiKey.replaceAll(/\s/g,'') }));
+                res.end(JSON.stringify({ userId, role, grouptag }));
                 break;
             default:
-                res.end(JSON.stringify({ openAiKey: openAiKey.replaceAll(/\s/g,'') }));
+                res.end(JSON.stringify({}));
                 break;
         }
     } catch (error) {

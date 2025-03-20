@@ -53,6 +53,14 @@ async function initializeDatabases() {
         statement = `CREATE DATABASE uaicusers`;
         await queryDatabase(connection, statement);
         console.log("uaicusers database created.");
+
+        statement = `DROP DATABASE IF EXISTS uaic`
+        await queryDatabase(connection, statement);
+        console.log("uaic database dropped.");
+        statement = `CREATE DATABASE uaic`;
+        await queryDatabase(connection, statement);
+        console.log("uaic database created.");
+        
         await closeConnection(connection);
         console.log("Initial connection ended.")
 
@@ -71,6 +79,7 @@ async function initializeDatabases() {
             email VARCHAR(255) NOT NULL UNIQUE,
             password CHAR(64) NOT NULL,
             role ENUM('student', 'teacher', 'admin') NOT NULL DEFAULT 'student',
+            grouptag ENUM('A1', 'A2', 'A3', 'A4', 'A5', 'B1', 'B2', 'B3', 'B4', 'E1', 'E2', 'E3') NULL DEFAULT NULL,
             requested BOOLEAN NOT NULL DEFAULT TRUE
         );`; // alter table required if not good: alter table users modify column role ...
         // select role from users where id = 1 =-> student
@@ -89,9 +98,211 @@ async function initializeDatabases() {
         console.log("Admin was successfully inserted.");
         await closeConnection(usersConnection);
         console.log("uaicusers connection was successfully ended.");
+        
+        // connect to uaic database
+        connectionConfig.database = "uaic";
+        const uaicConnection = await connectToDatabase(connectionConfig);
 
+        await queryDatabase(uaicConnection, `
+            CREATE TABLE timeslots (
+                id INT PRIMARY KEY AUTO_INCREMENT,
+                day ENUM('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday') NOT NULL,
+                hour TIME NOT NULL
+            );
+        `);
+        console.log("timeslots table created.");
+        
+        await queryDatabase(uaicConnection, `
+            CREATE TABLE teachers (
+                id INT PRIMARY KEY AUTO_INCREMENT,
+                name VARCHAR(255) NOT NULL,
+                max_hours INT NOT NULL,
+                can_teach_course BOOLEAN NOT NULL
+            );
+        `);
+        console.log("teachers table created.");
+
+        await queryDatabase(uaicConnection, `
+            CREATE TABLE subjects (
+                id INT PRIMARY KEY AUTO_INCREMENT,
+                name VARCHAR(255) NOT NULL,
+                is_optional BOOLEAN NOT NULL
+            );
+        `);
+        console.log("subjects table created.");
+
+        await queryDatabase(uaicConnection, `
+            CREATE TABLE teacher_subjects (
+                teacher_id INT,
+                subject_id INT,
+                PRIMARY KEY (teacher_id, subject_id),
+                FOREIGN KEY (teacher_id) REFERENCES teachers(id) ON DELETE CASCADE,
+                FOREIGN KEY (subject_id) REFERENCES subjects(id) ON DELETE CASCADE
+            );
+        `);
+        console.log("teacher_subjects table created.");
+
+        await queryDatabase(uaicConnection, `
+            CREATE TABLE rooms (
+                id INT PRIMARY KEY AUTO_INCREMENT,
+                name VARCHAR(255) NOT NULL,
+                course_possible BOOLEAN NOT NULL
+            );
+        `);
+        console.log("rooms table created.");
+
+        await queryDatabase(uaicConnection, `
+            CREATE TABLE room_times (
+                room_id INT,
+                timeslot_id INT,
+                PRIMARY KEY (room_id, timeslot_id),
+                FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE,
+                FOREIGN KEY (timeslot_id) REFERENCES timeslots(id) ON DELETE CASCADE
+            );
+        `);
+        console.log("room_times table created.");
+
+        await queryDatabase(uaicConnection, `
+            CREATE TABLE groups (
+                id INT PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                language VARCHAR(50) NOT NULL
+            );
+        `);
+        console.log("groups table created.");
+
+        await queryDatabase(uaicConnection, `
+            CREATE TABLE extra_restrictions (
+                id INT PRIMARY KEY AUTO_INCREMENT,
+                teacher_id INT NOT NULL,
+                restriction_type ENUM('unpreferred_timeslots', 'max_daily_hours') NOT NULL,
+                timeslot_id INT NULL,
+                value INT NULL,
+                FOREIGN KEY (teacher_id) REFERENCES teachers(id) ON DELETE CASCADE,
+                FOREIGN KEY (timeslot_id) REFERENCES timeslots(id) ON DELETE CASCADE
+            );
+        `);
+        console.log("extra_restrictions table created.");
+        await closeConnection(uaicConnection);
+        console.log("uaic connection closed.");
     } catch (err) {
         console.log(err);
+    }
+    populateDatabase();
+}
+
+async function populateDatabase() {
+    try {
+        const connectionConfig = {
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            database: "uaic"
+        };
+
+        const connection = await connectToDatabase(connectionConfig);
+        console.log("Connected to uaic database. Starting data insertion...");
+
+        const timeslots = readJsonFile(path.join("uaic_data","time_slots.json"));
+        const teachers = readJsonFile(path.join("uaic_data","teachers.json"));
+        const subjects = readJsonFile(path.join("uaic_data","subjects.json"));
+        const rooms = readJsonFile(path.join("uaic_data","rooms.json"));
+        const groups = readJsonFile(path.join("uaic_data","groups.json"));
+        const extraRestrictions = readJsonFile(path.join("uaic_data","extra_restrictions.json"));
+
+        // insert timeslots
+        for (ts of timeslots) {
+            await queryDatabase(connection, `
+                INSERT INTO timeslots (day, hour) VALUES (?, ?)`,
+                [ts.day, ts.hour]
+            );
+        }
+        console.log("Timeslots inserted.");
+
+        // insert teachers
+        for (teacher of teachers) {
+            await queryDatabase(connection, `
+                INSERT INTO teachers (id, name, max_hours, can_teach_course) 
+                VALUES (?, ?, ?, ?)`,
+                [teacher.code, teacher.name, teacher.max_hours, teacher.can_teach_course]
+            );
+        }
+        console.log("Teachers inserted.");
+
+        // insert subjects
+        for (subject of subjects) {
+            await queryDatabase(connection, `
+                INSERT INTO subjects (id, name, is_optional) 
+                VALUES (?, ?, ?)`,
+                [subject.code, subject.name, subject.is_optional]
+            );
+        }
+        console.log("Subjects inserted.");
+
+        // insert teacher-subject relationships
+        for (teacher of teachers) {
+            for (subjectId of teacher.subjects_taught) {
+                await queryDatabase(connection, `
+                    INSERT INTO teacher_subjects (teacher_id, subject_id) 
+                    VALUES (?, ?)`,
+                    [teacher.code, subjectId]
+                );
+            }
+        }
+        console.log("Teacher-subject relationships inserted.");
+
+        // insert rooms
+        for (room of rooms) {
+            await queryDatabase(connection, `
+                INSERT INTO rooms (id, name, course_possible) 
+                VALUES (?, ?, ?)`,
+                [room.code, room.name, room.course_possible]
+            );
+
+            // insert room-timeslot availability
+            for (timeId of room.possible_times) {
+                await queryDatabase(connection, `
+                    INSERT INTO room_times (room_id, timeslot_id) 
+                    VALUES (?, ?)`,
+                    [room.code, timeId]
+                );
+            }
+        }
+        console.log("Rooms and room-timeslot mappings inserted.");
+
+        for (group of groups) {
+            await queryDatabase(connection, `
+                INSERT INTO groups (id, name, language) 
+                VALUES (?, ?, ?)`,
+                [group.code, group.name, group.language]
+            );
+        }
+        console.log("Groups inserted.");
+
+        // insert extra restrictions
+        for ([teacherId, restrictions] of Object.entries(extraRestrictions.unpreferred_timeslots)) {
+            for (timeslotId of restrictions) {
+                await queryDatabase(connection, `
+                    INSERT INTO extra_restrictions (teacher_id, restriction_type, timeslot_id) 
+                    VALUES (?, 'unpreferred_timeslots', ?)`,
+                    [teacherId, timeslotId]
+                );
+            }
+        }
+
+        for ([teacherId, maxHours] of Object.entries(extraRestrictions.max_daily_hours)) {
+            await queryDatabase(connection, `
+                INSERT INTO extra_restrictions (teacher_id, restriction_type, value) 
+                VALUES (?, 'max_daily_hours', ?)`,
+                [teacherId, maxHours]
+            );
+        }
+        console.log("Extra restrictions inserted.");
+
+        await closeConnection(connection);
+        console.log("Database population complete. Connection closed.");
+    } catch (err) {
+        console.error("Error inserting data:", err);
     }
 }
 

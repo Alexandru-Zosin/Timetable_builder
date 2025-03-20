@@ -1,0 +1,141 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 10px;
+    background: #f4f4f4;
+}
+
+.container {
+    width: 100%;
+    max-width: 370px;
+}
+
+.form-container {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+    text-align: center;
+}
+
+.form-switcher {
+    display: flex;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #ddd;
+}
+
+.form-switcher button {
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    color: #666;
+    transition: 0.3s;
+}
+
+.form-switcher button.active {
+    color: #4d6dff;
+    font-weight: 700;
+    border-bottom: 3px solid #4d6dff;
+}
+
+form {
+    display: none;
+}
+
+form.active-form {
+    display: block;
+    animation: fadeIn 0.4s forwards;
+}
+
+h2 {
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 4px;
+    color: #555;
+    font-size: 13px;
+}
+
+label i {
+    margin-right: 4px;
+    color: #445bf6;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    border: 1.5px solid #ddd;
+    border-radius: 6px;
+    font-size: 13px;
+    background: white;
+}
+
+input:focus, select:focus {
+    border-color: #4d6dff;
+    outline: none;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 10px;
+    background: #4d6dff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.submit-btn:hover {
+    background: #0a1d75;
+}
+
+.submit-btn i {
+    transition: transform 0.3s ease;
+}
+
+.submit-btn:hover i {
+    transform: translateX(4px);
+}
+
+@media (max-width: 420px) {
+    .form-container {
+        padding: 15px;
+    }
+
+    h2 {
+        font-size: 16px;
+    }
+
+    .submit-btn {
+        font-size: 13px;
+    }
+}

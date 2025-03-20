@@ -10,6 +10,15 @@ connectionConfig = {
 }
 const pool = mysql.createPool(connectionConfig);
 
+connectionConfig2 = {
+    connectionLimit: 10,
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: "uaic"
+}
+const pool2 = mysql.createPool(connectionConfig2);
+
 function getConnectionFromPool(dbPool) {
     return new Promise((res, rej) => {
         dbPool.getConnection((err, conn) => {
@@ -61,9 +70,9 @@ async function registerUser(userData) {
     }
     
     const connection = await getConnectionFromPool(pool);
-    const query = 'INSERT INTO users (email, password) VALUES (?, ?)';
+    const query = 'INSERT INTO users (email, password, grouptag) VALUES (?, ?, ?)';
     const isRegisterSuccessful = await new Promise((res) => {
-        connection.query(query, [userData.email, userData.password], (err, results) => {
+        connection.query(query, [userData.email, userData.password, userData.grouptag], (err, results) => {
         if (err)
             res(false);
         else
@@ -74,4 +83,20 @@ async function registerUser(userData) {
     return isRegisterSuccessful;
 }
 
-module.exports = { findUserByEmail, registerUser, getHashedPasswordForUserId };
+async function getGroups() {
+    const connection = await getConnectionFromPool(pool2);
+    const query = 'SELECT name FROM groups WHERE LENGTH(name) = 2';
+    const groups = await new Promise((res, rej) => {
+        connection.query(query, (err, results) => {
+            if (err) {
+                rej(err);
+            } else {
+                res(results);
+            }
+        });
+    });
+    connection.release();
+    return groups;
+}
+
+module.exports = { findUserByEmail, registerUser, getHashedPasswordForUserId, getGroups };

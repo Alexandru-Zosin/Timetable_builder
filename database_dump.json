@@ -1,0 +1,1247 @@
+{
+    "timeslots": [
+        {
+            "code": 1,
+            "day": "Monday",
+            "hour": "08:00"
+        },
+        {
+            "code": 2,
+            "day": "Monday",
+            "hour": "10:00"
+        },
+        {
+            "code": 3,
+            "day": "Monday",
+            "hour": "12:00"
+        },
+        {
+            "code": 4,
+            "day": "Monday",
+            "hour": "14:00"
+        },
+        {
+            "code": 5,
+            "day": "Monday",
+            "hour": "16:00"
+        },
+        {
+            "code": 6,
+            "day": "Monday",
+            "hour": "18:00"
+        },
+        {
+            "code": 7,
+            "day": "Tuesday",
+            "hour": "08:00"
+        },
+        {
+            "code": 8,
+            "day": "Tuesday",
+            "hour": "10:00"
+        },
+        {
+            "code": 9,
+            "day": "Tuesday",
+            "hour": "12:00"
+        },
+        {
+            "code": 10,
+            "day": "Tuesday",
+            "hour": "14:00"
+        },
+        {
+            "code": 11,
+            "day": "Tuesday",
+            "hour": "16:00"
+        },
+        {
+            "code": 12,
+            "day": "Tuesday",
+            "hour": "18:00"
+        },
+        {
+            "code": 13,
+            "day": "Wednesday",
+            "hour": "08:00"
+        },
+        {
+            "code": 14,
+            "day": "Wednesday",
+            "hour": "10:00"
+        },
+        {
+            "code": 15,
+            "day": "Wednesday",
+            "hour": "12:00"
+        },
+        {
+            "code": 16,
+            "day": "Wednesday",
+            "hour": "14:00"
+        },
+        {
+            "code": 17,
+            "day": "Wednesday",
+            "hour": "16:00"
+        },
+        {
+            "code": 18,
+            "day": "Wednesday",
+            "hour": "18:00"
+        },
+        {
+            "code": 19,
+            "day": "Thursday",
+            "hour": "08:00"
+        },
+        {
+            "code": 20,
+            "day": "Thursday",
+            "hour": "10:00"
+        },
+        {
+            "code": 21,
+            "day": "Thursday",
+            "hour": "12:00"
+        },
+        {
+            "code": 22,
+            "day": "Thursday",
+            "hour": "14:00"
+        },
+        {
+            "code": 23,
+            "day": "Thursday",
+            "hour": "16:00"
+        },
+        {
+            "code": 24,
+            "day": "Thursday",
+            "hour": "18:00"
+        },
+        {
+            "code": 25,
+            "day": "Friday",
+            "hour": "08:00"
+        },
+        {
+            "code": 26,
+            "day": "Friday",
+            "hour": "10:00"
+        },
+        {
+            "code": 27,
+            "day": "Friday",
+            "hour": "12:00"
+        },
+        {
+            "code": 28,
+            "day": "Friday",
+            "hour": "14:00"
+        },
+        {
+            "code": 29,
+            "day": "Friday",
+            "hour": "16:00"
+        },
+        {
+            "code": 30,
+            "day": "Friday",
+            "hour": "18:00"
+        }
+    ],
+    "teachers": [
+        {
+            "code": 1,
+            "name": "Stoica George",
+            "max_hours": 6,
+            "can_teach_course": 0,
+            "subjects_taught": [
+                18
+            ]
+        },
+        {
+            "code": 2,
+            "name": "Conf. dr. Vitcu Anca",
+            "max_hours": 10,
+            "can_teach_course": 1,
+            "subjects_taught": [
+                16
+            ]
+        },
+        {
+            "code": 3,
+            "name": "Drd. Olariu Florin",
+            "max_hours": 10,
+            "can_teach_course": 1,
+            "subjects_taught": [
+                17
+            ]
+        },
+        {
+            "code": 4,
+            "name": "Marculet Dan",
+            "max_hours": 4,
+            "can_teach_course": 0,
+            "subjects_taught": [
+                18
+            ]
+        },
+        {
+            "code": 5,
+            "name": "Conf. dr. Gavrilut Dragos",
+            "max_hours": 6,
+            "can_teach_course": 1,
+            "subjects_taught": [
+                19
+            ]
+        },
+        {
+            "code": 6,
+            "name": "Prof. dr. Tiplea Ferucio Laurentiu",
+            "max_hours": 6,
+            "can_teach_course": 1,
+            "subjects_taught": [
+                26
+            ]
+        },
+        {
+            "code": 7,
+            "name": "Lect. dr. Pistol Ionut Cristian",
+            "max_hours": 6,
+            "can_teach_course": 1,
+            "subjects_taught": [
+                20
+            ]
+        },
+        {
+            "code": 8,
+            "name": "Conf. dr. Raschip Madalina",
+            "max_hours": 6,
+            "can_teach_course": 1,
+            "subjects_taught": [
+                20
+            ]
+        },
+        {
+            "code": 9,
+            "name": "Conf. dr. Trandabat Diana",
+            "max_hours": 4,
+            "can_teach_course": 0,
+            "subjects_taught": [
+                20
+            ]
+        },
+        {
+            "code": 10,
+            "name": "Colab. Lupascu Marilena",
+            "max_hours": 4,
+            "can_teach_course": 0,
+            "subjects_taught": [
+                19
+            ]
+        },
+        {
+            "code": 11,
+            "name": "Lect. dr. Benchea Razvan",
+            "max_hours": 4,
+            "can_teach_course": 1,
+            "subjects_taught": [
+                18
+            ]
+        },
+        {
+            "code": 12,
+            "name": "Conf. dr. Ciortuz Liviu",
+            "max_hours": 4,
+            "can_teach_course": 1,
+            "subjects_taught": [
+                22
+            ]
+        },
+        {
+            "code": 13,
+            "name": "Lect. dr. Vidrascu Cristian",
+            "max_hours": 10,
+            "can_teach_course": 1,
+            "subjects_taught": [
+                24
+            ]
+        },
+        {
+            "code": 14,
+            "name": "Conf. dr. Onica Emanuel",
+            "max_hours": 6,
+            "can_teach_course": 1,
+            "subjects_taught": [
+                21
+            ]
+        },
+        {
+            "code": 15,
+            "name": "Ticlos Olimpia",
+            "max_hours": 4,
+            "can_teach_course": 0,
+            "subjects_taught": [
+                26
+            ]
+        },
+        {
+            "code": 16,
+            "name": "Asist. dr. Craciun Vlad",
+            "max_hours": 8,
+            "can_teach_course": 0,
+            "subjects_taught": [
+                19,
+                25
+            ]
+        },
+        {
+            "code": 17,
+            "name": "Conf. dr. Ciobaca Stefan",
+            "max_hours": 6,
+            "can_teach_course": 1,
+            "subjects_taught": [
+                23
+            ]
+        },
+        {
+            "code": 18,
+            "name": "Colab. Pantiru Stefan",
+            "max_hours": 6,
+            "can_teach_course": 0,
+            "subjects_taught": [
+                22
+            ]
+        },
+        {
+            "code": 19,
+            "name": "Peterca Adrian",
+            "max_hours": 6,
+            "can_teach_course": 0,
+            "subjects_taught": [
+                19
+            ]
+        },
+        {
+            "code": 20,
+            "name": "Lect. dr. Nica Anca-Maria",
+            "max_hours": 6,
+            "can_teach_course": 1,
+            "subjects_taught": [
+                26
+            ]
+        },
+        {
+            "code": 21,
+            "name": "Asist. dr. Prelipcean Bogdan",
+            "max_hours": 6,
+            "can_teach_course": 0,
+            "subjects_taught": [
+                26
+            ]
+        },
+        {
+            "code": 22,
+            "name": "Colab. Ciobanu Sebastian",
+            "max_hours": 6,
+            "can_teach_course": 0,
+            "subjects_taught": [
+                22
+            ]
+        },
+        {
+            "code": 23,
+            "name": "Lect. dr. Varlan Cosmin",
+            "max_hours": 10,
+            "can_teach_course": 1,
+            "subjects_taught": [
+                25
+            ]
+        },
+        {
+            "code": 24,
+            "name": "Simionescu Cristian",
+            "max_hours": 8,
+            "can_teach_course": 0,
+            "subjects_taught": [
+                18,
+                22
+            ]
+        },
+        {
+            "code": 25,
+            "name": "Albert Ramona",
+            "max_hours": 4,
+            "can_teach_course": 0,
+            "subjects_taught": [
+                22
+            ]
+        },
+        {
+            "code": 26,
+            "name": "Lect. dr. Diac Paul",
+            "max_hours": 6,
+            "can_teach_course": 0,
+            "subjects_taught": [
+                21
+            ]
+        },
+        {
+            "code": 27,
+            "name": "Colab. Lazarescu Simona",
+            "max_hours": 4,
+            "can_teach_course": 0,
+            "subjects_taught": [
+                19,
+                26
+            ]
+        },
+        {
+            "code": 28,
+            "name": "Colab. Balan Gheorghe",
+            "max_hours": 4,
+            "can_teach_course": 0,
+            "subjects_taught": [
+                24
+            ]
+        },
+        {
+            "code": 29,
+            "name": "Prof. dr. Iftene Adrian",
+            "max_hours": 2,
+            "can_teach_course": 1,
+            "subjects_taught": [
+                15
+            ]
+        },
+        {
+            "code": 30,
+            "name": "Constantinescu Gabriel",
+            "max_hours": 4,
+            "can_teach_course": 0,
+            "subjects_taught": [
+                15
+            ]
+        },
+        {
+            "code": 31,
+            "name": "Colab. Silion Dragos",
+            "max_hours": 4,
+            "can_teach_course": 0,
+            "subjects_taught": [
+                15
+            ]
+        },
+        {
+            "code": 32,
+            "name": "Coteanu Maria",
+            "max_hours": 4,
+            "can_teach_course": 0,
+            "subjects_taught": [
+                26
+            ]
+        },
+        {
+            "code": 33,
+            "name": "Cornei Laura",
+            "max_hours": 4,
+            "can_teach_course": 0,
+            "subjects_taught": [
+                20
+            ]
+        }
+    ],
+    "subjects": [
+        {
+            "code": 15,
+            "name": "Introducere in realitatea mixta",
+            "is_optional": 1
+        },
+        {
+            "code": 16,
+            "name": "Animatie 3D: algoritmi si tehnici fundamentale",
+            "is_optional": 1
+        },
+        {
+            "code": 17,
+            "name": "Introducere in .NET",
+            "is_optional": 1
+        },
+        {
+            "code": 18,
+            "name": "Retele neuronale",
+            "is_optional": 1
+        },
+        {
+            "code": 19,
+            "name": "Programare in Python",
+            "is_optional": 0
+        },
+        {
+            "code": 20,
+            "name": "Inteligenta artificiala",
+            "is_optional": 0
+        },
+        {
+            "code": 21,
+            "name": "Tehnici de programare multiprocesor",
+            "is_optional": 1
+        },
+        {
+            "code": 22,
+            "name": "Invatare automata",
+            "is_optional": 0
+        },
+        {
+            "code": 23,
+            "name": "Dezvoltare de programe bazata pe verificare",
+            "is_optional": 1
+        },
+        {
+            "code": 24,
+            "name": "Capitole speciale de sisteme de operare",
+            "is_optional": 1
+        },
+        {
+            "code": 25,
+            "name": "Dezvoltarea sistemelor fizice utilizand microprocesoare",
+            "is_optional": 1
+        },
+        {
+            "code": 26,
+            "name": "Securitatea informatiei",
+            "is_optional": 0
+        }
+    ],
+    "rooms": [
+        {
+            "code": 1,
+            "name": "C909",
+            "course_possible": 0,
+            "possible_times": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30
+            ]
+        },
+        {
+            "code": 2,
+            "name": "C2",
+            "course_possible": 1,
+            "possible_times": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30
+            ]
+        },
+        {
+            "code": 3,
+            "name": "C905",
+            "course_possible": 0,
+            "possible_times": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30
+            ]
+        },
+        {
+            "code": 4,
+            "name": "C112",
+            "course_possible": 1,
+            "possible_times": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30
+            ]
+        },
+        {
+            "code": 5,
+            "name": "C109",
+            "course_possible": 0,
+            "possible_times": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30
+            ]
+        },
+        {
+            "code": 6,
+            "name": "C210",
+            "course_possible": 0,
+            "possible_times": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30
+            ]
+        },
+        {
+            "code": 7,
+            "name": "C308",
+            "course_possible": 1,
+            "possible_times": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30
+            ]
+        },
+        {
+            "code": 8,
+            "name": "C309",
+            "course_possible": 1,
+            "possible_times": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30
+            ]
+        },
+        {
+            "code": 9,
+            "name": "C401",
+            "course_possible": 0,
+            "possible_times": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30
+            ]
+        },
+        {
+            "code": 10,
+            "name": "C403",
+            "course_possible": 0,
+            "possible_times": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30
+            ]
+        },
+        {
+            "code": 11,
+            "name": "C405",
+            "course_possible": 0,
+            "possible_times": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30
+            ]
+        },
+        {
+            "code": 12,
+            "name": "C409",
+            "course_possible": 0,
+            "possible_times": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30
+            ]
+        },
+        {
+            "code": 13,
+            "name": "C411",
+            "course_possible": 0,
+            "possible_times": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30
+            ]
+        },
+        {
+            "code": 14,
+            "name": "C412",
+            "course_possible": 0,
+            "possible_times": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30
+            ]
+        },
+        {
+            "code": 15,
+            "name": "C901",
+            "course_possible": 0,
+            "possible_times": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30
+            ]
+        },
+        {
+            "code": 16,
+            "name": "C903",
+            "course_possible": 0,
+            "possible_times": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30
+            ]
+        },
+        {
+            "code": 17,
+            "name": "C413",
+            "course_possible": 0,
+            "possible_times": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30
+            ]
+        }
+    ],
+    "groups": [
+        {
+            "code": 0,
+            "name": "ABE",
+            "language": "Romanian"
+        },
+        {
+            "code": 1,
+            "name": "A",
+            "language": "Romanian"
+        },
+        {
+            "code": 2,
+            "name": "B",
+            "language": "Romanian"
+        },
+        {
+            "code": 3,
+            "name": "E",
+            "language": "English"
+        },
+        {
+            "code": 101,
+            "name": "A1",
+            "language": "Romanian"
+        },
+        {
+            "code": 102,
+            "name": "A2",
+            "language": "Romanian"
+        },
+        {
+            "code": 103,
+            "name": "A3",
+            "language": "Romanian"
+        },
+        {
+            "code": 104,
+            "name": "A4",
+            "language": "Romanian"
+        },
+        {
+            "code": 105,
+            "name": "A5",
+            "language": "Romanian"
+        },
+        {
+            "code": 201,
+            "name": "B1",
+            "language": "Romanian"
+        },
+        {
+            "code": 202,
+            "name": "B2",
+            "language": "Romanian"
+        },
+        {
+            "code": 203,
+            "name": "B3",
+            "language": "Romanian"
+        },
+        {
+            "code": 204,
+            "name": "B4",
+            "language": "Romanian"
+        },
+        {
+            "code": 301,
+            "name": "E1",
+            "language": "English"
+        },
+        {
+            "code": 302,
+            "name": "E2",
+            "language": "English"
+        },
+        {
+            "code": 303,
+            "name": "E3",
+            "language": "English"
+        }
+    ],
+    "extra_restrictions": {
+        "unpreferred_timeslots": {
+            "2": [
+                1,
+                12
+            ],
+            "3": [
+                1,
+                2
+            ]
+        },
+        "max_daily_hours": {
+            "2": 2,
+            "3": 3
+        }
+    }
+}
