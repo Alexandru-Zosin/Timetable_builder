@@ -1,5 +1,4 @@
 const mysql = require("mysql");
-const fs = require("fs");
 require("dotenv").config();
 
 function connectToDatabase(config) {
@@ -95,27 +94,6 @@ async function getDatabaseAsJson() {
             SELECT id AS code, name, language FROM groups
         `);
 
-        // retrieve extra restrictions
-        const restrictionsRaw = await queryDatabase(connection, `
-            SELECT teacher_id, restriction_type, timeslot_id, value FROM extra_restrictions
-        `);
-
-        const extraRestrictions = {
-            unpreferred_timeslots: {},
-            max_daily_hours: {}
-        };
-
-        restrictionsRaw.forEach(({ teacher_id, restriction_type, timeslot_id, value }) => {
-            if (restriction_type === 'unpreferred_timeslots') {
-                if (!extraRestrictions.unpreferred_timeslots[teacher_id]) {
-                    extraRestrictions.unpreferred_timeslots[teacher_id] = [];
-                }
-                extraRestrictions.unpreferred_timeslots[teacher_id].push(timeslot_id);
-            } else if (restriction_type === 'max_daily_hours') {
-                extraRestrictions.max_daily_hours[teacher_id] = value;
-            }
-        });
-
         // close connection
         await closeConnection(connection);
         console.log("Data retrieval complete. Connection closed.");
@@ -126,21 +104,13 @@ async function getDatabaseAsJson() {
             subjects: subjectsRaw,
             rooms,
             groups,
-            extra_restrictions: extraRestrictions
         };
 
-        // Write to file
-        fs.writeFileSync("database_dump.json", JSON.stringify(finalJson, null, 4), "utf8");
-        console.log("JSON saved to database_dump.json");
-
-        return finalJson;
+        return JSON.stringify(finalJson);
 
     } catch (err) {
-        console.error("Error retrieving data:", err);
+        throw err;
     }
 }
 
-// Call function to get JSON
-getDatabaseAsJson().then(jsonData => {
-    console.log("Database JSON:", JSON.stringify(jsonData, null, 4));
-});
+module.exports = { getDatabaseAsJson };

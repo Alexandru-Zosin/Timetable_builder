@@ -1,24 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--https://stackoverflow.com/questions/30280370/how-does-content-security-policy-csp-work
+        files must come from the same origin where page is hosted (external files blocked),
+        so <script src = "evilwebsite.com"> is impossible
+        any js can send data only to localhost 3000 -> protects against xss attacks:
+        even if attacker injects script, they cant send stolen data to external servers
+        - any attack on CSS is impossible, as it's applied by browser in the beginning and done
+    -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="connect-src https://localhost:3000 https://localhost:3001 https://localhost:3557">
     <title>Timetable</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="script.js" defer></script> <!-- runs only after HTML is parsed -->
 </head>
 <body>
-    <!-- Navbar -->
     <nav class="navbar">
         <div class="logo">
             <i class="fas fa-calendar-alt"></i>
             <span>UAIC Timetable</span>
         </div>
         <div class="user-info">
-            <span id="user-name">John Doe</span>
-            <img id="user-avatar" src="https://ui-avatars.com/api/?name=John+Doe" alt="User Avatar">
+            <div id="user-avatar"><i class="fa-solid fa-user"></i></div>
             <button id="logout-btn" class="logout-btn">
-                <i class="fas fa-sign-out-alt"></i> Logout
+                Logout
             </button>
         </div>
     </nav>
@@ -27,18 +35,10 @@
     <div class="container">
         <header class="page-header">
             <h1>Academic Timetable</h1>
-            <div class="controls">
-                <div class="date-selector">
-                    <button id="prev-week"><i class="fas fa-chevron-left"></i></button>
-                    <span id="current-week">September 11-17, 2023</span>
-                    <button id="next-week"><i class="fas fa-chevron-right"></i></button>
-                </div>
-                <div class="view-filters">
-                    <button class="filter-btn active" data-filter="all">All</button>
-                    <button class="filter-btn" data-filter="course">Courses</button>
-                    <button class="filter-btn" data-filter="seminar">Seminars</button>
-                    <button class="filter-btn" data-filter="mandatory">Mandatory</button>
-                </div>
+            <div class="view-filters">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="course">Courses</button>
+                <button class="filter-btn" data-filter="seminar">Seminars</button>
             </div>
         </header>
 
@@ -83,10 +83,6 @@
                 <div class="legend-color seminar"></div>
                 <span>Seminar</span>
             </div>
-            <div class="legend-item">
-                <div class="legend-color mandatory"></div>
-                <span>Mandatory</span>
-            </div>
         </div>
     </div>
 
@@ -94,9 +90,9 @@
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-section">
-                <h3>Suggest Timetable Changes</h3>
+                <h3>Suggest a Timetable Change:</h3>
                 <form id="suggestion-form" class="suggestion-form">
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="suggestion-type">Change Type:</label>
                         <select id="suggestion-type" required>
                             <option value="">Select Type</option>
@@ -105,25 +101,14 @@
                             <option value="cancel">Cancellation</option>
                             <option value="other">Other</option>
                         </select>
-                    </div>
+                    </div> -->
                     <div class="form-group">
-                        <label for="suggestion-course">Course:</label>
-                        <input type="text" id="suggestion-course" placeholder="Course name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="suggestion-details">Details:</label>
                         <textarea id="suggestion-details" placeholder="Describe your suggestion..." required></textarea>
                     </div>
-                    <button type="submit" class="submit-btn">Submit Suggestion</button>
+                    <button type="submit" class="submit-btn">Submit</button>
                 </form>
-            </div>
-            <div class="footer-section">
-                <p>© 2023 TimeTable Pro. All rights reserved.</p>
-                <p>Questions? Contact <a href="mailto:support@timetablepro.com">support@timetablepro.com</a></p>
             </div>
         </div>
     </footer>
-
-    <script src="script.js"></script>
 </body>
 </html>

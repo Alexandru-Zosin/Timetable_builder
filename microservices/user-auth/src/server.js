@@ -6,6 +6,7 @@ const { logout } = require('./routes/logout.controller');
 const { validate } = require('./routes/validate.controller');
 const { setCORSHeadersOnValidOrigin } = require('../utils/corsHeaders');
 const { parseJSON } = require('../utils/parseJSONBody');
+const { Agent, setGlobalDispatcher } = require('undici')
 const PORT = 3000;
 require("dotenv").config();
 
@@ -13,6 +14,14 @@ let options = {
     key: fs.readFileSync('../key.pem', 'utf8'),
     cert: fs.readFileSync('../cert.pem', 'utf8')
 };
+
+const agent = new Agent({
+    connect: {
+      rejectUnauthorized: false
+    }
+});
+  
+setGlobalDispatcher(agent);
 
 const server = https.createServer(options, (req, res) => {
     if (!setCORSHeadersOnValidOrigin(req, res))

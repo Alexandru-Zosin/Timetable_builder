@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher Constraints</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <i class="fas fa-calendar-alt"></i>
+            <span>UAIC Timetable</span>
+        </div>
+        <div class="user-info">
+            <div id="user-avatar"><i class="fa-solid fa-user"></i></div>
+            <button id="logout-btn" class="logout-btn">Logout</button>
+        </div>
+    </div>
+    <div class="center-container">
+        <div class="constraint-hdr">
+            <h2>Pending Constraints</h2>
+            <button id="new-timetable-btn">Generate New Timetable</button>
+        </div>
+        <div id="constraint-list" class="constraint-list"></div>
+    </div>
+</body>
+</html>

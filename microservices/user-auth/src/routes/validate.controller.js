@@ -55,12 +55,6 @@ async function validate(req, res) {
         switch (parseInt(originPort)) {
             case PORTS.timetable:
                 res.end(JSON.stringify({ userId, role }));
-            case PORTS.admin:
-                res.end(JSON.stringify({ userId, role }));
-                break;
-            case PORTS.userProfileHandler:
-                const hashedPassword = await getHashedPasswordForUserId(userId);
-                res.end(JSON.stringify({ hashedPassword: hashedPassword.password, userId}));
                 break;
             case PORTS.front:
                 res.end(JSON.stringify({ userId, role, grouptag }));

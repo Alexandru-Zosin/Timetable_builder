@@ -1,35 +1,14 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // User data - This would come from your backend
-    const userData = {
-        name: 'Jane Smith',
-        avatar: 'https://ui-avatars.com/api/?name=Jane+Smith&background=4a6cff&color=fff'
-    };
+// Load sample timetable data - Replace this with your actual data loading
+loadTimetableData()
+    .then(data => {
+        renderTimetable(data);
+    })
+    .catch(error => {
+        console.error('Error loading timetable data:', error);
+    });
 
-    // Initialize the UI with user data
-    initializeUserInterface(userData);
-    
-    // Load sample timetable data - Replace this with your actual data loading
-    loadTimetableData()
-        .then(data => {
-            renderTimetable(data);
-            initializeTimetableEvents();
-        })
-        .catch(error => {
-            console.error('Error loading timetable data:', error);
-        });
-    
-    // Initialize event listeners
-    initializeEventListeners();
-});
-
-/**
- * Initialize the user interface with user data
- * @param {Object} userData - The user data object
- */
-function initializeUserInterface(userData) {
-    document.getElementById('user-name').textContent = userData.name;
-    document.getElementById('user-avatar').src = userData.avatar;
-}
+// Initialize event listeners
+initializeEventListeners();
 
 /**
  * Load timetable data - Replace this with your actual data fetching logic
@@ -49,8 +28,7 @@ function loadTimetableData() {
                 group: "CS-2023",
                 day: 1, // Monday
                 startTime: "10:00",
-                endTime: "12:00",
-                mandatory: true
+                endTime: "12:00"
             },
             {
                 id: 2,
@@ -61,8 +39,7 @@ function loadTimetableData() {
                 group: "CS-2023",
                 day: 1, // Monday
                 startTime: "14:00",
-                endTime: "16:00",
-                mandatory: false
+                endTime: "16:00"
             },
             {
                 id: 3,
@@ -73,8 +50,7 @@ function loadTimetableData() {
                 group: "CS-2023",
                 day: 2, // Tuesday
                 startTime: "9:00",
-                endTime: "11:00",
-                mandatory: true
+                endTime: "11:00"
             },
             {
                 id: 4,
@@ -85,8 +61,7 @@ function loadTimetableData() {
                 group: "CS-2023",
                 day: 3, // Wednesday
                 startTime: "13:00",
-                endTime: "15:00",
-                mandatory: true
+                endTime: "15:00"
             },
             {
                 id: 5,
@@ -97,8 +72,7 @@ function loadTimetableData() {
                 group: "CS-2023",
                 day: 4, // Thursday
                 startTime: "11:00",
-                endTime: "13:00",
-                mandatory: false
+                endTime: "13:00"
             },
             {
                 id: 6,
@@ -109,20 +83,14 @@ function loadTimetableData() {
                 group: "CS-2023",
                 day: 5, // Friday
                 startTime: "15:00",
-                endTime: "17:00",
-                mandatory: false
+                endTime: "17:00"
             }
         ];
         
-        // Simulate API delay
-        setTimeout(() => resolve(sampleData), 300);
+        resolve(sampleData);
     });
 }
 
-/**
- * Render the timetable with provided data
- * @param {Array} timetableData - The timetable data
- */
 function renderTimetable(timetableData) {
     const timetableGrid = document.getElementById('timetable-grid');
     timetableGrid.innerHTML = '';
@@ -145,29 +113,20 @@ function renderTimetable(timetableData) {
     }
 }
 
-/**
- * Create a class card element
- * @param {Object} classData - The class data
- * @returns {HTMLElement} The class card element
- */
 function createClassCard(classData) {
     const startHour = parseInt(classData.startTime.split(':')[0]);
-    const startMinute = parseInt(classData.startTime.split(':')[1]);
+    // const startMinute = parseInt(classData.startTime.split(':')[1]);
     const endHour = parseInt(classData.endTime.split(':')[0]);
-    const endMinute = parseInt(classData.endTime.split(':')[1]);
+    // const endMinute = parseInt(classData.endTime.split(':')[1]);
     
     // Calculate position and height
-    const topPosition = (startHour - 8) * 80 + (startMinute / 60) * 80; // 8:00 is the starting time
-    const duration = (endHour - startHour) + (endMinute - startMinute) / 60;
+    const topPosition = (startHour - 8) * 80; // 8:00 is the starting time
+    const duration = (endHour - startHour);
     const height = duration * 80;
     
     const classCard = document.createElement('div');
     classCard.className = `class-card ${classData.type}`;
     classCard.dataset.id = classData.id;
-    
-    if (classData.mandatory) {
-        classCard.classList.add('mandatory');
-    }
     
     classCard.style.top = `${topPosition}px`;
     classCard.style.height = `${height}px`;
@@ -186,34 +145,9 @@ function createClassCard(classData) {
 }
 
 /**
- * Initialize timetable-related event listeners
- */
-function initializeTimetableEvents() {
-    // Add click event to class cards
-    document.querySelectorAll('.class-card').forEach(card => {
-        card.addEventListener('click', function() {
-            showClassDetails(this.dataset.id);
-        });
-    });
-}
-
-/**
- * Show details for a specific class
- * @param {string} classId - The class ID
- */
-function showClassDetails(classId) {
-    // Here you would show a modal or details panel with more information about the class
-    alert(`Viewing details for class #${classId}`);
-    // In a real application, you would fetch detailed information and show it in a modal
-}
-
-/**
  * Initialize all event listeners
  */
 function initializeEventListeners() {
-    // Week navigation
-    document.getElementById('prev-week').addEventListener('click', navigateWeek('prev'));
-    document.getElementById('next-week').addEventListener('click', navigateWeek('next'));
     
     // Filter buttons
     document.querySelectorAll('.filter-btn').forEach(button => {
@@ -239,28 +173,6 @@ function initializeEventListeners() {
 }
 
 /**
- * Navigate to previous or next week
- * @param {string} direction - Navigation direction ('prev' or 'next')
- * @returns {Function} Event handler function
- */
-function navigateWeek(direction) {
-    return function() {
-        // This is a placeholder. In a real app, you would update the date and fetch new data
-        const currentWeek = document.getElementById('current-week').textContent;
-        
-        // For demo purposes, just update the text
-        if (direction === 'prev') {
-            document.getElementById('current-week').textContent = 'September 4-10, 2023';
-        } else {
-            document.getElementById('current-week').textContent = 'September 18-24, 2023';
-        }
-        
-        // Here you would load new data for the selected week
-        console.log(`Navigating ${direction} from ${currentWeek}`);
-    };
-}
-
-/**
  * Filter timetable by type
  * @param {string} filter - The filter type
  */
@@ -282,9 +194,6 @@ function filterTimetable(filter) {
             card.style.display = 'none';
         }
         
-        if (filter === 'mandatory' && !card.classList.contains('mandatory')) {
-            card.style.display = 'none';
-        }
     });
 }
 

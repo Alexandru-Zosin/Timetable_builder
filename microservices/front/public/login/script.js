@@ -17,6 +17,21 @@ window.onload = async () => {
     } catch (error) {
         console.error("Validation Error:", error);
     }
+
+    /*try {
+        const response = await fetch("https://localhost:3557/timetable", {
+            method: "POST",
+            credentials: "include",
+            mode: "cors",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type" : "application-json"
+            },
+            body: JSON.stringify({extra_restrictions : [] })
+        });
+    } catch (error) {
+        console.log("err");
+    }*/
 };
 
 // form switching functionality

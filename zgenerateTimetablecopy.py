@@ -282,4 +282,5 @@ def backtracking(class_index):
 
 backtracking(0)
 
+best_timetable["class_list"] = class_list;
 print(json.dumps(best_timetable, indent=4))

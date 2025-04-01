@@ -178,18 +178,18 @@ async function initializeDatabases() {
         `);
         console.log("groups table created.");
 
-        // await queryDatabase(uaicConnection, `
-        //     CREATE TABLE extra_restrictions (
-        //         id INT PRIMARY KEY AUTO_INCREMENT,
-        //         teacher_id INT NOT NULL,
-        //         restriction_type ENUM('unpreferred_timeslots', 'max_daily_hours') NOT NULL,
-        //         timeslot_id INT NULL,
-        //         value INT NULL,
-        //         FOREIGN KEY (teacher_id) REFERENCES teachers(id) ON DELETE CASCADE,
-        //         FOREIGN KEY (timeslot_id) REFERENCES timeslots(id) ON DELETE CASCADE
-        //     );
-        // `);
-        // console.log("extra_restrictions table created.");
+        await queryDatabase(uaicConnection, `
+            CREATE TABLE extra_restrictions (
+                id INT PRIMARY KEY AUTO_INCREMENT,
+                teacher_id INT NOT NULL,
+                restriction_type ENUM('unpreferred_timeslots', 'max_daily_hours') NOT NULL,
+                timeslot_id INT NULL,
+                value INT NULL,
+                FOREIGN KEY (teacher_id) REFERENCES teachers(id) ON DELETE CASCADE,
+                FOREIGN KEY (timeslot_id) REFERENCES timeslots(id) ON DELETE CASCADE
+            );
+        `);
+        console.log("extra_restrictions table created.");
         await closeConnection(uaicConnection);
         console.log("uaic connection closed.");
 
@@ -201,7 +201,6 @@ async function initializeDatabases() {
                 id INT PRIMARY KEY AUTO_INCREMENT,
                 data json DEFAULT NULL,
                 class_list json DEFAULT NULL,
-                extra_restrictions json DEFAULT NULL,
                 active BOOLEAN DEFAULT FALSE
             );`
         );
@@ -240,7 +239,7 @@ async function populateDatabase() {
         const subjects = readJsonFile(path.join("uaic_data","subjects.json"));
         const rooms = readJsonFile(path.join("uaic_data","rooms.json"));
         const groups = readJsonFile(path.join("uaic_data","groups.json"));
-        //const extraRestrictions = readJsonFile(path.join("uaic_data","extra_restrictions.json"));
+        const extraRestrictions = readJsonFile(path.join("uaic_data","extra_restrictions.json"));
 
         // insert timeslots
         for (ts of timeslots) {
@@ -312,24 +311,24 @@ async function populateDatabase() {
         console.log("Groups inserted.");
 
         // insert extra restrictions
-        // for ([teacherId, restrictions] of Object.entries(extraRestrictions.unpreferred_timeslots)) {
-        //     for (timeslotId of restrictions) {
-        //         await queryDatabase(connection, `
-        //             INSERT INTO extra_restrictions (teacher_id, restriction_type, timeslot_id) 
-        //             VALUES (?, 'unpreferred_timeslots', ?)`,
-        //             [teacherId, timeslotId]
-        //         );
-        //     }
-        // }
+        for ([teacherId, restrictions] of Object.entries(extraRestrictions.unpreferred_timeslots)) {
+            for (timeslotId of restrictions) {
+                await queryDatabase(connection, `
+                    INSERT INTO extra_restrictions (teacher_id, restriction_type, timeslot_id) 
+                    VALUES (?, 'unpreferred_timeslots', ?)`,
+                    [teacherId, timeslotId]
+                );
+            }
+        }
 
-        // for ([teacherId, maxHours] of Object.entries(extraRestrictions.max_daily_hours)) {
-        //     await queryDatabase(connection, `
-        //         INSERT INTO extra_restrictions (teacher_id, restriction_type, value) 
-        //         VALUES (?, 'max_daily_hours', ?)`,
-        //         [teacherId, maxHours]
-        //     );
-        // }
-        // console.log("Extra restrictions inserted.");
+        for ([teacherId, maxHours] of Object.entries(extraRestrictions.max_daily_hours)) {
+            await queryDatabase(connection, `
+                INSERT INTO extra_restrictions (teacher_id, restriction_type, value) 
+                VALUES (?, 'max_daily_hours', ?)`,
+                [teacherId, maxHours]
+            );
+        }
+        console.log("Extra restrictions inserted.");
 
         await closeConnection(connection);
         console.log("Database population complete. Connection closed.");

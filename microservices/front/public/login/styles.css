@@ -11,7 +11,7 @@ body {
     align-items: center;
     min-height: 100vh;
     padding: 10px;
-    background: #f4f4f4;
+    background: linear-gradient(to bottom right, #f5faff, #e6efff);
 }
 
 .container {
@@ -78,11 +78,6 @@ label {
     font-size: 13px;
 }
 
-label i {
-    margin-right: 4px;
-    color: #445bf6;
-}
-
 input, select {
     width: 100%;
     padding: 10px;
@@ -111,19 +106,10 @@ input:focus, select:focus {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
 }
 
 .submit-btn:hover {
     background: #0a1d75;
-}
-
-.submit-btn i {
-    transition: transform 0.3s ease;
-}
-
-.submit-btn:hover i {
-    transform: translateX(4px);
 }
 
 @media (max-width: 420px) {
