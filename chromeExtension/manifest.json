@@ -1,0 +1,17 @@
+{
+    "manifest_version": 3,
+    "name": "UAIC Timetable Extension",
+    "version": "1.0",
+    "description": "Shows today's timetable for UAIC students.",
+    "permissions": [
+        "storage",
+        "activeTab"
+    ],
+    "host_permissions": [
+        "https://localhost:3557/*"
+    ],
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": "icon.png"
+    }
+}

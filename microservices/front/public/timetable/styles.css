@@ -8,9 +8,57 @@
     --card-bg: #ffffff;
     --course-color: #4d6dff;
     --seminar-color: #ff4d94;
+    --optional-color: #888888;
     --shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
     --border-radius: 12px;
 }
+
+/* Dark Theme Variables */
+body.dark {
+    --primary-color: #90a0ff;
+    --primary-light: #2b2b2b;
+    --secondary-color: #ff85a2;
+    --text-color: #e0e0e0;
+    --light-text: #aaaaaa;
+    --background: #1e1e1e; /* Soft dark gray */
+    --card-bg: #2a2a2a; /* Slightly lighter gray for cards */
+    --course-color: #3a4dbf;
+    --seminar-color: #bf4d7a;
+    --optional-color: #555555;
+    --shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    --border-radius: 12px;
+}
+
+.theme-toggle {
+    background: none;
+    color: var(--primary-color);
+    border: none;
+    padding: 0;
+    margin-right: 5px;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.theme-toggle:hover {
+    color: var(--light-text);
+    transform: scale(1.1);
+}
+
+.theme-toggle i {
+    font-size: 24px;
+    line-height: 1;
+}
+
+body.dark .logout-btn, body.dark .pdf-btn {
+    background: var(--primary-light);
+    color: var(--text-color);
+}
+
+body.dark .logout-btn:hover, body.dark .pdf-btn:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
 
 * {
     margin: 0;
@@ -35,6 +83,20 @@ body {
     top: 0;
     z-index: 3;
 }
+
+.view-selectors {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+select {
+    border: 1px solid gray;
+    border-radius: 0.25em;
+    padding: 0.25em 0.5em;
+    cursor: pointer;
+    background-color: #fff;
+  }
 
 .logo {
     font-size: 24px;
@@ -103,7 +165,7 @@ body {
     gap: 20px;
 }
 
-.filter-btn {
+.filter-btn, .pdf-btn {
     padding: 8px 16px;
     border: none;
     border-radius: 20px;
@@ -113,7 +175,7 @@ body {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
-.filter-btn:hover, .filter-btn.active {
+.filter-btn:hover, .filter-btn.active, .pdf-btn:hover, pdf-btn.active {
     background: var(--primary-color);
     color: white;
 }
@@ -166,7 +228,7 @@ body {
     min-width: 160px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-around;
     font-weight: 600;
     border-right: 1px solid rgba(255, 255, 255, 0.2);
 }
@@ -174,7 +236,7 @@ body {
 .timetable-grid {
     display: flex;
     position: relative;
-    height: calc(13 * 80px); /* 13 time slots */
+    height: calc(12 * 80px + 1px); /* 13 time slots */
 }
 
 .day-column {
@@ -189,6 +251,7 @@ body {
     width: calc(100% - 16px);
     left: 8px;
     border-radius: 8px;
+    margin: 1px;
     padding: 10px;
     color: white;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -202,6 +265,10 @@ body {
 
 .class-card.seminar {
     background: var(--seminar-color);
+}
+
+.class-card.optional {
+    background: var(--optional-color);
 }
 
 .class-time {
@@ -235,11 +302,17 @@ body {
 .legend {
     display: flex;
     gap: 20px;
+    justify-content: space-around;
     margin-bottom: 30px;
     padding: 15px;
     background: var(--card-bg);
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
+}
+
+.legends {
+    display: flex;
+    gap: 20px
 }
 
 .legend-item {
@@ -262,11 +335,32 @@ body {
     background: var(--seminar-color);
 }
 
+.legend-color.optional {
+    background: var(--optional-color);
+}
+
+.pdf-btn {
+    background: white;
+    color: var(--primary-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    align-self: flex-start;
+}
+
+.pdf-btn:hover {
+    background: var(--secondary-color);
+    color: white;
+}
+
 /* Footer Styles */
 .footer {
     background: var(--primary-color);
     color: white;
     padding: 40px 20px;
+    border-radius: var(--border-radius);
 }
 
 .footer-content {
@@ -316,6 +410,26 @@ body {
     color: rgba(255, 255, 255, 0.7);
 }
 
+#suggestion-details {
+    width: 100%;
+    height: 100px;
+    padding-right: 40px; /* Leave space for the mic icon */
+}
+
+#mic-icon {
+    font-size: 20px;
+    color: white;
+    padding: 5px;
+    margin-left: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+#mic-icon.active {
+    color: green;
+}
+
 .submit-btn {
     background: white;
     color: var(--primary-color);
@@ -337,14 +451,36 @@ body {
     text-decoration: underline;
 }
 
-@media (max-width: 600px) {
-    .navbar {
-        padding: 15px;
+@media (max-width: 1050px) {
+    .class-time {
+        display: none;
     }
-    
+}
+
+@media (max-width: 800px) {
     .logo span {
         display: none;
     }
+
+    .pdf-btn {
+        display: none;
+    }
+
+    .view-selectors {
+        display: none;
+        flex-direction: column;
+        max-width: 100px;
+    }
+
+    .view-selectors label {
+        display: none;
+    }
+}
+
+@media (max-width: 600px) {
+    .navbar {
+        padding: 15px;
+    }    
     
     .timetable-container {
         overflow-x: auto;

@@ -96,7 +96,7 @@ async function initializeDatabases() {
 
         const insAdmStatement = `INSERT INTO users (email, password, role, requested) VALUES(
             'admin@uaic.info.ro',
-            'hashedPass',
+            '771dccfd999072a8fdbe127be9154f0bb1522fc047cd61aa4c10348190cd947e',
             'admin',
             FALSE)`;
 

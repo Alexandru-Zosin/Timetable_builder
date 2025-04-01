@@ -1,224 +1,321 @@
-// Load sample timetable data - Replace this with your actual data loading
-loadTimetableData()
-    .then(data => {
-        renderTimetable(data);
-    })
-    .catch(error => {
-        console.error('Error loading timetable data:', error);
+let groups = [];
+let rooms = [];
+let subjects = [];
+let teachers = [];
+let timeslots = [];
+
+// This will hold all timetable info keyed by "G###" (group) or "T##" (teacher).
+// e.g. timetableData["G101"] -> { Monday: [...], Tuesday: [...], ... }
+//      timetableData["T2"]   -> { Monday: [...], Tuesday: [...], ... }
+let timetableData = {};
+
+// UI filter state
+let currentFilterType = null;        // 'group' or 'teacher'
+let currentFilterValue = null;       // e.g. "G101" or "T2"
+let currentClassType = 'all';        // 'course', 'seminar', 'all'
+
+// Day order used in sorting
+const DAY_ORDER = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+
+window.onload = async function () {
+  try {
+    // Fetch the timetable from your backend
+    const response = await fetch('https://localhost:3557/timetable', {
+      method: 'GET',
+      credentials: 'include',
+      mode: 'cors',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }
+    });
+    const data = await response.json();
+
+    groups    = data.info.groups;
+    rooms     = data.info.rooms;
+    subjects  = data.info.subjects;
+    teachers  = data.info.teachers;
+    timeslots = data.info.timeslots;
+
+    const bestTimetable = data.data;
+
+    // Build a mapping (object or Map) to find details by code quickly
+    const groupMap    = {};
+    const teacherMap  = {};
+    const roomMap     = {};
+    const subjectMap  = {};
+    const timeslotMap = {};
+
+    groups.forEach(g => groupMap[g.code] = g);
+    teachers.forEach(t => teacherMap[t.code] = t);
+    rooms.forEach(r => roomMap[r.code] = r);
+    subjects.forEach(s => subjectMap[s.code] = s);
+    timeslots.forEach(ts => timeslotMap[ts.code] = ts);
+
+    // Transform data into the final timetableData
+    transformData(bestTimetable, groupMap, teacherMap, roomMap, subjectMap, timeslotMap);
+
+    // Populate the dropdown selectors
+    populateSelectors();
+
+    // Default: no particular selection, or pick "all" for group
+    // but let's do an initial render with no filter selected.
+    currentFilterType = 'group';
+    currentFilterValue = 'Gall';  // a placeholder if you want "all" by default
+    renderFilteredTimetable();
+
+    // Listen for filter by class type (course/seminar/all)
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', function () {
+        currentClassType = this.dataset.filter;  // 'course', 'seminar', or 'all'
+        // Toggle active class
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+
+        renderFilteredTimetable();
+      });
     });
 
-// Initialize event listeners
-initializeEventListeners();
+    // Listen for group selector changes
+    document.getElementById('group-select').addEventListener('change', function () {
+      // If user picks a group, switch filterType to 'group'
+      currentFilterType = 'group';
+      if (this.value === 'all') {
+        currentFilterValue = 'Gall';  // you can define a special "all" if you wish
+      } else {
+        currentFilterValue = 'G' + this.value;
+      }
+
+      // Reset teacher selector
+      document.getElementById('teacher-select').value = 'all';
+
+      renderFilteredTimetable();
+    });
+
+    // Listen for teacher selector changes
+    document.getElementById('teacher-select').addEventListener('change', function () {
+      // If user picks a teacher, switch filterType to 'teacher'
+      currentFilterType = 'teacher';
+      if (this.value === 'all') {
+        currentFilterValue = 'Tall'; // define if you'd like "all teachers"
+      } else {
+        currentFilterValue = 'T' + this.value;
+      }
+
+      // Reset group selector
+      document.getElementById('group-select').value = 'all';
+
+      renderFilteredTimetable();
+    });
+
+  } catch (error) {
+    console.error('Error loading timetable data:', error);
+  }
+};
 
 /**
- * Load timetable data - Replace this with your actual data fetching logic
- * @returns {Promise<Array>} A promise that resolves to the timetable data
+ * Build timetableData keyed by "G..." or "T...".
+ * For each teacher_code in bestTimetable:
+ *   - We read each time_code in bestTimetable[teacher_code],
+ *   - We push to that teacher's schedule (timetableData["T" + teacher_code]),
+ *   - We also push to the appropriate group(s) schedule.
+ *
+ * group_code == 0 => replicate to all 3-digit groups
+ * group_code < 10 and != 0 => replicate to all that match that hundred block
+ * e.g. group_code = 1 => replicate to 101,102,103,...
  */
-function loadTimetableData() {
-    // This is a placeholder. In a real app, you would fetch data from an API
-    return new Promise((resolve) => {
-        // Sample data structure
-        const sampleData = [
-            {
-                id: 1,
-                name: "Algorithms and Data Structures",
-                type: "course",
-                teacher: "Dr. Smith",
-                room: "A101",
-                group: "CS-2023",
-                day: 1, // Monday
-                startTime: "10:00",
-                endTime: "12:00"
-            },
-            {
-                id: 2,
-                name: "Database Systems",
-                type: "seminar",
-                teacher: "Prof. Johnson",
-                room: "B205",
-                group: "CS-2023",
-                day: 1, // Monday
-                startTime: "14:00",
-                endTime: "16:00"
-            },
-            {
-                id: 3,
-                name: "Computer Networks",
-                type: "course",
-                teacher: "Dr. Williams",
-                room: "A102",
-                group: "CS-2023",
-                day: 2, // Tuesday
-                startTime: "9:00",
-                endTime: "11:00"
-            },
-            {
-                id: 4,
-                name: "Software Engineering",
-                type: "seminar",
-                teacher: "Prof. Brown",
-                room: "C303",
-                group: "CS-2023",
-                day: 3, // Wednesday
-                startTime: "13:00",
-                endTime: "15:00"
-            },
-            {
-                id: 5,
-                name: "Artificial Intelligence",
-                type: "course",
-                teacher: "Dr. Davis",
-                room: "A103",
-                group: "CS-2023",
-                day: 4, // Thursday
-                startTime: "11:00",
-                endTime: "13:00"
-            },
-            {
-                id: 6,
-                name: "Human-Computer Interaction",
-                type: "seminar",
-                teacher: "Prof. Wilson",
-                room: "B206",
-                group: "CS-2023",
-                day: 5, // Friday
-                startTime: "15:00",
-                endTime: "17:00"
-            }
-        ];
-        
-        resolve(sampleData);
-    });
-}
-
-function renderTimetable(timetableData) {
-    const timetableGrid = document.getElementById('timetable-grid');
-    timetableGrid.innerHTML = '';
-    
-    // Create day columns
-    for (let day = 1; day <= 5; day++) {
-        const dayColumn = document.createElement('div');
-        dayColumn.className = 'day-column';
-        dayColumn.dataset.day = day;
-        timetableGrid.appendChild(dayColumn);
-        
-        // Filter classes for this day
-        const dayClasses = timetableData.filter(cls => cls.day === day);
-        
-        // Render each class card
-        dayClasses.forEach(cls => {
-            const classCard = createClassCard(cls);
-            dayColumn.appendChild(classCard);
-        });
+function transformData(bestTimetable, groupMap, teacherMap, roomMap, subjectMap, timeslotMap) {
+  // Helper to initialize day->[] structure
+  const initDayArray = (obj, key, day) => {
+    if (!obj[key]) {
+      obj[key] = {};
     }
-}
+    if (!obj[key][day]) {
+      obj[key][day] = [];
+    }
+  };
 
-function createClassCard(classData) {
-    const startHour = parseInt(classData.startTime.split(':')[0]);
-    // const startMinute = parseInt(classData.startTime.split(':')[1]);
-    const endHour = parseInt(classData.endTime.split(':')[0]);
-    // const endMinute = parseInt(classData.endTime.split(':')[1]);
-    
-    // Calculate position and height
-    const topPosition = (startHour - 8) * 80; // 8:00 is the starting time
-    const duration = (endHour - startHour);
-    const height = duration * 80;
-    
-    const classCard = document.createElement('div');
-    classCard.className = `class-card ${classData.type}`;
-    classCard.dataset.id = classData.id;
-    
-    classCard.style.top = `${topPosition}px`;
-    classCard.style.height = `${height}px`;
-    
-    classCard.innerHTML = `
-        <div class="class-time">${classData.startTime} - ${classData.endTime}</div>
-        <div class="class-name">${classData.name}</div>
-        <div class="class-info">
-            <div class="class-teacher"><i class="fas fa-user"></i> ${classData.teacher}</div>
-            <div class="class-room"><i class="fas fa-map-marker-alt"></i> ${classData.room}</div>
-            <div class="class-group"><i class="fas fa-users"></i> ${classData.group}</div>
-        </div>
-    `;
-    
-    return classCard;
-}
+  // A quick way to get all group codes that are >=100
+  // or group codes that share the same hundred block.
+  const allFullGroups = Object.keys(groupMap)
+    .map(code => parseInt(code, 10))
+    .filter(code => code >= 100) // only real subgroups
+    .sort((a, b) => a - b);
 
-/**
- * Initialize all event listeners
- */
-function initializeEventListeners() {
-    
-    // Filter buttons
-    document.querySelectorAll('.filter-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            filterTimetable(this.dataset.filter);
-            
-            // Update active state
-            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
+  // For each teacher code
+  for (let tCode in bestTimetable) {
+    const teacherCode = parseInt(tCode, 10);
+    // Ensure we have an entry for this teacher
+    if (!timetableData["T" + teacherCode]) {
+      timetableData["T" + teacherCode] = {};
+    }
+
+    // This teacher's schedule
+    const teacherSchedule = bestTimetable[tCode];
+
+    // For each time code in this teacher's schedule
+    for (let timeCode in teacherSchedule) {
+      const [groupCode, roomCode, subjectCode, classType] = teacherSchedule[timeCode];
+
+      const day     = timeslotMap[timeCode].day;
+      const hourStr = timeslotMap[timeCode].hour;  // e.g. "08:00"
+      // Let’s assume each timeslot is 2 hours, so Interval is e.g. "08-10"
+      const startHour = parseInt(hourStr.slice(0, 2), 10);
+      const endHour   = startHour + 2;
+      const interval  = `${String(startHour).padStart(2, '0')}-${String(endHour).padStart(2, '0')}`;
+
+      // Build the row
+      const subj       = subjectMap[subjectCode];
+      const isOptional = (subj.is_optional === 1);
+      const row = {
+        Interval: interval,
+        Subject: subj.name,
+        Teacher: teacherMap[teacherCode]?.name ?? ("Teacher " + teacherCode),
+        Room: roomMap[roomCode]?.name ?? ("Room " + roomCode),
+        Type: classType,        // 'course' or 'seminar'
+        Optional: isOptional
+      };
+
+      // 1) Add to teacher's timetable
+      initDayArray(timetableData, "T" + teacherCode, day);
+      timetableData["T" + teacherCode][day].push(row);
+
+      // 2) Add to group(s) timetable
+      if (groupCode >= 100) {
+        // It's a real group code
+        const key = "G" + groupCode;
+        initDayArray(timetableData, key, day);
+        timetableData[key][day].push(row);
+
+      } else if (groupCode === 0) {
+        // group_code = 0 => replicate to everyone
+        for (const g of allFullGroups) {
+          const gKey = "G" + g;
+          initDayArray(timetableData, gKey, day);
+          timetableData[gKey][day].push(row);
+        }
+
+      } else {
+        // groupCode < 10 and != 0 => replicate to that hundred range
+        // e.g. groupCode = 1 => all 1xx
+        // e.g. groupCode = 2 => all 2xx
+        const hundred = groupCode; // 1 => 100..199, 2 => 200..299
+        for (const g of allFullGroups) {
+          if (Math.floor(g / 100) === hundred) {
+            const gKey = "G" + g;
+            initDayArray(timetableData, gKey, day);
+            timetableData[gKey][day].push(row);
+          }
+        }
+      }
+    }
+  }
+
+  // Now sort the entries in each day by start time
+  for (let key in timetableData) {
+    const dayObj = timetableData[key];
+    // dayObj is like { Monday: [...], Tuesday: [...], ... }
+    // Sort day keys by our DAY_ORDER
+    const sortedDayObj = {};
+    DAY_ORDER.forEach(d => {
+      if (dayObj[d]) {
+        // Sort by the numeric start hour
+        dayObj[d].sort((a, b) => {
+          const startA = parseInt(a.Interval.split('-')[0], 10);
+          const startB = parseInt(b.Interval.split('-')[0], 10);
+          return startA - startB;
         });
+        sortedDayObj[d] = dayObj[d];
+      }
     });
-    
-    // Logout button
-    document.getElementById('logout-btn').addEventListener('click', function() {
-        handleLogout();
+    timetableData[key] = sortedDayObj;
+  }
+}
+
+/**
+ * Populate the group and teacher <select> elements.
+ */
+function populateSelectors() {
+  const groupSelect   = document.getElementById('group-select');
+  const teacherSelect = document.getElementById('teacher-select');
+
+  // Clear them if needed
+  groupSelect.innerHTML = '<option value="all">Select Group</option>';
+  teacherSelect.innerHTML = '<option value="all">Select Teacher</option>';
+
+  // Add each 3-digit group
+  groups
+    .filter(g => g.code >= 100)
+    .sort((a, b) => a.code - b.code)
+    .forEach(g => {
+      const option = document.createElement('option');
+      option.value = g.code;       // e.g. '101'
+      option.textContent = g.name; // e.g. 'A1'
+      groupSelect.appendChild(option);
     });
-    
-    // Suggestion form
-    document.getElementById('suggestion-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        handleSuggestionSubmit();
+
+  // Add each teacher
+  teachers
+    .sort((a, b) => a.code - b.code)
+    .forEach(t => {
+      const option = document.createElement('option');
+      option.value = t.code;         // e.g. '2'
+      option.textContent = t.name;   // e.g. 'Conf. dr. ...'
+      teacherSelect.appendChild(option);
     });
 }
 
 /**
- * Filter timetable by type
- * @param {string} filter - The filter type
+ * Renders the timetable based on currentFilterValue ("G..." or "T...") and currentClassType.
  */
-function filterTimetable(filter) {
-    const cards = document.querySelectorAll('.class-card');
-    
-    cards.forEach(card => {
-        card.style.display = 'block';
-        
-        if (filter === 'all') {
-            return;
-        }
-        
-        if (filter === 'course' && !card.classList.contains('course')) {
-            card.style.display = 'none';
-        }
-        
-        if (filter === 'seminar' && !card.classList.contains('seminar')) {
-            card.style.display = 'none';
-        }
-        
+function renderFilteredTimetable() {
+  const timetableGrid = document.getElementById('timetable-grid');
+  timetableGrid.innerHTML = '';
+
+  // We’ll show Monday..Friday columns
+  // If no data or user picks 'all' with no logic, just show empty columns
+  const dataForKey = timetableData[currentFilterValue] || {};
+
+  // Create 5 columns for each day in order
+  DAY_ORDER.forEach(day => {
+    const dayColumn = document.createElement('div');
+    dayColumn.className = 'day-column';
+
+    // For each row in day
+    const entries = dataForKey[day] || []; // might be empty
+    entries.forEach(row => {
+      // Filter by classType if needed
+      // row.Type is 'course' or 'seminar'
+      if (currentClassType === 'all' || row.Type === currentClassType) {
+        const [startStr, endStr] = row.Interval.split('-');
+        const startHour = parseInt(startStr, 10);
+        const endHour   = parseInt(endStr, 10);
+
+        // Each hour = 80px in height (example)
+        const topPosition = (startHour - 8) * 80;  // e.g. 8 => 0, 9 => 80, etc.
+        const height      = (endHour - startHour) * 79;
+
+        const classCard = document.createElement('div');
+        // If it's optional, we apply 'optional' else row.Type
+        const cardClass = row.Optional ? 'optional' : row.Type; // 'course', 'seminar', or 'optional'
+
+        classCard.className = `class-card ${cardClass}`;
+        classCard.style.top    = `${topPosition}px`;
+        classCard.style.height = `${height}px`;
+
+        classCard.innerHTML = `
+          <div class="class-time">${row.Interval}</div>
+          <div class="class-name">${row.Subject}</div>
+          <div class="class-info">
+            <div class="class-teacher"><i class="fas fa-user"></i> ${row.Teacher}</div>
+            <div class="class-room"><i class="fas fa-map-marker-alt"></i> ${row.Room}</div>
+            <div class="class-type">${row.Type}${row.Optional ? ' (optional)' : ''}</div>
+          </div>
+        `;
+        dayColumn.appendChild(classCard);
+      }
     });
-}
 
-/**
- * Handle logout button click
- */
-function handleLogout() {
-    // This is a placeholder. In a real app, you would handle logout logic
-    alert('Logging out...');
-}
-
-/**
- * Handle suggestion form submission
- */
-function handleSuggestionSubmit() {
-    const type = document.getElementById('suggestion-type').value;
-    const course = document.getElementById('suggestion-course').value;
-    const details = document.getElementById('suggestion-details').value;
-    
-    // This is a placeholder. In a real app, you would send this data to your backend
-    console.log('Suggestion submitted:', { type, course, details });
-    
-    // Show confirmation
-    alert('Thank you for your suggestion! It has been submitted for review.');
-    
-    // Clear form
-    document.getElementById('suggestion-form').reset();
+    timetableGrid.appendChild(dayColumn);
+  });
 }

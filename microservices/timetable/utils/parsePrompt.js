@@ -49,6 +49,9 @@ async function parsePrompt(constraint, teacher_id, extraRestrictions) {
         max_daily_hours: {}
     } : extraRestrictions;
 
+    if (!Object.keys(teachers).includes(teacher_id))
+        return extraRestrictions;
+        
     const prompt = `
     You are a helpful assistant that based on a user input has to generate a JSON file matching the requirements.
     I run a timetable generative app and you are tasked with understanding what extra restrictions are described 

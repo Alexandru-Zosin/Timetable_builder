@@ -55,7 +55,7 @@ const server = https.createServer(options, async (req, res) => {
             }));
         }
 
-        parseJSON(req, res, async () => {
+        //parseJSON(req, res, async () => {
             switch(req.url) {
                 case '/timetable':
                     getCurrentTimetable(req, res);
@@ -77,7 +77,7 @@ const server = https.createServer(options, async (req, res) => {
                     res.end(JSON.stringify({error: "Not found."}));
                     break;
             }
-        });
+       // });
     } 
     else if (req.method === "POST") {
         parseJSON(req, res, async () => {

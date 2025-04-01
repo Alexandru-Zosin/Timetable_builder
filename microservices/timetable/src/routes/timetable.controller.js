@@ -1,6 +1,7 @@
 const { getTimetable, uploadTimetable } = require('../models/timetable.model');
 const { generateTimetableAndClasslist } = require('../generateTimetable');
 const { parsePrompt } = require('../../utils/parsePrompt');
+const { getDatabaseAsJson } = require('../../utils/downloadDatabases');
 
 async function getCurrentTimetable(req, res) {
     const timetable = await getTimetable();
@@ -16,7 +17,10 @@ async function getCurrentTimetable(req, res) {
         res.writeHead(200, {
             'Content-Type': 'application/json'
         });
-        return res.end(JSON.stringify(timetable));
+        const info = await getDatabaseAsJson();
+        timetable.info = JSON.parse(info);
+        let replyMessage = {data: timetable.data, info: JSON.parse(info)};
+        return res.end(JSON.stringify(replyMessage));
     }
 }
 
