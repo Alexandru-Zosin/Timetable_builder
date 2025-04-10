@@ -56,27 +56,27 @@ const server = https.createServer(options, async (req, res) => {
         }
 
         //parseJSON(req, res, async () => {
-            switch(req.url) {
-                case '/timetable':
-                    getCurrentTimetable(req, res);
-                    break;
-                case '/constraints':
-                    const authorizationPayload = await authorizeRequest(req);
-                    if (!(authorizationPayload.role === 'admin')) {
-                        res.writeHead(401, {
-                            'Content-Type': 'application/json',
-                        });
-                        return res.end(JSON.stringify({
-                            error: 'Unauthorized.'
-                        }));
-                    }
-                    getRequests(req, res);
-                    break;
-                default:
-                    res.writeHead(404, {'Content-Type': 'application-json'});
-                    res.end(JSON.stringify({error: "Not found."}));
-                    break;
-            }
+        switch(req.url) {
+            case '/timetable':
+                getCurrentTimetable(req, res);
+                break;
+            case '/constraints':
+                const authorizationPayload = await authorizeRequest(req);
+                if (!(authorizationPayload.role === 'admin')) {
+                    res.writeHead(401, {
+                        'Content-Type': 'application/json',
+                    });
+                    return res.end(JSON.stringify({
+                        error: 'Unauthorized.'
+                    }));
+                }
+                getRequests(req, res);
+                break;
+            default:
+                res.writeHead(404, {'Content-Type': 'application-json'});
+                res.end(JSON.stringify({error: "Not found."}));
+                break;
+        }
        // });
     } 
     else if (req.method === "POST") {
@@ -104,7 +104,7 @@ const server = https.createServer(options, async (req, res) => {
                             error: 'Unauthorized.'
                         }));
                     }
-                    addRequest(req, res, authorizationPayload.userId);
+                    addRequest(req, res, teacher_id);
                     break;
                 default:
                     res.writeHead(404, { "Content-Type": "application/json" });

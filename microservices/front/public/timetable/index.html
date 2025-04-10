@@ -67,37 +67,38 @@
         </header>
 
         <div id="pdf-container">
-
-        <div class="timetable-container">
-            <div class="time-axis">
-                <div class="time-slot">8:00</div>
-                <div class="time-slot">9:00</div>
-                <div class="time-slot">10:00</div>
-                <div class="time-slot">11:00</div>
-                <div class="time-slot">12:00</div>
-                <div class="time-slot">13:00</div>
-                <div class="time-slot">14:00</div>
-                <div class="time-slot">15:00</div>
-                <div class="time-slot">16:00</div>
-                <div class="time-slot">17:00</div>
-                <div class="time-slot">18:00</div>
-                <div class="time-slot">19:00</div>
-            </div>
-
-            <div class="timetable" id="timetable">
-                <div class="days-header">
-                    <div class="day-header">Monday</div>
-                    <div class="day-header">Tuesday</div>
-                    <div class="day-header">Wednesday</div>
-                    <div class="day-header">Thursday</div>
-                    <div class="day-header">Friday</div>
+            <div class="timetable-container">
+                <div class="time-axis">
+                    <div class="time-slot">8:00</div>
+                    <div class="time-slot">9:00</div>
+                    <div class="time-slot">10:00</div>
+                    <div class="time-slot">11:00</div>
+                    <div class="time-slot">12:00</div>
+                    <div class="time-slot">13:00</div>
+                    <div class="time-slot">14:00</div>
+                    <div class="time-slot">15:00</div>
+                    <div class="time-slot">16:00</div>
+                    <div class="time-slot">17:00</div>
+                    <div class="time-slot">18:00</div>
+                    <div class="time-slot">19:00</div>
                 </div>
 
-                <div class="timetable-grid" id="timetable-grid">
-                    <!-- timetable content will be inserted here by the script -->
+                <div class="timetable" id="timetable">
+                    <div class="days-header">
+                        <div class="day-header">Monday</div>
+                        <div class="day-header">Tuesday</div>
+                        <div class="day-header">Wednesday</div>
+                        <div class="day-header">Thursday</div>
+                        <div class="day-header">Friday</div>
+                    </div>
+
+                    <div class="timetable-grid" id="timetable-grid">
+                        <!-- timetable content will be inserted here by the script -->
+                    </div>
                 </div>
             </div>
-        </div>
+        </div> <!-- end pdf-container-->
+
 
         <div class="legend">
             <div class="legends">
@@ -117,10 +118,10 @@
             <button class="pdf-btn" onclick="downloadDivAsPDF()">Download PDF</button>
         </div>
         
-    </div>
+    
 
         <!-- Footer -->
-        <footer class="footer">
+        <footer id="footer">
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>Suggest a Timetable Change:
@@ -132,7 +133,7 @@
                                 <textarea id="suggestion-details" placeholder="Or describe your suggestion..." required></textarea>
                             </div>
                         </div>
-                        <button type="submit" class="submit-btn">Submit</button>
+                        <button id="prompt-btn" type="submit" class="submit-btn">Submit</button>
                     </div>
                 </div>
             </div>

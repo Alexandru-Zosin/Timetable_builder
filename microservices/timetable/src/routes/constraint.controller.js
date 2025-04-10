@@ -3,20 +3,20 @@ const { userMadeRequest, uploadRequest, getAllRequests } = require('../models/co
 
 require("dotenv").config();
 
-async function addRequest(req, res, userId) {
+async function addRequest(req, res, teacher_id) {
     const { request } = req.body;
     try {
-        const requestMade = await userMadeRequest(userId);
+        const requestMade = await userMadeRequest(teacher_id);
         if (requestMade) {
             res.writeHead(409, {
                 'Content-Type': 'application/json',
             });
             return res.end(JSON.stringify({
-                error: 'Conflict. Teacher already made a request.'
+                message: 'You already made a request. Wait until it is resolved.'
             }));
         }
 
-        await uploadRequest(userId, request);
+        await uploadRequest(teacher_id, request);
         res.writeHead(201, { 'Content-Type': 'application/json' });
         return res.end(JSON.stringify({
             message: 'Request registered successfully.'

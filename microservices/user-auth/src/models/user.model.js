@@ -70,9 +70,9 @@ async function registerUser(userData) {
     }
     
     const connection = await getConnectionFromPool(pool);
-    const query = 'INSERT INTO users (email, password, grouptag) VALUES (?, ?, ?)';
+    const query = 'INSERT INTO users (email, password, tag) VALUES (?, ?, ?)';
     const isRegisterSuccessful = await new Promise((res) => {
-        connection.query(query, [userData.email, userData.password, userData.grouptag], (err, results) => {
+        connection.query(query, [userData.email, userData.password, userData.tag], (err, results) => {
         if (err)
             res(false);
         else

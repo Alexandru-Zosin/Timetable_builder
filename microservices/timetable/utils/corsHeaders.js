@@ -2,6 +2,7 @@ const { PORTS } = require('../whitelistports');
 
 const allowedOrigins = Object.values(PORTS).map(port => `https://localhost:${port}`);
 allowedOrigins.push('https://localhost');
+allowedOrigins.push('chrome-extension://*');
 
 function setCORSHeadersOnValidOrigin(req, res) {
     const requestOrigin = req.headers.origin;

@@ -31,7 +31,7 @@ async function validate(req, res) {
 
     try {
         const decryptedToken = decrypt(sessionToken, process.env.SECRET_KEY);
-        const [userId, role, grouptag, expiration] = decryptedToken.split('|');
+        const [userId, role, tag, expiration] = decryptedToken.split('|');
 
         if (Date.now() > parseInt(expiration)) {
             res.writeHead(401, { 'Content-Type': 'application/json' });
@@ -57,7 +57,7 @@ async function validate(req, res) {
                 res.end(JSON.stringify({ userId, role }));
                 break;
             case PORTS.front:
-                res.end(JSON.stringify({ userId, role, grouptag }));
+                res.end(JSON.stringify({ userId, role, tag }));
                 break;
             default:
                 res.end(JSON.stringify({}));

@@ -100,7 +100,6 @@ async function initializeDatabases() {
             'admin',
             FALSE)`;
 
-        // insert request table and timetable required stuff
         await queryDatabase(usersConnection, insAdmStatement);
         console.log("Admin was successfully inserted.");
         await closeConnection(usersConnection);

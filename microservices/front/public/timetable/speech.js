@@ -5,17 +5,15 @@ document.addEventListener('DOMContentLoaded', function () {
     let recognition;
     let isListening = false;
 
-    // Check if browser supports SpeechRecognition
     if ('webkitSpeechRecognition' in window) {
         recognition = new webkitSpeechRecognition();
-        recognition.lang = 'ro-RO'; // Romanian language
+        recognition.lang = 'ro-RO'; 
         recognition.continuous = false;
         recognition.interimResults = false;
 
-        // On successful recognition
         recognition.onresult = function (event) {
             const transcript = event.results[0][0].transcript;
-            suggestionDetails.value += transcript + ' ';
+            suggestionDetails.value = transcript;
         };
 
         recognition.onstart = function () {
@@ -37,7 +35,6 @@ document.addEventListener('DOMContentLoaded', function () {
             micIcon.classList.remove('active');
         };
 
-        // Toggle speech recognition on mic icon click
         micIcon.addEventListener('click', function () {
             if (isListening) {
                 recognition.stop();

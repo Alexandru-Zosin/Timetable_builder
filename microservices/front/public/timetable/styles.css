@@ -236,7 +236,7 @@ select {
 .timetable-grid {
     display: flex;
     position: relative;
-    height: calc(12 * 80px + 1px); /* 13 time slots */
+    height: calc(12 * 80px + 1px); /* 12 time slots */
 }
 
 .day-column {

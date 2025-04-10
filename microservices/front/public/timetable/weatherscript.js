@@ -11,12 +11,18 @@ const weatherIcons = {
 };
 
 const getWeatherIcon = (description) => {
-  if (description.includes('clear') || description.includes('sunny')) return weatherIcons.sunny;
-  if (description.includes('cloud')) return weatherIcons.cloudy;
-  if (description.includes('rain') || description.includes('drizzle')) return weatherIcons.rainy;
-  if (description.includes('snow')) return weatherIcons.snow;
-  if (description.includes('thunder')) return weatherIcons.thunderstorm;
-  if (description.includes('fog') || description.includes('mist')) return weatherIcons.foggy;
+  if ([0, 1].some((el) => description.includes(el)))
+    return weatherIcons.sunny;
+  if ([3].some((el) => description.includes(el)))
+    return weatherIcons.cloudy;
+  if ([61, 63].some((el) => description.includes(el)))
+    return weatherIcons.rainy;
+  if ([85, 86].some((el) => description.includes(el)))
+    return weatherIcons.snow;
+  if ([95, 96].some((el) => description.includes(el)))
+    return weatherIcons.thunderstorm;
+  if ([45, 48].some((el) => description.includes(el)))
+    return weatherIcons.foggy;
   return weatherIcons.clear;
 };
 

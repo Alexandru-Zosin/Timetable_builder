@@ -94,18 +94,18 @@ async function initializeDatabases() {
         await queryDatabase(usersConnection, statement);
         console.log("users table has been created in uaicusersDB.")
 
-        // const insAdmStatement = `INSERT INTO users (email, password, role, requested) VALUES(
-        //     'admin@uaic.info.ro',
-        //     '771dccfd999072a8fdbe127be9154f0bb1522fc047cd61aa4c10348190cd947e',
-        //     'admin',
-        //     FALSE)`;
+        const insAdmStatement = `INSERT INTO users (email, password, role, requested) VALUES(
+            'admin@uaic.info.ro',
+            '771dccfd999072a8fdbe127be9154f0bb1522fc047cd61aa4c10348190cd947e',
+            'admin',
+            FALSE)`;
 
-        // // insert request table and timetable required stuff
-        // await queryDatabase(usersConnection, insAdmStatement);
+        // insert request table and timetable required stuff
+        await queryDatabase(usersConnection, insAdmStatement);
 
         
 
-        // console.log("Admin was successfully inserted.");
+        console.log("Admin was successfully inserted.");
         await closeConnection(usersConnection);
         console.log("uaicusers connection was successfully ended.");
         
@@ -228,7 +228,7 @@ async function initializeDatabases() {
 
 async function populateDatabase() {
     try {
-        let connectionConfig = {
+        const connectionConfig = {
             host: process.env.DB_HOST,
             user: process.env.DB_USER,
             password: process.env.DB_PASSWORD,
@@ -314,33 +314,6 @@ async function populateDatabase() {
         }
         console.log("Groups inserted.");
 
-        await closeConnection(connection);
-        connectionConfig.database = "uaicusers";
-        const usersConnection = await connectToDatabase(connectionConfig);
-
-        const insAdmStatement = `INSERT INTO users (email, password, role, requested) VALUES(
-            'admin@uaic.info.ro',
-            '771dccfd999072a8fdbe127be9154f0bb1522fc047cd61aa4c10348190cd947e',
-            'admin',
-            FALSE)`;
-        await queryDatabase(usersConnection, insAdmStatement);
-        console.log("Admin was successfully inserted.");
-        
-        const numOfTeachers = Object.keys(teachers).length;
-        for (var id = 1; id <= numOfTeachers; id++) {
-            const insTeacherStatement = `INSERT INTO users (email, password, role, tag, requested) VALUES(
-                'teacher${id}@uaic.info.ro',
-                '771dccfd999072a8fdbe127be9154f0bb1522fc047cd61aa4c10348190cd947e',
-                'teacher',
-                '${id}',
-                FALSE)`;
-            await queryDatabase(usersConnection, insTeacherStatement);
-        }
-        console.log("Teachers were successfully inserted.");
-
-        await closeConnection(usersConnection);
-        console.log("uaicusers connection was successfully ended.");
-        
         // insert extra restrictions
         // for ([teacherId, restrictions] of Object.entries(extraRestrictions.unpreferred_timeslots)) {
         //     for (timeslotId of restrictions) {
@@ -361,7 +334,7 @@ async function populateDatabase() {
         // }
         // console.log("Extra restrictions inserted.");
 
-        //await closeConnection(connection);
+        await closeConnection(connection);
         console.log("Database population complete. Connection closed.");
     } catch (err) {
         console.error("Error inserting data:", err);

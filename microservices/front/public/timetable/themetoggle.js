@@ -12,7 +12,7 @@ function toggleTheme() {
     }
 }
 
-// Load theme from localStorage on page load
+// load theme from localStorage on page load
 window.addEventListener('load', () => {
     const theme = localStorage.getItem('theme');
     const buttonIcon = document.querySelector('.theme-toggle i');

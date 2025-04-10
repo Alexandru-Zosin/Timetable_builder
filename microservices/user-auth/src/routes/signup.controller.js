@@ -29,7 +29,7 @@ async function signup(req, res) {
     const userData = {
         email: email,
         password: hashedPassword,
-        grouptag: grouptag
+        tag: grouptag
     };
 
     try {
