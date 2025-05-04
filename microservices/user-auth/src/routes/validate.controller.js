@@ -54,10 +54,10 @@ async function validate(req, res) {
 
         switch (parseInt(originPort)) {
             case PORTS.timetable:
-                res.end(JSON.stringify({ userId, role }));
+                res.end(JSON.stringify({ role, tag }));
                 break;
             case PORTS.front:
-                res.end(JSON.stringify({ userId, role, tag }));
+                res.end(JSON.stringify({ role, tag }));
                 break;
             default:
                 res.end(JSON.stringify({}));

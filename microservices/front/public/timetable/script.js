@@ -1,9 +1,16 @@
-let groups = [];
-let rooms = [];
-let subjects = [];
-let teachers = [];
-let timeslots = [];
-let userId, role, tag;
+let groups = [],
+    rooms = [],
+    subjects = [],
+    teachers = [],
+    timeslots = [],
+    role,
+    tag,
+    groupMap = {},
+    teacherMap = {},
+    roomMap = {},
+    subjectMap = {},
+    timeslotMap = {};
+
 // this will hold all timetable info by "G###" (group) or "T##" (teacher).
 // e.g. timetableData["G101"] { Monday: [...], Tuesday: [...], ... }
 let timetableData = {};
@@ -17,7 +24,6 @@ const DAY_ORDER = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
 window.addEventListener('load', async function () {
     try {
-        // WIP
         const validationResponse = await fetch("https://localhost:3000/validate", {
             method: 'POST',
             credentials: 'include',
@@ -29,10 +35,12 @@ window.addEventListener('load', async function () {
             body: JSON.stringify({})
         });
 
-        if (validationResponse.status == 200)
-            ({ userId, role, tag } = await validationResponse.json()); // () to not confuse a block of code
-        else
-            window.alert("An error has occured.");
+        if (validationResponse.status == 200) {
+            ({ role, tag } = await validationResponse.json()); // () to not confuse a block of code
+        } else {
+            window.location.href = "https://localhost/login/index.html";
+            return;
+        }
 
         const response = await fetch('https://localhost:3557/timetable', {
             method: 'GET',
@@ -44,10 +52,11 @@ window.addEventListener('load', async function () {
             }
         });
         let data;
-        if (response.status == 200)
+        if (response.status == 200) {
             data = await response.json();
-        else
-            window.alert("An error has occured.");
+        } else {
+            window.alert("Error: Can't retrieve the timetable.");
+        }
 
         groups = data.info.groups;
         rooms = data.info.rooms;
@@ -58,11 +67,6 @@ window.addEventListener('load', async function () {
         const bestTimetable = data.data;
 
         // Build a mapping (object or Map) to find details by code quickly
-        const groupMap = {};
-        const teacherMap = {};
-        const roomMap = {};
-        const subjectMap = {};
-        const timeslotMap = {};
 
         groups.forEach(g => groupMap[g.code] = g);
         teachers.forEach(t => teacherMap[t.code] = t);
@@ -85,7 +89,7 @@ window.addEventListener('load', async function () {
             currentFilterType = 'teacher';
             currentFilterValue = 'T' + tag;
             document.getElementById('teacher-select').value = tag;
-        } 
+        }
 
         // Default: no particular selection, or pick "all" for group
         // but let's do an initial render with no filter selected.
@@ -93,6 +97,7 @@ window.addEventListener('load', async function () {
         //currentFilterValue = 'Gall';  // a placeholder if you want "all" by default
         renderFilteredTimetable();
 
+        // EVENT LISTENERS
         // Listen for filter by class type (course/seminar/all)
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', function () {
@@ -148,13 +153,16 @@ window.addEventListener('load', async function () {
                     body: JSON.stringify({})
                 }
             );
-
+            if (logoutRequest.status !== 200) {
+                window.alert(`Logout failed. ${response.status}`);
+                return;
+            }
             window.location.href = "https://localhost/login/index.html";
         });
-        
-        document.getElementById("submit").addEventListener('click', async () => {
+
+        document.getElementById("prompt-btn").addEventListener('click', async () => {
             const constraint = document.getElementById("suggestion-details").value;
-            const response = await fetch("https://localhost:3557/constraint", {
+            const response = await fetch("https://localhost:3557/constraints", {
                 method: "POST",
                 credentials: "include",
                 mode: "cors",
@@ -163,63 +171,23 @@ window.addEventListener('load', async function () {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
+                    name: teacherMap[tag].name,
                     constraint: constraint
                 })
             });
-            if (!response.status == 200) {
-                throw new Error(`Constraint was not successfully sent. ${response.status}`);
+            if (response.status == 409) {
+                window.alert(`You already made a request. Wait for it to be processed.`);
+            } else if (response.status !== 201) {
+                window.alert(`Constraint was not successfully sent. ${response.status}`);
+            } else {
+                window.alert(`Constraint was successfully created.`);
             }
-            
+            document.getElementById("suggestion-details").value = "";
         });
     } catch (error) {
-        console.error('Error loading data upon fetching:', error);
+        window.alert('Error: ' + error);
     }
 });
-
-// const promptButton = document.getElementById("prompt-btn");
-// promptButton.addEventListener('click', () => {
-//     const prompt = document.getElementById("suggestion-details").value;
-
-//     try {
-//         const statusCode = await fetch('https://localhost:3557/constraint', {
-//             method: 'POST',
-//             credentials: 'include',
-//             mode: 'cors',
-//             headers: {
-//                 "Accept": "application/json",
-//                 "Content-Type": "application/json"
-//             },
-//             body: JSON.stringify({
-//                 prompt
-//             })
-//         });
-
-//         if (!statusCode.ok) {
-//             throw new Error(`Response status: ${response.status}`);
-//         }
-
-
-//         // Fetch the timetable from your backend
-//         const response = await fetch('https://localhost:3557/timetable', {
-//             method: 'GET',
-//             credentials: 'include',
-//             mode: 'cors',
-//             headers: {
-//                 'Accept': 'application/json',
-//                 'Content-Type': 'application/json',
-//             }
-//         });
-//         const data = await response.json();
-
-//     } catch (err) {
-//         alert("There was a problem when ")
-//     }
-//     const statusCode = fetch("https://localhost:3557/constraint", {
-
-//     });
-
-//     console.log(prompt);
-// });
 
 /**
  * Build timetableData keyed by "G..." or "T...".
@@ -394,7 +362,7 @@ function renderFilteredTimetable() {
                 const endHour = parseInt(endStr, 10);
 
                 // each hour = 80px in height
-                const topPosition = (startHour - 8) * 80; 
+                const topPosition = (startHour - 8) * 80;
                 const height = (endHour - startHour) * 79;
 
                 const classCard = document.createElement('div');

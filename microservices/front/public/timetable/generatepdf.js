@@ -12,7 +12,7 @@ function downloadDivAsPDF() {
 
         // Get the actual dimensions of the div
         const imgWidth = canvas.width * 0.264583;  // px to mm
-        const imgHeight = canvas.height * 0.264583; // px to mm
+        const imgHeight = canvas.height * 0.264583;
 
         // Create a PDF with the exact dimensions of the div in landscape mode
         const pdf = new jsPDF("l", "mm", [imgWidth, imgHeight]);

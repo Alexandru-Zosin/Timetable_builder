@@ -5,7 +5,7 @@ require("dotenv").config();
 const { setCORSHeadersOnValidOrigin } = require("../utils/corsheaders");
 const { parseJSON } = require("../utils/parseJSONbody");
 const { getCurrentTimetable, generateNewTimetable } = require("./routes/timetable.controller");
-const { addRequest, getRequests } = require("./routes/constraint.controller");
+const { addRequest, getRequests, removeRequest } = require("./routes/constraints.controller");
 
 const PORT = 3557;
 const options = {
@@ -55,7 +55,6 @@ const server = https.createServer(options, async (req, res) => {
             }));
         }
 
-        //parseJSON(req, res, async () => {
         switch(req.url) {
             case '/timetable':
                 getCurrentTimetable(req, res);
@@ -77,13 +76,13 @@ const server = https.createServer(options, async (req, res) => {
                 res.end(JSON.stringify({error: "Not found."}));
                 break;
         }
-       // });
     } 
     else if (req.method === "POST") {
         parseJSON(req, res, async () => {
+            let authorizationPayload;
             switch (req.url) {
                 case "/timetable":
-                    let authorizationPayload = await authorizeRequest(req);
+                    authorizationPayload = await authorizeRequest(req);
                     if (!(authorizationPayload.role === 'admin')) {
                         res.writeHead(401, {
                             'Content-Type': 'application/json',
@@ -92,9 +91,9 @@ const server = https.createServer(options, async (req, res) => {
                             error: 'Unauthorized.'
                         }));
                     }
-                    generateNewTimetable(req, res);
+                    await generateNewTimetable(req, res);
                     break;
-                case "/constraint":
+                case "/constraints":
                     authorizationPayload = await authorizeRequest(req);
                     if (!(authorizationPayload.role === 'teacher')) {
                         res.writeHead(401, {
@@ -104,7 +103,7 @@ const server = https.createServer(options, async (req, res) => {
                             error: 'Unauthorized.'
                         }));
                     }
-                    addRequest(req, res, teacher_id);
+                    await addRequest(req, res, authorizationPayload.tag);
                     break;
                 default:
                     res.writeHead(404, { "Content-Type": "application/json" });
@@ -116,7 +115,30 @@ const server = https.createServer(options, async (req, res) => {
     else if (req.method === "OPTIONS") {
         res.writeHead(204, { "Content-Length": 0 });
         res.end();
-    } 
+    }
+    else if (req.method === "DELETE") {
+        let authorizationPayload;
+        const urlParts = req.url.split('/');
+        
+        if (urlParts[1] === 'constraints' && urlParts.length === 3) {
+            const id = parseInt(urlParts[2]);
+    
+            if (isNaN(id)) {
+                res.writeHead(400, { "Content-Type": "application/json" }); //bad request
+                return res.end(JSON.stringify({ error: "Invalid constraint ID." }));
+            }
+
+            authorizationPayload = await authorizeRequest(req);
+            if (authorizationPayload.role !== 'admin') {
+                res.writeHead(401, { "Content-Type": "application/json" });
+                return res.end(JSON.stringify({ error: "Unauthorized." }));
+            }
+            return removeRequest(id, res);
+        } else {
+            res.writeHead(404, { "Content-Type": "application/json" });
+            res.end(JSON.stringify({ error: "Not found." }));
+        }
+    }    
     else {
         res.writeHead(404, { "Content-Type": "application/json" });
         res.end(JSON.stringify({ error: "Error" }));

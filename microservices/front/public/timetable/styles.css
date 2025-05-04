@@ -13,52 +13,20 @@
     --border-radius: 12px;
 }
 
-/* Dark Theme Variables */
 body.dark {
     --primary-color: #90a0ff;
     --primary-light: #2b2b2b;
     --secondary-color: #ff85a2;
     --text-color: #e0e0e0;
     --light-text: #aaaaaa;
-    --background: #1e1e1e; /* Soft dark gray */
-    --card-bg: #2a2a2a; /* Slightly lighter gray for cards */
+    --background: #1e1e1e;
+    --card-bg: #2a2a2a;
     --course-color: #3a4dbf;
     --seminar-color: #bf4d7a;
     --optional-color: #555555;
     --shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
     --border-radius: 12px;
 }
-
-.theme-toggle {
-    background: none;
-    color: var(--primary-color);
-    border: none;
-    padding: 0;
-    margin-right: 5px;
-    cursor: pointer;
-    transition: color 0.3s ease, transform 0.2s ease;
-}
-
-.theme-toggle:hover {
-    color: var(--light-text);
-    transform: scale(1.1);
-}
-
-.theme-toggle i {
-    font-size: 24px;
-    line-height: 1;
-}
-
-body.dark .logout-btn, body.dark .pdf-btn {
-    background: var(--primary-light);
-    color: var(--text-color);
-}
-
-body.dark .logout-btn:hover, body.dark .pdf-btn:hover {
-    background: var(--primary-color);
-    color: white;
-}
-
 
 * {
     margin: 0;
@@ -84,6 +52,17 @@ body {
     z-index: 3;
 }
 
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.logo i {
+    margin-right: 10px;
+    font-size: 28px;
+}
+
 .view-selectors {
     display: flex;
     gap: 10px;
@@ -96,17 +75,6 @@ select {
     padding: 0.25em 0.5em;
     cursor: pointer;
     background-color: #fff;
-  }
-
-.logo {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--primary-color);
-}
-
-.logo i {
-    margin-right: 10px;
-    font-size: 28px;
 }
 
 .user-info {
@@ -126,7 +94,27 @@ select {
 }
 
 #user-avatar:hover {
-    color: var(--primary-color)
+    color: var(--primary-color);
+}
+
+.theme-toggle {
+    background: none;
+    color: var(--primary-color);
+    border: none;
+    padding: 0;
+    margin-right: 5px;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.theme-toggle:hover {
+    color: var(--light-text);
+    transform: scale(1.1);
+}
+
+.theme-toggle i {
+    font-size: 24px;
+    line-height: 1;
 }
 
 .logout-btn {
@@ -139,6 +127,18 @@ select {
 }
 
 .logout-btn:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+body.dark .logout-btn,
+body.dark .pdf-btn {
+    background: var(--primary-light);
+    color: var(--text-color);
+}
+
+body.dark .logout-btn:hover,
+body.dark .pdf-btn:hover {
     background: var(--primary-color);
     color: white;
 }
@@ -165,7 +165,8 @@ select {
     gap: 20px;
 }
 
-.filter-btn, .pdf-btn {
+.filter-btn,
+.pdf-btn {
     padding: 8px 16px;
     border: none;
     border-radius: 20px;
@@ -175,7 +176,10 @@ select {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
-.filter-btn:hover, .filter-btn.active, .pdf-btn:hover, pdf-btn.active {
+.filter-btn:hover,
+.filter-btn.active,
+.pdf-btn:hover,
+pdf-btn.active {
     background: var(--primary-color);
     color: white;
 }
@@ -213,14 +217,9 @@ select {
     display: flex;
     height: 50px;
     position: sticky;
-    /* top: 0; */
     background: var(--primary-color);
     color: white;
     z-index: 2;
-}
-
-.timetable {
-    flex-grow: 1;
 }
 
 .day-header {
@@ -233,10 +232,14 @@ select {
     border-right: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+.timetable {
+    flex-grow: 1;
+}
+
 .timetable-grid {
     display: flex;
     position: relative;
-    height: calc(12 * 80px + 1px); /* 12 time slots */
+    height: calc(12 * 80px + 1px);
 }
 
 .day-column {
@@ -288,14 +291,18 @@ select {
     opacity: 0.9;
 }
 
-.class-teacher, .class-room, .class-group {
+.class-teacher,
+.class-room,
+.class-group {
     display: flex;
     align-items: center;
     gap: 5px;
     margin-top: 3px;
 }
 
-.class-teacher i, .class-room i, .class-group i {
+.class-teacher i,
+.class-room i,
+.class-group i {
     font-size: 10px;
 }
 
@@ -312,7 +319,7 @@ select {
 
 .legends {
     display: flex;
-    gap: 20px
+    gap: 20px;
 }
 
 .legend-item {
@@ -355,7 +362,6 @@ select {
     color: white;
 }
 
-/* Footer Styles */
 .footer {
     background: var(--primary-color);
     color: white;
@@ -382,38 +388,39 @@ select {
     font-weight: 600;
 }
 
+.footer-section a {
+    color: white;
+    text-decoration: underline;
+}
+
 .suggestion-form {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.form-group label {
-    font-size: 14px;
-}
-
-.form-group input, .form-group select, .form-group textarea {
+.form-group input,
+.form-group select,
+.form-group textarea {
     padding: 10px;
     border: none;
     border-radius: 6px;
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
+    background: var(--card-bg);
+    color: var(--text-color);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
-.form-group input::placeholder, .form-group textarea::placeholder {
-    color: rgba(255, 255, 255, 0.7);
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: var(--light-text);
 }
 
 #suggestion-details {
     width: 100%;
     height: 100px;
-    padding-right: 40px; /* Leave space for the mic icon */
+    padding-right: 40px;
+    background-color: var(--card-bg);
+    color: var(--text-color);
 }
 
 #mic-icon {
@@ -438,7 +445,6 @@ select {
     border-radius: 6px;
     font-weight: 600;
     cursor: pointer;
-    align-self: flex-start;
 }
 
 .submit-btn:hover {
@@ -446,9 +452,14 @@ select {
     color: white;
 }
 
-.footer-section a {
+body.dark .submit-btn {
+    background: var(--primary-light);
+    color: var(--text-color);
+}
+
+body.dark .submit-btn:hover {
+    background: var(--primary-color);
     color: white;
-    text-decoration: underline;
 }
 
 @media (max-width: 1050px) {
@@ -480,8 +491,8 @@ select {
 @media (max-width: 600px) {
     .navbar {
         padding: 15px;
-    }    
-    
+    }
+
     .timetable-container {
         overflow-x: auto;
     }

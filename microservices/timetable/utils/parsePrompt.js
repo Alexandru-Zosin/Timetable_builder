@@ -49,7 +49,7 @@ async function parsePrompt(constraint, teacher_id, extraRestrictions) {
         max_daily_hours: {}
     } : extraRestrictions;
 
-    if (!Object.keys(teachers).includes(teacher_id))
+    if (!teachers.some(t => t.code === teacher_id))
         return extraRestrictions;
         
     const prompt = `
@@ -95,7 +95,8 @@ async function parsePrompt(constraint, teacher_id, extraRestrictions) {
     Return in JSON format only and without any additional comments.
     Remember that when someone says that he doesn't want to have hours scheduled from 08, for example,
     it means he doesn't want to teach only the first timeslot beginning at 08 (it doesn't include the 10 timeslot, nor does it mean from 08 until the end of the day).
-    When he means a whole day, he will say: "No hours monday at all".
+    When he means a whole day, he will say: "No hours monday at all". 
+    Also, if he says he doesn't want hours scheduled from "02" or "two", it means 14:00 (02 PM) - try to map meanings reasonably well for 08-18:00 interval.
     Here is what the user wants to achieve as a prompt from the user:
     ${constraint}
     `;

@@ -11,13 +11,29 @@
         even if attacker injects script, they cant send stolen data to external servers
         - any attack on CSS is impossible, as it's applied by browser in the beginning and done
     -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src https://localhost:3000 https://localhost:3557">
+    <meta http-equiv="Content-Security-Policy" content="connect-src https://localhost:3000 https://localhost:3557 https://cdnjs.cloudflare.com">
     <title>Login/Signup</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
     <script src="script.js" defer></script> <!-- runs only after HTML is parsed -->
+    <script src="themetoggle.js" defer></script>
 </head>
 
 <body>
+    <nav class="navbar">
+        <div class="logo">
+            <i class="fas fa-calendar-alt"></i>
+            <span>UAIC Timetable</span>
+        </div>
+        <div class="user-info">
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <i class="fa-solid fa-moon"></i>
+            </button>
+        </div>
+    </nav>
+
     <div class="container">
         <div class="form-container">
             <div class="form-switcher">
@@ -26,7 +42,7 @@
             </div>
 
             <form id="login-form" class="active-form">
-                <h2>UAIC Timetable</h2>
+                <h2>Enter Credentials</h2>
 
                 <div class="form-group">
                     <label for="login-email">Email</label>

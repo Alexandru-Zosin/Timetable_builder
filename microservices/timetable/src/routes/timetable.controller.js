@@ -1,5 +1,5 @@
 const { getTimetable, uploadTimetable } = require('../models/timetable.model');
-const { generateTimetableAndClasslist } = require('../generateTimetable');
+const { generateTimetableAndClasslist, swapTimetablePlaces } = require('../generateTimetable');
 const { parsePrompt } = require('../../utils/parsePrompt');
 const { getDatabaseAsJson } = require('../../utils/downloadDatabases');
 
@@ -29,12 +29,16 @@ async function generateNewTimetable(req, res) {
    
     let { prompt, teacher_id } = req.body;
     let new_extra_restrictions, newTimetable;
-    if (prompt != '') {
+    if (prompt != '' && teacher_id != null) {
         new_extra_restrictions = await parsePrompt(prompt, teacher_id, oldTimetable?.extra_restrictions ?? null);
         newTimetable = await generateTimetableAndClasslist(new_extra_restrictions, oldTimetable);
     } else {
         newTimetable = await generateTimetableAndClasslist(null, null);
     }
+
+    // try swap algorithm
+    if (!newTimetable)
+        newTimetable = await swapTimetablePlaces(new_extra_restrictions, oldTimetable);
 
     if (!newTimetable) {
         res.writeHead(404, {

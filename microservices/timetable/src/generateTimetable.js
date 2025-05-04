@@ -1,6 +1,8 @@
 const fs = require("fs");
 const { getDatabaseAsJson } = require('../utils/downloadDatabases');
 
+const timeOut = 6000;
+let startTime;
 let loaded_data;
 //const db = await getDatabaseAsJson();
 //const loaded_data = JSON.parse(db);
@@ -22,69 +24,12 @@ let extra_restrictions;// = loaded_data.extra_restrictions;
 
 let shuffle = true;
 let class_list = [];
-/*
-if ('class_list' in loaded_data) {
-    class_list = loaded_data.class_list;
-    shuffle = false;
-}
-
-if (shuffle) {
-    for (const subject of loaded_data.subjects) {
-        if (subject.is_optional === 0) {  // mandatory subject
-            for (const group of loaded_data.groups) {
-                const group_name = group.name;
-                if (group_name.length === 1) {  // course group(all subgroups altogether)
-                    class_list.push({
-                        type: 'course',
-                        subject_code: subject.code,
-                        group_code: group.code
-                    });
-                } else if (group.code !== 0) {  // seminar group (each individual group) --- avoids EVERYONE
-                    class_list.push({
-                        type: 'seminar',
-                        subject_code: subject.code,
-                        group_code: group.code
-                    });
-                }
-            }
-        } else {  // optional subject
-            const main_groups = loaded_data.groups.filter(group => group.name.length === 1);
-            class_list.push({
-                type: 'course',
-                subject_code: subject.code,
-                group_code: 0 // course is for EVERYONE at the same time
-            });
-            for (const group of main_groups) { // seminar is for all respective(A or B or ...) subgroups altogether
-                class_list.push({
-                    type: 'seminar',
-                    subject_code: subject.code,
-                    group_code: group.code
-                });
-            }
-        }
-    }
-
-    class_list.sort(() => Math.random() - 0.5);
-
-    //for (let i = class_list.length - 1; i > 0; i--) {
-     //   const j = Math.floor(Math.random() * (i + 1));
-      //  [class_list[i], class_list[j]] = [class_list[j], class_list[i]];
-    //}
-}
-*/
-
 let best_timetable = null;
 let current_timetable = {};  // current_timetable[teacher_code][time_code] = (group_code, room_code, subject_code, class_type)
 let teacher_schedule = {};  // which timeslots are occupied by each teacher
 let group_schedule = {};  // which timeslots are occupied by each group -> detect overlapping classes
-//for (const group of Object.values(groups)) {
-//    group_schedule[group.code] = new Set();
-//}
-//if group['code'] not in group_schedule:
-//DELETE    group_schedule[group['code']] = set()
 let room_schedule = {};  // which time slots are occupied by each room
 let daily_teacher_hours = {};  // daily hours for each teacher per day
-
 
 function initializeData(old_class_list) {
     groups = Object.fromEntries(loaded_data.groups.map(group => [group.code, group]));
@@ -144,11 +89,6 @@ function initializeData(old_class_list) {
         }
 
         class_list.sort(() => Math.random() - 0.5);
-
-        //for (let i = class_list.length - 1; i > 0; i--) {
-        //   const j = Math.floor(Math.random() * (i + 1));
-        //  [class_list[i], class_list[j]] = [class_list[j], class_list[i]];
-        //}
     }
 
     best_timetable = null;
@@ -158,12 +98,10 @@ function initializeData(old_class_list) {
     for (const group of Object.values(groups)) {
         group_schedule[group.code] = new Set();
     }
-    //if group['code'] not in group_schedule:
-    //DELETE    group_schedule[group['code']] = set()
+
     room_schedule = {};  // which time slots are occupied by each room
     daily_teacher_hours = {};  // daily hours for each teacher per day
 }
-
 
 function add_to_timetable(teacher_code, time_code, group_code, room_code, subject_code, class_type) {
     /**
@@ -304,6 +242,10 @@ function generate(class_index) {
 
     // WE TRY to assign each TEACHER in turn
     for (const teacher_code of possible_teachers) {
+        if (Date.now() - startTime > timeOut) {
+            return 0;
+        }
+
         // if it's a course, we need to check if teacher is elligible (R8)
         if (class_type === 'course' && !teachers[teacher_code].can_teach_course) {
             continue;
@@ -354,7 +296,7 @@ function generate(class_index) {
                     if (return_value === 1) {
                         return 1;
                     }
-                    // if not successful, remove assignment
+                    // if not successful, remove assignment (here WIP)
                     remove_from_timetable(teacher_code, time_code);
                 }
             }
@@ -378,14 +320,14 @@ async function generateTimetableAndClasslist(new_extra_restrictions, oldTimetabl
     if (oldTimetable != null)
         initializeData(oldTimetable.class_list)
     else
-        initializeData(null);   
-
-    generate(0);
-    return ({
+        initializeData(null);
+    
+    startTime = Date.now();
+    return generate(0) ? ({
         data: best_timetable,
         class_list: class_list,
         extra_restrictions: extra_restrictions
-    });
+    }) : null;
 }
 
 module.exports = { generateTimetableAndClasslist };

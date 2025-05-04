@@ -30,7 +30,7 @@ async function getAllRequests() {
             if (err)
                 rej(err);
             else
-                res(results);
+                res(results.map(r => ({...r})));
         })
     });
     connection.release();
@@ -52,11 +52,11 @@ async function userMadeRequest(userId) {
     return requestExists;
 }
 
-async function uploadRequest(userId, data) {
+async function uploadRequest(userId, name, request) {
     const connection = await getConnectionFromPool(pool);
-    const query = `INSERT INTO requests (id, request) VALUES (?)`;
+    const query = `INSERT INTO requests (id, name, request) VALUES (?, ?, ?)`;
     const isSuccessfullyInserted = await new Promise((res, rej) => {
-        connection.query(query, [userId, data], (err, res) => {
+        connection.query(query, [userId, name, request], (err, result) => {
             if (err)
                 rej(false);
             else
@@ -67,4 +67,23 @@ async function uploadRequest(userId, data) {
     return isSuccessfullyInserted;
 }
 
-module.exports = { userMadeRequest, uploadRequest, getAllRequests };
+async function deleteRequest(id) {
+    const connection = await getConnectionFromPool(pool);
+    const query = `DELETE FROM requests WHERE id = ?`;
+
+    const deletedSuccessfully = await new Promise((res, rej) => {
+        connection.query(query, [id], (err, result) => {
+            if (err) {
+                rej(err);
+            } else {
+                res(true);
+            }
+        });
+    });
+
+    connection.release();
+    return deletedSuccessfully;
+}
+
+
+module.exports = { userMadeRequest, uploadRequest, getAllRequests, deleteRequest };

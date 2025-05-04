@@ -213,6 +213,7 @@ async function initializeDatabases() {
         await queryDatabase(timetablesConnection, 
             `CREATE TABLE requests (
                 id INT PRIMARY KEY,
+                name VARCHAR(255),
                 request VARCHAR(255) NOT NULL
             );`
         );
