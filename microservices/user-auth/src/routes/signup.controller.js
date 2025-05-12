@@ -1,55 +1,32 @@
 const { registerUser } = require('../models/user.model');
 const { hashWithKey } = require('../../utils/crypting');
 const { validateEmail, validatePassword, validateGroup } = require('../../utils/validate');
-require("dotenv").config();
 
 async function signup(req, res) {
     const { email, password, confirmPassword, grouptag } = req.body;
 
-    if (!validateEmail(email) || !validatePassword(password) || !validatePassword(confirmPassword)
-    || !validateGroup(grouptag)) {
-        res.writeHead(403, {
-            'Content-Type': 'application/json',
-        });
-        return res.end(JSON.stringify({
-            error: 'Fordidden.'
-        }));
+    if (!validateEmail(email) || !validatePassword(password) || 
+    !validatePassword(confirmPassword) || !await validateGroup(grouptag)) {
+        return res.status(403).json({ error: 'Forbidden.' });
     }
 
     if (password !== confirmPassword) {
-        res.writeHead(400, {
-            'Content-Type': 'application/json',
-        });
-        return res.end(JSON.stringify({
-            error: 'Bad request. Password does not match the confirm password.'
-        }));
+        return res.status(400).json({ error: 'Password does not match the confirm password.' });
     }
 
     const hashedPassword = hashWithKey(password, process.env.HASH_KEY);
-    const userData = {
-        email: email,
-        password: hashedPassword,
-        tag: grouptag
-    };
+    const userData = { email, password: hashedPassword, tag: grouptag };
 
     try {
         const userCreated = await registerUser(userData);
 
         if (!userCreated) {
-            res.writeHead(409, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify({
-                error: 'User already exists.'
-            }));
+            return res.status(409).json({ error: 'User already exists.' });
         }
-        res.writeHead(201, { 'Content-Type': 'application/json' });
-        return res.end(JSON.stringify({
-            message: 'User registered successfully.'
-        }));
+
+        return res.status(201).json({ message: 'User registered successfully.' });
     } catch (err) {
-        res.writeHead(500, { 'Content-Type': 'application/json' });
-        return res.end(JSON.stringify({
-            error: 'Internal server error.'
-        }));
+        return res.status(500).json({ error: 'Internal server error.' });
     }
 }
 

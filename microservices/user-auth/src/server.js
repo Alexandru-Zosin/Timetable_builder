@@ -1,70 +1,51 @@
+const express = require('express');
 const https = require('https');
 const fs = require('fs');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const { login } = require('./routes/login.controller');
 const { signup } = require('./routes/signup.controller');
 const { logout } = require('./routes/logout.controller');
 const { validate } = require('./routes/validate.controller');
-const { setCORSHeadersOnValidOrigin } = require('../utils/corsHeaders');
-const { parseJSON } = require('../utils/parseJSONBody');
-const { Agent, setGlobalDispatcher } = require('undici')
-const PORT = 3000;
-require("dotenv").config();
+const { PORTS } = require('../whitelistports');
+require('dotenv').config();
 
-let options = {
+const app = express();
+
+// ssl Certificate
+const options = {
     key: fs.readFileSync('../key.pem', 'utf8'),
     cert: fs.readFileSync('../cert.pem', 'utf8')
 };
 
-const agent = new Agent({
-    connect: {
-      rejectUnauthorized: false
-    }
-});
-  
-setGlobalDispatcher(agent);
+// CORS configuration
+const allowedOrigins = Object.values(PORTS).map(port => `https://localhost:${port}`);
+allowedOrigins.push('https://localhost');
 
-const server = https.createServer(options, (req, res) => {
-    if (!setCORSHeadersOnValidOrigin(req, res))
-        return;
+app.use(cors({
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    credentials: true,
+}));
+app.use(express.json());
+app.use(cookieParser());
 
-    if (req.method === 'POST') {
-        parseJSON(req, res, () => {
-            switch (req.url) {
-                case '/login':
-                    login(req, res);
-                    break;
-                case '/signup':
-                    signup(req, res);
-                    break;
-                case '/logout':
-                    logout(req, res);
-                    break;
-                case '/validate':
-                    validate(req, res);
-                    break;
-                default:
-                    res.writeHead(404, { 'Content-Type': 'application/json' });
-                    res.end(JSON.stringify({
-                        error: 'Not found.'
-                    }));
-                    break;
-            }
-        });
-    }
-    else if (req.method == 'OPTIONS') { // preflight
-        res.writeHead(204, { // No content, successful processing
-            'Content-Length': '0'
-        });
-        res.end();
-    }
-    else {
-        res.writeHead(404, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({
-            error: 'Error.'
-        }));
-    }
+app.post('/login', login);
+app.post('/signup', signup);
+app.post('/logout', logout);
+app.post('/validate', validate);
+
+app.use((req, res) => {
+    res.status(404).json({ error: 'Not found.' });
 });
 
-server.listen(PORT, () => {
-    console.log(`Server is running on https://localhost:${PORT}`);
+// HTTPS server
+const PORT = 3000;
+https.createServer(options, app).listen(PORT, () => {
+    console.log(`Server running at https://localhost:${PORT}`);
 });

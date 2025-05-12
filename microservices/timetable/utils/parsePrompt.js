@@ -3,7 +3,7 @@ const { getDatabaseAsJson } = require('./downloadDatabases');
 require("dotenv").config();
 
 function mergeRestrictions(existing, newRestrictions) {
-    const merged = JSON.parse(JSON.stringify(existing));
+    const merged = existing;
 
     for (const key in newRestrictions) {
         if (merged.hasOwnProperty(key)) {
@@ -53,6 +53,8 @@ async function parsePrompt(constraint, teacher_id, extraRestrictions) {
         return extraRestrictions;
         
     const prompt = `
+    Return only valid JSON. Do not include explanations or text before or after the JSON.
+
     You are a helpful assistant that based on a user input has to generate a JSON file matching the requirements.
     I run a timetable generative app and you are tasked with understanding what extra restrictions are described 
     by the user input and generating a JSON to match that.
@@ -103,9 +105,12 @@ async function parsePrompt(constraint, teacher_id, extraRestrictions) {
 
     try {
         const response = await openai.chat.completions.create({
-            model: "gpt-4",
+            model: "gpt-4o",
+            response_format: {
+                type: "json_object"
+            },
             messages: [
-                { role: "system", content: "You are a helpful assistant." },
+                { role: "system", content: "You are a helpful assistant that only replies with JSON." },
                 { role: "user", content: prompt }
             ]
         });
@@ -113,7 +118,7 @@ async function parsePrompt(constraint, teacher_id, extraRestrictions) {
         return mergeRestrictions(extraRestrictions, result);
     } catch (error) {
         console.error("Error fetching from OpenAI:", error);
-        return null;
+        return extraRestrictions;
     }
 }
 

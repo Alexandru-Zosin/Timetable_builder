@@ -1,58 +1,49 @@
 const { getTimetable, uploadTimetable } = require('../models/timetable.model');
-const { generateTimetableAndClasslist, swapTimetablePlaces } = require('../generateTimetable');
+const { generateTimetableAndClasslist } = require('../generateTimetable');
 const { parsePrompt } = require('../../utils/parsePrompt');
 const { getDatabaseAsJson } = require('../../utils/downloadDatabases');
 
 async function getCurrentTimetable(req, res) {
-    const timetable = await getTimetable();
+    try {
+        const timetable = await getTimetable();
 
-    if (!timetable) {
-        res.writeHead(404, {
-            'Content-Type': 'application/json'
-        });
-        return res.end(JSON.stringify({
-            error: "Not found"
-        }));
-    } else {
-        res.writeHead(200, {
-            'Content-Type': 'application/json'
-        });
+        if (!timetable) {
+            return res.status(404).json({ error: "Not found" });
+        }
+
         const info = await getDatabaseAsJson();
-        timetable.info = JSON.parse(info);
-        let replyMessage = {data: timetable.data, info: JSON.parse(info)};
-        return res.end(JSON.stringify(replyMessage));
+        const replyMessage = {
+            data: timetable.data,
+            info: JSON.parse(info)
+        };
+        return res.status(200).json(replyMessage);
+    } catch (err) {
+        return res.status(500).json({ error: "Internal server error" });
     }
 }
 
 async function generateNewTimetable(req, res) {
-    let oldTimetable = await getTimetable();
-   
-    let { prompt, teacher_id } = req.body;
-    let new_extra_restrictions, newTimetable;
-    if (prompt != '' && teacher_id != null) {
-        new_extra_restrictions = await parsePrompt(prompt, teacher_id, oldTimetable?.extra_restrictions ?? null);
-        newTimetable = await generateTimetableAndClasslist(new_extra_restrictions, oldTimetable);
-    } else {
-        newTimetable = await generateTimetableAndClasslist(null, null);
-    }
+    try {
+        const oldTimetable = await getTimetable();
+        const { prompt, teacher_id } = req.body;
 
-    // try swap algorithm
-    if (!newTimetable)
-        newTimetable = await swapTimetablePlaces(new_extra_restrictions, oldTimetable);
+        let newTimetable;
+        if (prompt !== '' && teacher_id != null) {
+            const extra = oldTimetable?.extra_restrictions ?? null;
+            const new_extra_restrictions = await parsePrompt(prompt, teacher_id, extra);
+            newTimetable = await generateTimetableAndClasslist(new_extra_restrictions, teacher_id, oldTimetable);
+        } else {
+            newTimetable = await generateTimetableAndClasslist(null, null);
+        }
 
-    if (!newTimetable) {
-        res.writeHead(404, {
-            'Content-Type': 'application/json'
-        });
-        return res.end(JSON.stringify({
-            error: "Not found"
-        }));
-    } else {
-        uploadTimetable(newTimetable);
-        res.writeHead(200, {
-            'Content-Type': 'application/json'
-        });
-        return res.end(JSON.stringify(newTimetable));
+        if (!newTimetable) {
+            return res.status(404).json({ error: "Not found" });
+        }
+
+        await uploadTimetable(newTimetable);
+        return res.status(200).json(newTimetable);
+    } catch (err) {
+        return res.status(500).json({ error: "Internal server error" });
     }
 }
 

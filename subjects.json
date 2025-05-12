@@ -1,0 +1,42 @@
+[
+    {
+        "code": 1,
+        "name": "Arhitectura calculatoarelor şi sistemelor de operare",
+        "is_optional": 0
+    },
+    {
+        "code": 2,
+        "name": "Matematică - Calcul diferențial și integral",
+        "is_optional": 0
+    },
+    {
+        "code": 3,
+        "name": "Structuri de date",
+        "is_optional": 0
+    },
+    {
+        "code": 4,
+        "name": "Educație fizică",
+        "is_optional": 0
+    },
+    {
+        "code": 5,
+        "name": "Limba Engleza I",
+        "is_optional": 0
+    },
+    {
+        "code": 6,
+        "name": "Logică pentru informatică",
+        "is_optional": 0
+    },
+    {
+        "code": 7,
+        "name": "Introducere în programare",
+        "is_optional": 0
+    },
+    {
+        "code": 8,
+        "name": "Etică și integritate academică",
+        "is_optional": 0
+    }
+]

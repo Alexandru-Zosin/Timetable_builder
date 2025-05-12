@@ -5,7 +5,7 @@
     --text-color: #333;
     --background: #f8f9fd;
     --card-bg: #ffffff;
-    --border-radius: 8px;
+    --border-radius: 12px;
 }
 
 * {
@@ -26,17 +26,20 @@ body {
     align-items: center;
     padding: 15px 30px;
     background: var(--card-bg);
-    border-bottom: 1px solid #ccc;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    position: sticky;
+    top: 0;
+    z-index: 3;
 }
 
 .logo {
-    font-size: 20px;
+    font-size: 24px;
     font-weight: bold;
     color: var(--primary-color);
     display: flex;
     align-items: center;
-    gap: 10px;
 }
+
 
 .user-info {
     display: flex;
@@ -59,9 +62,14 @@ body {
     background: var(--primary-light);
     color: var(--primary-color);
     border: none;
-    padding: 6px 12px;
-    border-radius: 16px;
+    padding: 8px 16px;
+    border-radius: 20px;
     font-weight: 600;
+    cursor: pointer;
+}
+.logout-btn:hover {
+    background: var(--primary-color);
+    color: white;
 }
 
 .center-container {
@@ -134,4 +142,9 @@ body {
 
 .generate-btn:hover {
     background-color: #218838;
+}
+
+.logo i {
+    margin-right: 10px;
+    font-size: 28px;
 }

@@ -1,6 +1,5 @@
 window.onload = async () => {
     try {
-        // Logout
         document.getElementById('logout-btn').addEventListener('click', async () => {
             const logoutRequest = await fetch("https://localhost:3000/logout", {
                 method: "POST",
@@ -44,7 +43,6 @@ window.onload = async () => {
             }
         });
 
-        // Fetch and render constraints
         const response = await fetch("https://localhost:3557/constraints", {
             method: "GET",
             credentials: "include",

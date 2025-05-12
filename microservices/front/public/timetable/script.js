@@ -11,15 +11,14 @@ let groups = [],
     subjectMap = {},
     timeslotMap = {};
 
-// this will hold all timetable info by "G###" (group) or "T##" (teacher).
-// e.g. timetableData["G101"] { Monday: [...], Tuesday: [...], ... }
+// this will hold all timetable info by "G###" (group) or "T##" (teacher). tD["G101"] { monday: [...]}
 let timetableData = {};
 
 let currentFilterType = 'group';        // 'group' or 'teacher'
 let currentFilterValue = null;       //  "G101" or "T2"
 let currentClassType = 'all';        // 'course', 'seminar', 'all'
 
-// Day order used in sorting
+// day order used in sorting
 const DAY_ORDER = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
 window.addEventListener('load', async function () {
@@ -66,8 +65,7 @@ window.addEventListener('load', async function () {
 
         const bestTimetable = data.data;
 
-        // Build a mapping (object or Map) to find details by code quickly
-
+        // build a mapping (object or Map) to find details by code quickly
         groups.forEach(g => groupMap[g.code] = g);
         teachers.forEach(t => teacherMap[t.code] = t);
         rooms.forEach(r => roomMap[r.code] = r);
@@ -91,7 +89,7 @@ window.addEventListener('load', async function () {
             document.getElementById('teacher-select').value = tag;
         }
 
-        // Default: no particular selection, or pick "all" for group
+        // default: no particular selection, or pick "all" for group
         // but let's do an initial render with no filter selected.
         //currentFilterType = 'group';
         //currentFilterValue = 'Gall';  // a placeholder if you want "all" by default
@@ -102,7 +100,6 @@ window.addEventListener('load', async function () {
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', function () {
                 currentClassType = this.dataset.filter;  // 'course', 'seminar', or 'all'
-                // Toggle active class
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
 
@@ -110,12 +107,11 @@ window.addEventListener('load', async function () {
             });
         });
 
-        // Listen for group selector changes
         document.getElementById('group-select').addEventListener('change', function () {
-            // If user picks a group, switch filterType to 'group'
+            // if user picks a group, switch filterType to 'group'
             currentFilterType = 'group';
             if (this.value === 'all') {
-                currentFilterValue = 'Gall';  // you can define a special "all" if you wish
+                currentFilterValue = 'Gall';
             } else {
                 currentFilterValue = 'G' + this.value;
             }
@@ -201,7 +197,7 @@ window.addEventListener('load', async function () {
  * e.g. group_code = 1 => replicate to 101,102,103,...
  */
 function transformData(bestTimetable, groupMap, teacherMap, roomMap, subjectMap, timeslotMap) {
-    // Helper to initialize day->[] structure
+    // initialize day->[] structure
     const initDayArray = (obj, key, day) => {
         if (!obj[key]) {
             obj[key] = {};
@@ -211,36 +207,33 @@ function transformData(bestTimetable, groupMap, teacherMap, roomMap, subjectMap,
         }
     };
 
-    // A quick way to get all group codes that are >=100
+    // quick way to get all group codes that are >=100
     // or group codes that share the same hundred block.
     const allFullGroups = Object.keys(groupMap)
         .map(code => parseInt(code, 10))
         .filter(code => code >= 100) // only real subgroups
         .sort((a, b) => a - b);
 
-    // For each teacher code
     for (let tCode in bestTimetable) {
         const teacherCode = parseInt(tCode, 10);
-        // Ensure we have an entry for this teacher
+        // ensure we have an entry for this teacher
         if (!timetableData["T" + teacherCode]) {
             timetableData["T" + teacherCode] = {};
         }
 
-        // This teacher's schedule
         const teacherSchedule = bestTimetable[tCode];
 
-        // For each time code in this teacher's schedule
         for (let timeCode in teacherSchedule) {
             const [groupCode, roomCode, subjectCode, classType] = teacherSchedule[timeCode];
 
             const day = timeslotMap[timeCode].day;
             const hourStr = timeslotMap[timeCode].hour;  // e.g. "08:00"
-            // Let’s assume each timeslot is 2 hours, so Interval is e.g. "08-10"
+            // assume each timeslot is 2 hours, so interval is e.g. "08-10"
             const startHour = parseInt(hourStr.slice(0, 2), 10);
             const endHour = startHour + 2;
             const interval = `${String(startHour).padStart(2, '0')}-${String(endHour).padStart(2, '0')}`;
 
-            // Build the row
+            // build the row
             const subj = subjectMap[subjectCode];
             const isOptional = (subj.is_optional === 1);
             const row = {
@@ -252,13 +245,12 @@ function transformData(bestTimetable, groupMap, teacherMap, roomMap, subjectMap,
                 Optional: isOptional
             };
 
-            // 1) Add to teacher's timetable
+            // 1) add to teacher's timetable
             initDayArray(timetableData, "T" + teacherCode, day);
             timetableData["T" + teacherCode][day].push(row);
 
-            // 2) Add to group(s) timetable
+            // 2) add to group(s) timetable
             if (groupCode >= 100) {
-                // It's a real group code
                 const key = "G" + groupCode;
                 initDayArray(timetableData, key, day);
                 timetableData[key][day].push(row);
@@ -287,15 +279,15 @@ function transformData(bestTimetable, groupMap, teacherMap, roomMap, subjectMap,
         }
     }
 
-    // Now sort the entries in each day by start time
+    // now sort the entries in each day by start time
     for (let key in timetableData) {
         const dayObj = timetableData[key];
         // dayObj is like { Monday: [...], Tuesday: [...], ... }
-        // Sort day keys by our DAY_ORDER
+        // sort day keys by our DAY_ORDER
         const sortedDayObj = {};
         DAY_ORDER.forEach(d => {
             if (dayObj[d]) {
-                // Sort by the numeric start hour
+                // sort by the numeric start hour
                 dayObj[d].sort((a, b) => {
                     const startA = parseInt(a.Interval.split('-')[0], 10);
                     const startB = parseInt(b.Interval.split('-')[0], 10);
@@ -309,7 +301,7 @@ function transformData(bestTimetable, groupMap, teacherMap, roomMap, subjectMap,
 }
 
 /**
- * Populate the group and teacher <select> elements.
+ * populate the group and teacher <select> elements.
  */
 function populateSelectors() {
     const groupSelect = document.getElementById('group-select');
@@ -333,7 +325,7 @@ function populateSelectors() {
         .forEach(t => {
             const option = document.createElement('option');
             option.value = t.code;         // '2'
-            option.textContent = t.name;   // 'Conf. dr. ...'
+            option.textContent = `${t.name} (${t.code})`;   // 'Conf. dr. ...'
             teacherSelect.appendChild(option);
         });
 }

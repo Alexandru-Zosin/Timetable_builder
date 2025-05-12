@@ -54,7 +54,7 @@ body {
 
 .logo {
     font-size: 24px;
-    font-weight: 700;
+    font-weight: bold;
     color: var(--primary-color);
 }
 
@@ -66,7 +66,6 @@ body {
 .view-selectors {
     display: flex;
     gap: 10px;
-    align-items: center;
 }
 
 select {
@@ -124,6 +123,7 @@ select {
     padding: 8px 16px;
     border-radius: 20px;
     font-weight: 600;
+    cursor: pointer;
 }
 
 .logout-btn:hover {
@@ -163,6 +163,7 @@ body.dark .pdf-btn:hover {
 .view-filters {
     display: flex;
     gap: 20px;
+    flex-wrap: wrap;
 }
 
 .filter-btn,
@@ -179,9 +180,18 @@ body.dark .pdf-btn:hover {
 .filter-btn:hover,
 .filter-btn.active,
 .pdf-btn:hover,
-pdf-btn.active {
+.pdf-btn.active {
     background: var(--primary-color);
     color: white;
+    cursor: pointer;
+}
+
+.filter-btn.active[data-filter="seminar"] {
+    background: var(--seminar-color);
+}
+
+.filter-btn:hover[data-filter="seminar"] {
+    background: var(--seminar-color);
 }
 
 .timetable-container {
@@ -259,6 +269,7 @@ pdf-btn.active {
     color: white;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     overflow: hidden;
+    pointer-events: none;
     cursor: pointer;
 }
 
@@ -425,7 +436,7 @@ pdf-btn.active {
 
 #mic-icon {
     font-size: 20px;
-    color: white;
+    color: var(--primary-color);
     padding: 5px;
     margin-left: 5px;
     border-radius: 50%;
@@ -476,19 +487,9 @@ body.dark .submit-btn:hover {
     .pdf-btn {
         display: none;
     }
-
-    .view-selectors {
-        display: none;
-        flex-direction: column;
-        max-width: 100px;
-    }
-
-    .view-selectors label {
-        display: none;
-    }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 400px) {
     .navbar {
         padding: 15px;
     }
@@ -496,4 +497,5 @@ body.dark .submit-btn:hover {
     .timetable-container {
         overflow-x: auto;
     }
+
 }

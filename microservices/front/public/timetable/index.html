@@ -20,8 +20,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
     <script src="speech.js" defer></script>
-    <script src="script.js" defer></script> 
-    <script src="weatherscript.js" defer></script>
+    <script src="script.js" defer></script>
     <script src="generatepdf.js" defer></script>
     <script src="themetoggle.js" defer></script>
 </head>
@@ -36,12 +35,12 @@
             <button class="theme-toggle" onclick="toggleTheme()">
                 <i class="fa-solid fa-moon"></i>
             </button>
-            <div id="user-avatar"><i class="fa-solid fa-user"></i></div>
+            <!-- <div id="user-avatar"><i class="fa-solid fa-user"></i></div> -->
             <button id="logout-btn" class="logout-btn">
                 Logout
             </button>
         </div>
-        
+
     </nav>
 
     <div class="container">
@@ -51,18 +50,18 @@
                 <button class="filter-btn active" data-filter="all">All</button>
                 <button class="filter-btn" data-filter="course">Courses</button>
                 <button class="filter-btn" data-filter="seminar">Seminars</button>
-                        
+
                 <div class="view-selectors">
                     <select id="group-select" class="filter-select">
                         <option value="all">Select Group</option>
                     </select>
-                
+
                     <select id="teacher-select" class="filter-select">
                         <option value="all">Select Teacher</option>
                     </select>
                 </div>
             </div>
-            
+
         </header>
 
         <div id="pdf-container">
@@ -98,7 +97,6 @@
             </div>
         </div> <!-- end pdf-container-->
 
-
         <div class="legend">
             <div class="legends">
                 <div class="legend-item">
@@ -115,19 +113,20 @@
                 </div>
             </div>
             <button class="pdf-btn" onclick="downloadDivAsPDF()">Download PDF</button>
-        </div>  
+        </div>
 
         <!-- Footer -->
         <footer id="footer">
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>Suggest a Timetable Change:
-                       <i id="mic-icon" class="fas fa-microphone" title="Click to speak"></i>
+                        <i id="mic-icon" class="fas fa-microphone" title="Click to speak"></i>
                     </h3>
                     <div id="suggestion-form" class="suggestion-form">
                         <div class="form-group">
                             <div class="form-group" style="position: relative;">
-                                <textarea id="suggestion-details" placeholder="Or describe your suggestion..." required></textarea>
+                                <textarea id="suggestion-details" placeholder="Describe your suggestion..."
+                                    required></textarea>
                             </div>
                         </div>
                         <button id="prompt-btn" type="submit" class="submit-btn">Submit</button>

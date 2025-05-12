@@ -1,32 +1,11 @@
 const { decrypt } = require('../../utils/crypting');
 const { PORTS } = require('../../whitelistports');
-const { getHashedPasswordForUserId } = require('../models/user.model');
-const url = require('url');
 
 async function validate(req, res) {
-    let cookies = {};
-    let sessionToken;
-    try {
-        if (req.headers.cookie) {
-            const cookieArray = req.headers.cookie.split(';');
-            for (let cookie of cookieArray) {
-                const parts = req.headers.cookie.split('=');
-                cookies[parts[0].trim()] = parts[1].trim();
-            }
-        }
+    const sessionToken = req.cookies?.default;
 
-        sessionToken = cookies['default'];
-        if (!sessionToken) {
-            res.writeHead(401, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify({
-                error: 'No session token provided.'
-            }));
-        }
-    } catch (error) {
-        res.writeHead(401, { 'Content-Type': 'application/json' });
-        return res.end(JSON.stringify({
-            error: 'No session token provided.'
-        }));
+    if (!sessionToken) {
+        return res.status(401).json({ error: 'No session token provided.' });
     }
 
     try {
@@ -34,40 +13,37 @@ async function validate(req, res) {
         const [userId, role, tag, expiration] = decryptedToken.split('|');
 
         if (Date.now() > parseInt(expiration)) {
-            res.writeHead(401, { 'Content-Type': 'application/json' });
-            return res.end(JSON.stringify({
-                error: 'Session expired.'
-            }));
+            return res.status(401).json({ error: 'Session expired.' });
         }
 
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-
+        // parse origin port
         const origin = req.headers.origin;
-        let originPort;
+        let originPort = null;
 
         if (origin) {
-            const parsedUrl = new URL(origin);
-            originPort = parsedUrl.port || '443';
-        } else { // client can have a dynamically assigned port, but highly unlikely
-            originPort = req.socket.remotePort;
+            try {
+                const parsedUrl = new URL(origin);
+                originPort = parsedUrl.port || (parsedUrl.protocol === 'https:' ? '443' : '80');
+            } catch (err) {
+                return res.status(400).json({ error: 'Invalid origin format.' });
+            }
+        } else {
+            return res.status(400).json({ error: 'Missing origin header.' });
         }
 
+        // role-based response for known microservices
         switch (parseInt(originPort)) {
             case PORTS.timetable:
-                res.end(JSON.stringify({ role, tag }));
-                break;
             case PORTS.front:
-                res.end(JSON.stringify({ role, tag }));
-                break;
+                return res.status(200).json({ role, tag });
             default:
-                res.end(JSON.stringify({}));
-                break;
+                return res.status(403).json({ error: 'Origin not allowed.' });
         }
+
     } catch (error) {
-        res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({
+        return res.status(500).json({
             error: 'Failed to decrypt token or invalid token format.'
-        }));
+        });
     }
 }
 

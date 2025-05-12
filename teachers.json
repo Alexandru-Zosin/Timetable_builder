@@ -1,0 +1,262 @@
+[
+    {
+        "code": 1,
+        "name": "Colab. Anton Dan Gabriel",
+        "subjects_taught": [
+            1
+        ],
+        "max_hours": 4,
+        "can_teach_course": false
+    },
+    {
+        "code": 2,
+        "name": "Conf. dr. Arusoaie Andreea-Valentina",
+        "subjects_taught": [
+            2
+        ],
+        "max_hours": 4,
+        "can_teach_course": true
+    },
+    {
+        "code": 3,
+        "name": "Conf. dr. Zălinescu Adrian",
+        "subjects_taught": [
+            2
+        ],
+        "max_hours": 4,
+        "can_teach_course": true
+    },
+    {
+        "code": 4,
+        "name": "Conf. dr. Gațu Cristian",
+        "subjects_taught": [
+            3
+        ],
+        "max_hours": 4,
+        "can_teach_course": true
+    },
+    {
+        "code": 5,
+        "name": "Conf. dr. Răschip Mădălina",
+        "subjects_taught": [
+            3
+        ],
+        "max_hours": 4,
+        "can_teach_course": true
+    },
+    {
+        "code": 6,
+        "name": "Bogdan Mihaela",
+        "subjects_taught": [
+            4
+        ],
+        "max_hours": 4,
+        "can_teach_course": false
+    },
+    {
+        "code": 7,
+        "name": "Asist. dr. Perez Cenel Augusto",
+        "subjects_taught": [
+            5
+        ],
+        "max_hours": 4,
+        "can_teach_course": false
+    },
+    {
+        "code": 8,
+        "name": "Lect.dr. Rădulescu Vlad",
+        "subjects_taught": [
+            1
+        ],
+        "max_hours": 4,
+        "can_teach_course": true
+    },
+    {
+        "code": 9,
+        "name": "Conf. dr. Arusoaie Andrei",
+        "subjects_taught": [
+            6
+        ],
+        "max_hours": 4,
+        "can_teach_course": true
+    },
+    {
+        "code": 10,
+        "name": "Conf. dr. Ciobâcă Ștefan",
+        "subjects_taught": [
+            6
+        ],
+        "max_hours": 4,
+        "can_teach_course": true
+    },
+    {
+        "code": 11,
+        "name": "Lect. dr. Pătruț Bogdan",
+        "subjects_taught": [
+            7
+        ],
+        "max_hours": 4,
+        "can_teach_course": true
+    },
+    {
+        "code": 12,
+        "name": "Lect. dr. Armanu Nicoleta",
+        "subjects_taught": [
+            5
+        ],
+        "max_hours": 4,
+        "can_teach_course": false
+    },
+    {
+        "code": 13,
+        "name": "Colab. Balan Gheorghe",
+        "subjects_taught": [
+            1
+        ],
+        "max_hours": 4,
+        "can_teach_course": false
+    },
+    {
+        "code": 14,
+        "name": "Lect. dr. Onofrei Paula",
+        "subjects_taught": [
+            5
+        ],
+        "max_hours": 4,
+        "can_teach_course": false
+    },
+    {
+        "code": 15,
+        "name": "Asist. drd. Ioniță Alexandru",
+        "subjects_taught": [
+            3,
+            7
+        ],
+        "max_hours": 8,
+        "can_teach_course": false
+    },
+    {
+        "code": 16,
+        "name": "Colab. Olariu Cristina",
+        "subjects_taught": [
+            8
+        ],
+        "max_hours": 4,
+        "can_teach_course": true
+    },
+    {
+        "code": 17,
+        "name": "Lect.dr. Ghirvu Lucian",
+        "subjects_taught": [
+            6
+        ],
+        "max_hours": 4,
+        "can_teach_course": false
+    },
+    {
+        "code": 18,
+        "name": "Colab. drd. Oniciuc Oriana",
+        "subjects_taught": [
+            3
+        ],
+        "max_hours": 4,
+        "can_teach_course": false
+    },
+    {
+        "code": 19,
+        "name": "Colab. Simion Ruben",
+        "subjects_taught": [
+            1
+        ],
+        "max_hours": 4,
+        "can_teach_course": false
+    },
+    {
+        "code": 20,
+        "name": "Colab. Vitel Silviu",
+        "subjects_taught": [
+            1
+        ],
+        "max_hours": 4,
+        "can_teach_course": false
+    },
+    {
+        "code": 21,
+        "name": "Prof. Huma Alexandru",
+        "subjects_taught": [
+            4
+        ],
+        "max_hours": 4,
+        "can_teach_course": false
+    },
+    {
+        "code": 22,
+        "name": "Parpalea Madalina",
+        "subjects_taught": [
+            1
+        ],
+        "max_hours": 4,
+        "can_teach_course": false
+    },
+    {
+        "code": 23,
+        "name": "Rusu Daniel",
+        "subjects_taught": [
+            3
+        ],
+        "max_hours": 4,
+        "can_teach_course": false
+    },
+    {
+        "code": 24,
+        "name": "Asist. dr. Gratie Diana Elena",
+        "subjects_taught": [
+            6
+        ],
+        "max_hours": 4,
+        "can_teach_course": false
+    },
+    {
+        "code": 25,
+        "name": "Vlad Adriana",
+        "subjects_taught": [
+            3
+        ],
+        "max_hours": 4,
+        "can_teach_course": false
+    },
+    {
+        "code": 26,
+        "name": "Prof. Hadimbu Stelian",
+        "subjects_taught": [
+            7
+        ],
+        "max_hours": 4,
+        "can_teach_course": false
+    },
+    {
+        "code": 27,
+        "name": "Dr. Curca Eduard",
+        "subjects_taught": [
+            2
+        ],
+        "max_hours": 4,
+        "can_teach_course": false
+    },
+    {
+        "code": 28,
+        "name": "Colab. Leon Daniel",
+        "subjects_taught": [
+            1
+        ],
+        "max_hours": 4,
+        "can_teach_course": false
+    },
+    {
+        "code": 29,
+        "name": "Conf. dr. Forăscu Corina",
+        "subjects_taught": [],
+        "max_hours": 0,
+        "can_teach_course": false
+    }
+]
