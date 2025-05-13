@@ -31,7 +31,7 @@ subjects_by_key = OrderedDict()  # (name, year) → {...}
 teachers_by_name = OrderedDict()  # name → {...}
 
 for year, urls in urls_by_year.items():
-    print(f"\nProcessing year {year}...\n")
+    print(f"\nProcessing year {year}\n")
 
     for url_index, url in enumerate(urls):
         print(f"  Fetching: {url}")
