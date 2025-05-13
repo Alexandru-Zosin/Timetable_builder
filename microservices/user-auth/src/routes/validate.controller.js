@@ -10,7 +10,7 @@ async function validate(req, res) {
 
     try {
         const decryptedToken = decrypt(sessionToken, process.env.SECRET_KEY);
-        const [userId, role, tag, expiration] = decryptedToken.split('|');
+        const [userId, role, tag, yeartag, expiration] = decryptedToken.split('|');
 
         if (Date.now() > parseInt(expiration)) {
             return res.status(401).json({ error: 'Session expired.' });
@@ -35,7 +35,7 @@ async function validate(req, res) {
         switch (parseInt(originPort)) {
             case PORTS.timetable:
             case PORTS.front:
-                return res.status(200).json({ role, tag });
+                return res.status(200).json({ role, tag, yeartag });
             default:
                 return res.status(403).json({ error: 'Origin not allowed.' });
         }

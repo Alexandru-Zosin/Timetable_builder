@@ -1,11 +1,13 @@
 const validator = require('validator');
 const { getGroups } = require('../src/models/user.model');
 
-async function validateGroup(group) {
+async function validateGroup(group, year) {
     try {
         const groups = await getGroups();
         groupsList = groups.map((group) => group.name);
         if (!groupsList.includes(group))
+            return false;
+        if (!['1', '2', '3'].includes(year))
             return false;
         return true;
     } catch (error) {

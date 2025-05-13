@@ -15,14 +15,16 @@
     <meta http-equiv="Content-Security-Policy"
         content="connect-src https://localhost:3000 https://localhost:3001 https://localhost:3557 https://api.open-meteo.com https://cdnjs.cloudflare.com">
     <title>Timetable</title>
+    <link rel="stylesheet" href="/utils/styles/general.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="speech.js" defer></script>
     <script src="script.js" defer></script>
     <script src="generatepdf.js" defer></script>
-    <script src="themetoggle.js" defer></script>
+    <script src="/utils/scripts/themetoggle.js" defer></script>
 </head>
 
 <body>
@@ -35,7 +37,6 @@
             <button class="theme-toggle" onclick="toggleTheme()">
                 <i class="fa-solid fa-moon"></i>
             </button>
-            <!-- <div id="user-avatar"><i class="fa-solid fa-user"></i></div> -->
             <button id="logout-btn" class="logout-btn">
                 Logout
             </button>
@@ -55,7 +56,12 @@
                     <select id="group-select" class="filter-select">
                         <option value="all">Select Group</option>
                     </select>
-
+                    <select id="year-select" class="filter-select">
+                        <option value="all">Select Year</option>
+                        <option value="1">Year 1</option>
+                        <option value="2">Year 2</option>
+                        <option value="3">Year 3</option>
+                    </select>
                     <select id="teacher-select" class="filter-select">
                         <option value="all">Select Teacher</option>
                     </select>

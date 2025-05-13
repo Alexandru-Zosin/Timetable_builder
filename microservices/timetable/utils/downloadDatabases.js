@@ -45,7 +45,7 @@ async function getDatabaseAsJson() {
 
         // retrieve subjects
         const subjectsRaw = await queryDatabase(connection, `
-            SELECT id AS code, name, is_optional FROM subjects
+            SELECT id AS code, name, is_optional, year FROM subjects
         `);
 
         // retrieve teacher-subject relationships

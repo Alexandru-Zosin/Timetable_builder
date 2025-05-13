@@ -1,0 +1,157 @@
+:root {
+    --primary-color: #4a6cff;
+    --primary-light: #e3e9ff;
+    --secondary-color: #ff4d94;
+    --text-color: #333;
+    --light-text: #777;
+    --background: #f8f9fd;
+    --card-bg: #ffffff;
+    --course-color: #4d6dff;
+    --seminar-color: #ff4d94;
+    --optional-color: #888888;
+    --shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    --border-radius: 12px;
+    --swal-bg: #ffffff;
+    --swal-text: #000000;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--background);
+    color: var(--text-color);
+    padding: 0;
+    margin: 0;
+}
+
+body.dark {
+    --primary-color: #90a0ff;
+    --primary-light: #2b2b2b;
+    --secondary-color: #ff85a2;
+    --text-color: #e0e0e0;
+    --light-text: #aaaaaa;
+    --background: #1e1e1e;
+    --card-bg: #2a2a2a;
+    --course-color: #3a4dbf;
+    --seminar-color: #bf4d7a;
+    --optional-color: #555555;
+    --shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    --border-radius: 12px;
+    --swal-bg: #2a2a2a;
+    --swal-text: #ffffff;
+}
+
+body.dark .logout-btn,
+body.dark .pdf-btn {
+    background: var(--primary-light);
+    color: var(--text-color);
+}
+
+body.dark .logout-btn:hover,
+body.dark .pdf-btn:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+body.dark input,
+body.dark select,
+body.dark select option {
+    background-color: #444;
+    color: #fff;
+    border-color: #666;
+}
+
+body.dark .submit-btn:hover {
+    background: var(--secondary-color);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    background: var(--card-bg);
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 3;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.logo i {
+    margin-right: 10px;
+    font-size: 28px;
+}
+
+.logout-btn {
+    background: var(--primary-light);
+    color: var(--primary-color);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logout-btn:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.theme-toggle {
+    background: none;
+    color: var(--primary-color);
+    border: none;
+    padding: 0;
+    margin-right: 5px;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.theme-toggle:hover {
+    color: var(--light-text);
+    transform: scale(1.1);
+}
+
+.theme-toggle i {
+    font-size: 24px;
+    line-height: 1;
+}
+
+.logout-btn {
+    background: var(--primary-light);
+    color: var(--primary-color);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+
+
+.custom-swal {
+    background-color: var(--swal-bg);
+    color: var(--swal-text);
+}

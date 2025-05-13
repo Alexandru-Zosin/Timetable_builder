@@ -17,21 +17,6 @@ window.onload = async () => {
     } catch (error) {
         console.error("Validation Error:", error);
     }
-
-    /*try {
-        const response = await fetch("https://localhost:3557/timetable", {
-            method: "POST",
-            credentials: "include",
-            mode: "cors",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type" : "application-json"
-            },
-            body: JSON.stringify({extra_restrictions : [] })
-        });
-    } catch (error) {
-        console.log("err");
-    }*/
 };
 
 // form switching functionality
@@ -61,7 +46,14 @@ loginForm.addEventListener('submit', async function (event) {
     const password = document.getElementById('login-password').value;
 
     if (!email || !password) {
-        alert("Please fill in all fields.");
+        Swal.fire({
+            text: "Please fill in all fields.",
+            customClass: {
+                popup: 'custom-swal'
+            },
+            showConfirmButton: false,
+            timer: 1500
+        });
         return;
     }
 
@@ -80,9 +72,23 @@ loginForm.addEventListener('submit', async function (event) {
         if (response.status === 200) {
             window.location.href = "https://localhost/timetable/index.html";
         } else if (response.status === 403 || response.status === 401) {
-            alert("Invalid credentials.");
+            Swal.fire({
+                text: "Invalid credentials.",
+                customClass: {
+                    popup: 'custom-swal',
+                },
+                showConfirmButton: false,
+                timer: 1500
+            });
         } else {
-            alert("Internal server error.");
+            Swal.fire({
+                text: "Internal server error.",
+                customClass: {
+                    popup: 'custom-swal'
+                },
+                showConfirmButton: false,
+                timer: 1500
+            });
         }
     } catch (error) {
         console.error("Login Error:", error);
@@ -96,9 +102,17 @@ signupForm.addEventListener('submit', async function (event) {
     const password = document.getElementById('signup-password').value;
     const confirmPassword = document.getElementById('confirm-password').value;
     const grouptag = document.getElementById('group-select').value;
+    const yeartag = document.getElementById('year-select').value;
 
-    if (!email || !password || !confirmPassword || !grouptag) {
-        alert("Please fill in all fields.");
+    if (!email || !password || !confirmPassword || !grouptag || !yeartag) {
+        Swal.fire({
+            text: "Please fill in all fields.",
+            customClass: {
+                popup: 'custom-swal'
+            },
+            showConfirmButton: false,
+            timer: 1500
+        });
         return;
     }
 
@@ -111,19 +125,46 @@ signupForm.addEventListener('submit', async function (event) {
                 "Accept": "application/json",
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ email, password, confirmPassword, grouptag }),
+            body: JSON.stringify({ email, password, confirmPassword, grouptag, yeartag }),
         });
 
         if (response.status === 201) {
             window.location.href = "https://localhost/login/index.html";
         } else if (response.status === 400) {
-            alert("Signup failed: Passwords do not match.");
+            Swal.fire({
+                text: "Signup failed: Passwords do not match.",
+                customClass: {
+                    popup: 'custom-swal'
+                },
+                showConfirmButton: false,
+                timer: 1500
+            });
         } else if (response.status === 403) {
-            alert("Signup failed: Invalid credentials.");
+            Swal.fire({
+                text: "Signup failed: Invalid credentials.",
+                customClass: {
+                    popup: 'custom-swal'
+                },
+                showConfirmButton: false,
+                timer: 1500
+            });
         } else if (response.status === 409) {
-            alert("Signup failed: User already exists.");
+            Swal.fire({
+                text: "Signup failed: User already exists.",
+                customClass: {
+                    popup: 'custom-swal'
+                },
+                showConfirmButton: false,
+                timer: 1500
+            });
         } else {
-            alert("Signup failed. Please try again.");
+            Swal.fire({
+                text: "Signup failed. Please try again.",
+                customClass: {
+                    popup: 'custom-swal'
+                }, showConfirmButton: false,
+                timer: 1500
+            });
         }
     } catch (error) {
         console.error("Signup Error:", error);

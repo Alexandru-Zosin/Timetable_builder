@@ -3,10 +3,10 @@ const { hashWithKey } = require('../../utils/crypting');
 const { validateEmail, validatePassword, validateGroup } = require('../../utils/validate');
 
 async function signup(req, res) {
-    const { email, password, confirmPassword, grouptag } = req.body;
+    const { email, password, confirmPassword, grouptag, yeartag } = req.body;
 
     if (!validateEmail(email) || !validatePassword(password) || 
-    !validatePassword(confirmPassword) || !await validateGroup(grouptag)) {
+    !validatePassword(confirmPassword) || !await validateGroup(grouptag, yeartag)) {
         return res.status(403).json({ error: 'Forbidden.' });
     }
 
@@ -15,7 +15,7 @@ async function signup(req, res) {
     }
 
     const hashedPassword = hashWithKey(password, process.env.HASH_KEY);
-    const userData = { email, password: hashedPassword, tag: grouptag };
+    const userData = { email, password: hashedPassword, tag: grouptag, yeartag };
 
     try {
         const userCreated = await registerUser(userData);

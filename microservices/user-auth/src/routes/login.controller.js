@@ -17,7 +17,7 @@ async function login(req, res) {
             return res.status(401).json({ error: 'Unauthorized.' });
         }
 
-        const token = encrypt(`${user.id}|${user.role}|${user.tag || null}|${Date.now() + 3600000 * 24}`, process.env.SECRET_KEY);
+        const token = encrypt(`${user.id}|${user.role}|${user.tag || null}|${user.yeartag || null}|${Date.now() + 3600000 * 24}`, process.env.SECRET_KEY);
 
         res.cookie('default', token, { // name value options
             httpOnly: true,

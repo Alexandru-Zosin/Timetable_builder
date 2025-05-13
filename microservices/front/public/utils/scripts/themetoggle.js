@@ -5,7 +5,7 @@ function toggleTheme() {
 
     if (body.classList.contains('dark')) {
         buttonIcon.classList.replace('fa-moon', 'fa-sun');
-        localStorage.setItem('theme', 'dark');
+        localStorage.setItem('theme', 'dark');        
     } else {
         buttonIcon.classList.replace('fa-sun', 'fa-moon');
         localStorage.setItem('theme', 'light');

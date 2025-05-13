@@ -12,7 +12,14 @@ window.onload = async () => {
                 body: JSON.stringify({})
             });
             if (logoutRequest.status !== 200) {
-                window.alert(`Logout failed. ${logoutRequest.status}`);
+                Swal.fire({
+                    text: `Logout failed. ${logoutRequest.status}`,
+                    customClass: {
+                        popup: 'custom-swal',
+                    },
+                    showConfirmButton: false,
+                    timer: 1500
+                });
                 return;
             }
             window.location.href = "https://localhost/login/index.html";
@@ -34,9 +41,23 @@ window.onload = async () => {
                     })
                 });
                 if (res.ok) {
-                    alert("A new timetable was generated.");
+                    Swal.fire({
+                        text: `A new timetable was generated.`,
+                        customClass: {
+                            popup: 'custom-swal',
+                        },
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
                 } else {
-                    alert(`Failed to generate timetable. Status: ${res.status}`);
+                    Swal.fire({
+                        text: `Failed to generate timetable. Unauthorized. Status: ${res.status}`,
+                        customClass: {
+                            popup: 'custom-swal',
+                        },
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
                 }
             } catch (err) {
                 console.error("Error generating timetable:", err);
@@ -110,9 +131,23 @@ async function acceptConstraint(id, prompt, item) {
 
         if (res.ok) {
             removeConstraint(id, item);
-            alert(`Generated a new timetable based on teacher ${id}'s request.`)
+            Swal.fire({
+                text: `Generated a new timetable based on teacher ${id}'s request.`,
+                customClass: {
+                    popup: 'custom-swal',
+                },
+                showConfirmButton: false,
+                timer: 1500
+            });
         } else {
-            alert(`Failed to accept constraint #${id}`);
+            Swal.fire({
+                text: `Failed to accept constraint #${id}`,
+                customClass: {
+                    popup: 'custom-swal',
+                },
+                showConfirmButton: false,
+                timer: 1500
+            });
         }
     } catch (err) {
         console.error(`Error accepting constraint #${id}:`, err);
@@ -134,7 +169,14 @@ async function removeConstraint(id, itemElement) {
         if (res.ok) {
             itemElement.remove();
         } else {
-            alert(`Failed to reject constraint #${id}`);
+            Swal.fire({
+                text: `Failed to reject constraint #${id}`,
+                customClass: {
+                    popup: 'custom-swal',
+                },
+                showConfirmButton: false,
+                timer: 1500
+            });
         }
     } catch (err) {
         console.error(`Error rejecting constraint #${id}:`, err);

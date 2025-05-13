@@ -87,6 +87,7 @@ async function initializeDatabases() {
             password CHAR(64) NOT NULL,
             role ENUM('student', 'teacher', 'admin') NOT NULL DEFAULT 'student',
             tag VARCHAR(4) NULL DEFAULT NULL,
+            yeartag INT DEFAULT NULL,
             requested BOOLEAN NOT NULL DEFAULT TRUE
         );`; // alter table required if not good: alter table users modify column role ...
         // select role from users where id = 1 =-> student
@@ -136,7 +137,8 @@ async function initializeDatabases() {
             CREATE TABLE subjects (
                 id INT PRIMARY KEY AUTO_INCREMENT,
                 name VARCHAR(255) NOT NULL,
-                is_optional BOOLEAN NOT NULL
+                is_optional BOOLEAN NOT NULL,
+                year INT NOT NULL
             );
         `);
         console.log("subjects table created.");
@@ -268,9 +270,9 @@ async function populateDatabase() {
         // insert subjects
         for (subject of subjects) {
             await queryDatabase(connection, `
-                INSERT INTO subjects (id, name, is_optional) 
-                VALUES (?, ?, ?)`,
-                [subject.code, subject.name, subject.is_optional]
+                INSERT INTO subjects (id, name, is_optional, year) 
+                VALUES (?, ?, ?, ?)`,
+                [subject.code, subject.name, subject.is_optional, subject.year]
             );
         }
         console.log("Subjects inserted.");

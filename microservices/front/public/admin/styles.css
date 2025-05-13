@@ -1,75 +1,9 @@
-:root {
-    --primary-color: #4a6cff;
-    --primary-light: #e3e9ff;
-    --secondary-color: #ff4d94;
-    --text-color: #333;
-    --background: #f8f9fd;
-    --card-bg: #ffffff;
-    --border-radius: 12px;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: var(--background);
-    color: var(--text-color);
-}
-
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 30px;
-    background: var(--card-bg);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
-    position: sticky;
-    top: 0;
-    z-index: 3;
-}
-
-.logo {
-    font-size: 24px;
-    font-weight: bold;
-    color: var(--primary-color);
-    display: flex;
-    align-items: center;
-}
-
-
-.user-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-#user-avatar {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    text-align: center;
-    line-height: 36px;
-    font-size: 18px;
+body.dark .constraint-item {
     background: var(--primary-light);
-    color: var(--primary-color);
 }
 
-.logout-btn {
-    background: var(--primary-light);
-    color: var(--primary-color);
-    border: none;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-weight: 600;
-    cursor: pointer;
-}
-.logout-btn:hover {
-    background: var(--primary-color);
-    color: white;
+body.dark .constraint-actions button.reject {
+    background: #cc0000;
 }
 
 .center-container {
@@ -142,9 +76,4 @@ body {
 
 .generate-btn:hover {
     background-color: #218838;
-}
-
-.logo i {
-    margin-right: 10px;
-    font-size: 28px;
 }

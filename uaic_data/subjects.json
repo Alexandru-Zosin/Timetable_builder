@@ -1,67 +1,176 @@
 [
     {
         "code": 1,
-        "name": "Animatie 3D: algoritmi si tehnici fundamentale",
-        "is_optional": 1
+        "name": "Arhitectura calculatoarelor şi sistemelor de operare",
+        "is_optional": 0,
+        "year": 1
     },
     {
         "code": 2,
-        "name": "Introducere în. Net",
-        "is_optional": 1
+        "name": "Matematică - Calcul diferențial și integral",
+        "is_optional": 0,
+        "year": 1
     },
     {
         "code": 3,
-        "name": "Rețele neuronale",
-        "is_optional": 1
+        "name": "Structuri de date",
+        "is_optional": 0,
+        "year": 1
     },
     {
         "code": 4,
-        "name": "Programare în Python",
-        "is_optional": 0
+        "name": "Limba Engleza I",
+        "is_optional": 0,
+        "year": 1
     },
     {
         "code": 5,
-        "name": "Securitatea informaţiei",
-        "is_optional": 0
+        "name": "Logică pentru informatică",
+        "is_optional": 0,
+        "year": 1
     },
     {
         "code": 6,
-        "name": "Inteligenţă artificială",
-        "is_optional": 0
+        "name": "Introducere în programare",
+        "is_optional": 0,
+        "year": 1
     },
     {
         "code": 7,
-        "name": "Programare și modelare probabilistă",
-        "is_optional": 1
+        "name": "Algoritmica grafurilor",
+        "is_optional": 0,
+        "year": 2
     },
     {
         "code": 8,
-        "name": "Învățare automată",
-        "is_optional": 0
+        "name": "Limba Engleză III",
+        "is_optional": 0,
+        "year": 2
     },
     {
         "code": 9,
-        "name": "Dezvoltarea sistemelor fizice utilizând microprocesoare",
-        "is_optional": 1
+        "name": "Baze de date",
+        "is_optional": 0,
+        "year": 2
     },
     {
         "code": 10,
-        "name": "Dezvoltare de programe bazată pe verificare",
-        "is_optional": 1
+        "name": "Algoritmi genetici",
+        "is_optional": 1,
+        "year": 2
     },
     {
         "code": 11,
-        "name": "Introducere în realitatea mixtă",
-        "is_optional": 1
+        "name": "Principii ale limbajelor de programare",
+        "is_optional": 1,
+        "year": 2
     },
     {
         "code": 12,
-        "name": "Capitole speciale de sisteme de operare",
-        "is_optional": 1
+        "name": "Reţele de calculatoare",
+        "is_optional": 0,
+        "year": 2
     },
     {
         "code": 13,
+        "name": "Limbaje formale, automate si compilatoare",
+        "is_optional": 0,
+        "year": 2
+    },
+    {
+        "code": 14,
+        "name": "Programare Rust",
+        "is_optional": 1,
+        "year": 2
+    },
+    {
+        "code": 15,
+        "name": "Calcul cuantic",
+        "is_optional": 1,
+        "year": 2
+    },
+    {
+        "code": 16,
+        "name": "Calculabilitate, decidabilitate si complexitate",
+        "is_optional": 1,
+        "year": 2
+    },
+    {
+        "code": 17,
+        "name": "Animatie 3D: algoritmi si tehnici fundamentale",
+        "is_optional": 1,
+        "year": 3
+    },
+    {
+        "code": 18,
+        "name": "Introducere în. Net",
+        "is_optional": 1,
+        "year": 3
+    },
+    {
+        "code": 19,
+        "name": "Rețele neuronale",
+        "is_optional": 1,
+        "year": 3
+    },
+    {
+        "code": 20,
+        "name": "Programare în Python",
+        "is_optional": 0,
+        "year": 3
+    },
+    {
+        "code": 21,
+        "name": "Securitatea informaţiei",
+        "is_optional": 0,
+        "year": 3
+    },
+    {
+        "code": 22,
+        "name": "Inteligenţă artificială",
+        "is_optional": 0,
+        "year": 3
+    },
+    {
+        "code": 23,
+        "name": "Programare și modelare probabilistă",
+        "is_optional": 1,
+        "year": 3
+    },
+    {
+        "code": 24,
+        "name": "Învățare automată",
+        "is_optional": 0,
+        "year": 3
+    },
+    {
+        "code": 25,
+        "name": "Dezvoltarea sistemelor fizice utilizând microprocesoare",
+        "is_optional": 1,
+        "year": 3
+    },
+    {
+        "code": 26,
+        "name": "Dezvoltare de programe bazată pe verificare",
+        "is_optional": 1,
+        "year": 3
+    },
+    {
+        "code": 27,
+        "name": "Introducere în realitatea mixtă",
+        "is_optional": 1,
+        "year": 3
+    },
+    {
+        "code": 28,
+        "name": "Capitole speciale de sisteme de operare",
+        "is_optional": 1,
+        "year": 3
+    },
+    {
+        "code": 29,
         "name": "Tehnici de programare multiprocesor",
-        "is_optional": 1
+        "is_optional": 1,
+        "year": 3
     }
 ]

@@ -2,6 +2,7 @@ const express = require('express');
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
+const mime = require('mime-types');
 
 // fs starting path is the directory where
 // the node.js is running
@@ -22,12 +23,12 @@ const filesLocation = path.join(__dirname, 'public');
 const app = express();
 
 // middleware to serve static files with protection
-app.use(express.static(filesLocation, {
+app.use(express.static(filesLocation, { // mounts /public as ROOT
     dotfiles: 'deny',             // deny hidden files like .env
     extensions: false,            // don't automatically resolve .html
     index: false,                 // don't serve index.html automatically
     setHeaders: (res, filePath) => {
-        res.setHeader("Content-Type", require('mime-types').lookup(filePath) || 'application/octet-stream');
+        res.setHeader("Content-Type", mime.lookup(filePath) || 'application/octet-stream');
     }
 }));
 
