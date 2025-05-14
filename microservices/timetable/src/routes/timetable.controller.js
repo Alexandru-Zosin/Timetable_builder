@@ -1,5 +1,6 @@
 const { getTimetable, uploadTimetable } = require('../models/timetable.model');
-const { generateTimetableAndClasslist } = require('../generateTimetable');
+const { generateBkTimetableAndClasslist } = require('../generateBkTimetable');
+const { generateHcTimetableAndClasslist } = require('../generateHcTimetable');
 const { parsePrompt } = require('../../utils/parsePrompt');
 const { getDatabaseAsJson } = require('../../utils/downloadDatabases');
 
@@ -25,15 +26,22 @@ async function getCurrentTimetable(req, res) {
 async function generateNewTimetable(req, res) {
     try {
         const oldTimetable = await getTimetable();
-        const { prompt, teacher_id } = req.body;
+        const { prompt, teacher_id, algorithm, timeout } = req.body;
+
+        if (!['bk', 'hc'].includes(algorithm))
+            return res.status(404).json({ error: "Not found." });
 
         let newTimetable;
         if (prompt !== '' && teacher_id != null) {
             const extra = oldTimetable?.extra_restrictions ?? null;
             const new_extra_restrictions = await parsePrompt(prompt, teacher_id, extra);
-            newTimetable = await generateTimetableAndClasslist(new_extra_restrictions, teacher_id, oldTimetable);
+            newTimetable = (algorithm == 'bk') ? 
+            await generateBkTimetableAndClasslist(new_extra_restrictions, teacher_id, oldTimetable, timeout) :
+            await generateHcTimetableAndClasslist(new_extra_restrictions, oldTimetable, timeout)
         } else {
-            newTimetable = await generateTimetableAndClasslist(null, null);
+            newTimetable = (algorithm == 'bk') ? 
+            await generateBkTimetableAndClasslist(null, null, null, timeout) :
+            await generateHcTimetableAndClasslist(null, null, timeout);
         }
 
         if (!newTimetable) {

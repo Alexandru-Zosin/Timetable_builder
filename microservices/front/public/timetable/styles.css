@@ -1,5 +1,6 @@
 .view-selectors {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
 }
 
@@ -339,6 +340,12 @@ body.dark .submit-btn {
 body.dark .submit-btn:hover {
     background: var(--primary-color);
     color: white;
+}
+
+.class-card.clickable-slot {
+    pointer-events: auto;
+    cursor: pointer;
+    outline: 2px dashed var(--text-color);
 }
 
 @media (max-width: 1050px) {

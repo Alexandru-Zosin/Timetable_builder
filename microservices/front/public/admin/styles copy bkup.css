@@ -61,55 +61,19 @@ body.dark .constraint-actions button.reject {
     background: red;
 }
 
-.timeout-slider-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.timeout-slider-container label {
-    font-size: 16px;
-    margin-bottom: 8px;
-}
-
-#timeout-range {
-    width: 60%;
-}
-
-.generate-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-bottom: 30px;
-}
-
-.generate-buttons .generate-btn {
-    padding: 8px 16px;
-    background-color: var(--primary-color);
+.generate-btn {
+    align-self: center;
+    padding: 10px 20px;
+    background-color: #28a745;
     color: white;
-    font-size: 14px;
+    font-size: 16px;
     border: none;
     border-radius: var(--border-radius);
     font-weight: bold;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-.generate-buttons .generate-btn:hover {
-    background-color: #0069d9;
-}
-
-.acceptBtn:hover {
-    background-color: #0069d9;
-}
-
-.constraint-actions button {
-    padding: 5px 10px;
-    font-size: 14px;
-    font-weight: 600;
-    border: none;
-    border-radius: 6px;
-    background: var(--primary-color);
-    color: white;
-    cursor: pointer;
+.generate-btn:hover {
+    background-color: #218838;
 }

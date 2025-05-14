@@ -1,8 +1,3 @@
-function getTimeoutValue() {
-    const sliderValue = document.getElementById("timeout-range").value;
-    return sliderValue;
-}
-
 window.onload = async () => {
     try {
         document.getElementById('logout-btn').addEventListener('click', async () => {
@@ -29,17 +24,9 @@ window.onload = async () => {
             }
             window.location.href = "https://localhost/login/index.html";
         });
-        
-        document.getElementById('generate-bk-btn').addEventListener('click', async () => {
-            await generateTimetable('bk');
-        });
-        document.getElementById('generate-hc-btn').addEventListener('click', async () => {
-            await generateTimetable('hc');
-        });
-        
-        async function generateTimetable(algorithm) {
+
+        document.getElementById('generate-timetable-btn').addEventListener('click', async () => {
             try {
-                const timeout = getTimeoutValue();
                 const res = await fetch("https://localhost:3557/timetable", {
                     method: "POST",
                     credentials: "include",
@@ -50,40 +37,40 @@ window.onload = async () => {
                     },
                     body: JSON.stringify({
                         prompt: '',
-                        teacher_id: null,
-                        algorithm: algorithm,
-                        timeout: timeout
+                        teacher_id: null
                     })
                 });
                 if (res.ok) {
                     Swal.fire({
-                        text: `A new ${algorithm.toUpperCase()} timetable was generated.`,
-                        customClass: { popup: 'custom-swal' },
+                        text: `A new timetable was generated.`,
+                        customClass: {
+                            popup: 'custom-swal',
+                        },
                         showConfirmButton: false,
                         timer: 5000
                     });
                 } else {
                     Swal.fire({
-                        text: `Failed to generate ${algorithm.toUpperCase()} timetable. Unauthorized. Status: ${res.status}`,
-                        customClass: { popup: 'custom-swal' },
+                        text: `Failed to generate timetable. Unauthorized. Status: ${res.status}`,
+                        customClass: {
+                            popup: 'custom-swal',
+                        },
                         showConfirmButton: false,
                         timer: 1500
                     });
                 }
             } catch (err) {
                 Swal.fire({
-                    text: "Error generating timetable. Check console.",
-                    customClass: { popup: 'custom-swal' },
+                    text: `Error generating timetable. Check console.`,
+                    customClass: {
+                        popup: 'custom-swal',
+                    },
                     showConfirmButton: false,
                     timer: 1500
                 });
                 console.error("Error generating timetable:", err);
             }
-        }
-        
-        document.getElementById("timeout-range").addEventListener("input", function () {
-            document.getElementById("timeout-value").textContent = `${this.value}s`;
-        });        
+        });
 
         const response = await fetch("https://localhost:3557/constraints", {
             method: "GET",
@@ -111,23 +98,16 @@ window.onload = async () => {
                 const actions = document.createElement("div");
                 actions.className = "constraint-actions";
 
-                const acceptBkBtn = document.createElement("button");
-                acceptBkBtn.classList.add("acceptBtn");
-                acceptBkBtn.textContent = "Accept_BK";
-                acceptBkBtn.onclick = () => acceptConstraint(constraint.id, constraint.request, item, 'bk');
-
-                const acceptHcBtn = document.createElement("button");
-                acceptHcBtn.classList.add("acceptBtn");
-                acceptHcBtn.textContent = "Accept_HC";
-                acceptHcBtn.onclick = () => acceptConstraint(constraint.id, constraint.request, item, 'hc');
+                const acceptBtn = document.createElement("button");
+                acceptBtn.textContent = "Accept";
+                acceptBtn.onclick = () => acceptConstraint(constraint.id, constraint.request, item);
 
                 const rejectBtn = document.createElement("button");
                 rejectBtn.className = "reject";
                 rejectBtn.textContent = "X";
                 rejectBtn.onclick = () => removeConstraint(constraint.id, item);
 
-                actions.appendChild(acceptBkBtn);
-                actions.appendChild(acceptHcBtn);
+                actions.appendChild(acceptBtn);
                 actions.appendChild(rejectBtn);
 
                 item.appendChild(text);
@@ -142,10 +122,9 @@ window.onload = async () => {
     }
 };
 
-async function acceptConstraint(id, prompt, item, algorithm) {
+async function acceptConstraint(id, prompt, item) {
     try {
-        const timeout = getTimeoutValue();
-        const res = await fetch("https://localhost:3557/timetable", {
+        const res = await fetch(`https://localhost:3557/timetable`, {
             method: "POST",
             credentials: "include",
             mode: "cors",
@@ -153,26 +132,27 @@ async function acceptConstraint(id, prompt, item, algorithm) {
                 "Accept": "application/json",
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({
+            body: JSON.stringify({ 
                 prompt: prompt,
-                teacher_id: id,
-                algorithm: algorithm,
-                timeout: timeout
-            })
+                teacher_id: id })
         });
 
         if (res.ok) {
             removeConstraint(id, item);
             Swal.fire({
-                text: `Generated a new ${algorithm.toUpperCase()} timetable based on teacher ${id}'s request.`,
-                customClass: { popup: 'custom-swal' },
+                text: `Generated a new timetable based on teacher ${id}'s request.`,
+                customClass: {
+                    popup: 'custom-swal',
+                },
                 showConfirmButton: false,
                 timer: 3500
             });
         } else {
             Swal.fire({
                 text: `Failed to accept constraint #${id}`,
-                customClass: { popup: 'custom-swal' },
+                customClass: {
+                    popup: 'custom-swal',
+                },
                 showConfirmButton: false,
                 timer: 3500
             });

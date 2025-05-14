@@ -2,7 +2,7 @@ const { reverse } = require("dns");
 const fs = require("fs");
 const { getDatabaseAsJson } = require('../utils/downloadDatabases');
 
-const timeOut = 120000;
+//const timeOut = 120000;
 let startTime;
 let loaded_data;
 //const db = await getDatabaseAsJson();
@@ -232,7 +232,7 @@ function add_to_timetable(teacher_code, time_code, group_code, room_code, subjec
     return true;
 }
 
-function generate(class_index, constr_teacher, first_pass) {
+function generate(class_index, constr_teacher, first_pass, timeOut = 10000) {
     /**
      * We TRY to assign each class(group, subject, type, year) to a
      * (TEACHER, TIMESLOT, ROOM) ensuring no overlapping constraints
@@ -314,7 +314,7 @@ function generate(class_index, constr_teacher, first_pass) {
 
                 // attempt to assign
                 if (add_to_timetable(teacher_code, time_code, group_code, room_code, subject_code, class_type, year_code))
-                    return generate(class_index + 1, constr_teacher, first_pass);
+                    return generate(class_index + 1, constr_teacher, first_pass, timeOut);
             }
         }
     }
@@ -331,7 +331,7 @@ function generate(class_index, constr_teacher, first_pass) {
         for (let prev_index = class_index - 1; prev_index >= 0; --prev_index) {
             swap_class_list(prev_index, class_index);
             initializeData(class_list);
-            if (generate(0, constr_teacher, false) == 1)
+            if (generate(0, constr_teacher, false, timeOut) == 1)
                 return 1;
             swap_class_list(prev_index, class_index);
         }
@@ -341,7 +341,7 @@ function generate(class_index, constr_teacher, first_pass) {
     }
 } // end generate
 
-async function generateTimetableAndClasslist(new_extra_restrictions, teacher_id, oldTimetable) {
+async function generateBkTimetableAndClasslist(new_extra_restrictions, teacher_id, oldTimetable, timeOut) {
     const db = await getDatabaseAsJson();
     loaded_data = JSON.parse(db);
     if (new_extra_restrictions != null)
@@ -358,11 +358,11 @@ async function generateTimetableAndClasslist(new_extra_restrictions, teacher_id,
         initializeData(null);
 
     startTime = Date.now();
-    return generate(0, teacher_id, true) ? ({
+    return generate(0, teacher_id, true, timeOut * 1000) ? ({
         data: best_timetable,
         class_list: class_list,
         extra_restrictions: extra_restrictions
     }) : null;
 }
 
-module.exports = { generateTimetableAndClasslist };
+module.exports = { generateBkTimetableAndClasslist };

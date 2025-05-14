@@ -5,7 +5,7 @@ let groups = [],
     timeslots = [],
     role,
     tag,
-    yeartag,
+    yeartag,                      
     groupMap = {},
     teacherMap = {},
     roomMap = {},
@@ -275,7 +275,7 @@ function transformData(bestTimetable, groupMap, teacherMap, roomMap, subjectMap,
             const [groupCode, roomCode, subjectCode, classType, year] = teacherSchedule[timeCode];
 
             const day = timeslotMap[timeCode].day;
-            const hourStr = timeslotMap[timeCode].hour;
+            const hourStr = timeslotMap[timeCode].hour; 
             // assume each timeslot is 2 hours, so interval is e.g. "08-10"
             const startHour = parseInt(hourStr.slice(0, 2), 10);
             const endHour = startHour + 2;
@@ -408,83 +408,40 @@ function renderFilteredTimetable() {
         dayColumn.className = 'day-column';
 
         const entries = dataForKey[day] || [];
-        // map of interval → [rows] to group overlapping entries
-        const intervalMap = {};
-
         entries.forEach(row => {
+
+            /* --- FILTERS -------------------------------------------------- */
             const classTypeOk = (currentClassType === 'all' || row.Type === currentClassType);
-            const yearOk = (currentYearFilter === 'all' || String(row.Year) === currentYearFilter);
+            const yearOk = (currentYearFilter === 'all' || String(row.Year) === currentYearFilter); // === NEW ===
 
             if (classTypeOk && yearOk) {
                 const [startStr, endStr] = row.Interval.split('-');
-                const interval = row.Interval;
+                const startHour = parseInt(startStr, 10);
+                const endHour = parseInt(endStr, 10);
 
-                if (!intervalMap[interval]) intervalMap[interval] = [];
-                intervalMap[interval].push(row);
+                // each hour = 80px in height
+                const topPosition = (startHour - 8) * 80;
+                const height = (endHour - startHour) * 79;
+
+                const classCard = document.createElement('div');
+                // if it's optional, we apply 'optional' else row.Type
+                const cardClass = row.Optional ? 'optional' : row.Type; // 'course', 'seminar', or 'optional'
+
+                classCard.className = `class-card ${cardClass}`;
+                classCard.style.top = `${topPosition}px`;
+                classCard.style.height = `${height}px`;
+
+                classCard.innerHTML = `
+                   <div class="class-time">${row.Interval}</div>
+                   <div class="class-name">${row.Subject}</div>
+                   <div class="class-info">
+                       <div class="class-teacher"><i class="fas fa-user"></i> ${row.Teacher}</div>
+                       <div class="class-room"><i class="fas fa-map-marker-alt"></i> ${row.Room}</div>
+                       <div class="class-type">${row.Type}${row.Optional ? ' (optional)' : ''}</div>
+                   </div>`;
+                dayColumn.appendChild(classCard);
             }
         });
-
-        Object.entries(intervalMap).forEach(([interval, rows]) => {
-            const [startStr, endStr] = interval.split('-');
-            const startHour = parseInt(startStr, 10);
-            const endHour = parseInt(endStr, 10);
-
-            const topPosition = (startHour - 8) * 80;
-            const height = (endHour - startHour) * 79;
-
-            let index = 0;
-
-            const multiple = rows.length > 1;
-
-            const classCard = document.createElement('div');
-            const currentRow = rows[index];
-            const cardClass = currentRow.Optional ? 'optional' : currentRow.Type;
-
-            classCard.className = `class-card ${cardClass}`;
-            if (multiple) {
-                classCard.classList.add('clickable-slot');
-                classCard.innerHTML = `
-            <div class="class-time">${interval} *</div>
-            <div class="class-name">${currentRow.Subject}</div>
-            <div class="class-info">
-                <div class="class-teacher"><i class="fas fa-user"></i> ${currentRow.Teacher}</div>
-                <div class="class-room"><i class="fas fa-map-marker-alt"></i> ${currentRow.Room}</div>
-                <div class="class-type">${currentRow.Type}${currentRow.Optional ? ' (optional)' : ''}</div>
-            </div>
-        `;
-
-                classCard.addEventListener('click', function () {
-                    index = (index + 1) % rows.length;
-                    const r = rows[index];
-                    const newCardClass = r.Optional ? 'optional' : r.Type;
-                    classCard.className = `class-card ${newCardClass} clickable-slot`;
-                    classCard.innerHTML = `
-                <div class="class-time">${interval} *</div>
-                <div class="class-name">${r.Subject}</div>
-                <div class="class-info">
-                    <div class="class-teacher"><i class="fas fa-user"></i> ${r.Teacher}</div>
-                    <div class="class-room"><i class="fas fa-map-marker-alt"></i> ${r.Room}</div>
-                    <div class="class-type">${r.Type}${r.Optional ? ' (optional)' : ''}</div>
-                </div>
-            `;
-                });
-            } else {
-                classCard.innerHTML = `
-            <div class="class-time">${interval}</div>
-            <div class="class-name">${currentRow.Subject}</div>
-            <div class="class-info">
-                <div class="class-teacher"><i class="fas fa-user"></i> ${currentRow.Teacher}</div>
-                <div class="class-room"><i class="fas fa-map-marker-alt"></i> ${currentRow.Room}</div>
-                <div class="class-type">${currentRow.Type}${currentRow.Optional ? ' (optional)' : ''}</div>
-            </div>
-        `;
-            }
-
-            classCard.style.top = `${topPosition}px`;
-            classCard.style.height = `${height}px`;
-            dayColumn.appendChild(classCard);
-        });
-
 
         timetableGrid.appendChild(dayColumn);
     });
