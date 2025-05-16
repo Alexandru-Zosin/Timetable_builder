@@ -5,29 +5,42 @@ require("dotenv").config();
 function mergeRestrictions(existing, newRestrictions) {
     const merged = existing;
 
-    for (const key in newRestrictions) {
-        if (merged.hasOwnProperty(key)) {
-            if (typeof merged[key] === "object" && !Array.isArray(merged[key])) {
-                for (const subkey in newRestrictions[key]) {
-                    if (merged[key].hasOwnProperty(subkey)) {
-                        if (key === "unpreferred_timeslots") {
-                            const oldValues = Array.isArray(merged[key][subkey]) ? merged[key][subkey] : [merged[key][subkey]];
-                            const newValues = Array.isArray(newRestrictions[key][subkey]) ? newRestrictions[key][subkey] : [newRestrictions[key][subkey]];
-                            merged[key][subkey] = Array.from(new Set([...oldValues, ...newValues]));
-                        } else if (key === "max_daily_hours") {
-                            if (newRestrictions[key][subkey] !== null) {
-                                merged[key][subkey] = newRestrictions[key][subkey];
-                            }
-                        }
-                    } else {
-                        merged[key][subkey] = newRestrictions[key][subkey];
-                    }
-                }
-            } else {
-                merged[key] = newRestrictions[key];
+    function mergeUnpreferredTimeslots(oldValue, newValue) {
+        // single values get transformed into an array
+        const oldValues = Array.isArray(oldValue) ? oldValue : [oldValue];
+        const newValues = Array.isArray(newValue) ? newValue : [newValue];
+        return Array.from(new Set([...oldValues, ...newValues]));
+    }
+    
+    function mergeTeacherRestriction(key, merged, newRestrictions, subkey) {
+        const newVal = newRestrictions[key][subkey];
+        const oldVal = merged[key][subkey];
+    
+        if (key === "unpreferred_timeslots") {
+            merged[key][subkey] = mergeUnpreferredTimeslots(oldVal, newVal);
+        } else if (key === "max_daily_hours" && newVal !== null) {
+            merged[key][subkey] = newVal;
+        }
+    }
+    
+    function handleObjectRestriction(key, merged, newRestrictions) {
+        for (const subkey in newRestrictions[key]) { // each teacherCode in newRestrictions
+            if (merged[key].hasOwnProperty(subkey)) { // if teacher was present
+                mergeTeacherRestriction(key, merged, newRestrictions, subkey);
+            } else { // otherwise, we 'inherit' it
+                merged[key][subkey] = newRestrictions[key][subkey];
             }
-        } else {
-            merged[key] = newRestrictions[key];
+        }
+    }
+    
+    for (const key in newRestrictions) { // unpreferred_timeslots and max_daily_hours 
+        const newVal = newRestrictions[key];
+        const hasKey = merged.hasOwnProperty(key); //(1)if oldRstr has unpref_tms/max_daily_hours
+
+        if (hasKey && typeof merged[key] === "object" && !Array.isArray(merged[key])) {
+            handleObjectRestriction(key, merged, newRestrictions);
+        } else { // (1) if it doesn't, we assign it to it
+            merged[key] = newVal;
         }
     }
 
@@ -50,7 +63,7 @@ async function parsePrompt(constraint, teacher_id, extraRestrictions) {
     } : extraRestrictions;
 
     if (!teachers.some(t => t.code === teacher_id))
-        return extraRestrictions;
+        return extraRestrictions; // we don't allow adding constraints to other teachers than himself
         
     const prompt = `
     Return only valid JSON. Do not include explanations or text before or after the JSON.

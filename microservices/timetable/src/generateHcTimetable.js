@@ -25,7 +25,7 @@ Assignment = (TEACHER_code, TIME_code, ROOM_code)
 Class_list = (class_type, subject_code, group_code, year_code)
 */
 
-const simpleHillClimbing = false;
+const simpleHillClimbing = true;
 // groups[301] gives all info about group 301 (name, language...) etc.
 let groups, rooms, teachers, subjects, timeslots, extra_restrictions;
 

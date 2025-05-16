@@ -30,7 +30,7 @@ app.use(express.json({ limit: "1mb" }));
 
 // this function is designed to allow the dynamic loading of allowed origin(s) from a 
 // backing datasource, like a database
-const corsOptions = {
+const corsOptions = {   // https://expressjs.com/en/resources/middleware/cors.html
     origin: (origin, callback) => { // dynamic validation of origin using a function
         if (allowedOrigins.includes(origin)) {
             callback(null, true);

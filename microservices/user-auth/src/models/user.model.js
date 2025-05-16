@@ -17,7 +17,7 @@ connectionConfig2 = {
     password: process.env.DB_PASSWORD,
     database: "uaic"
 }
-const pool2 = mysql.createPool(connectionConfig2);
+const pool2 = mysql.createPool(connectionConfig2); // needed for group names
 
 function getConnectionFromPool(dbPool) {
     return new Promise((res, rej) => {

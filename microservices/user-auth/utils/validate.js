@@ -23,7 +23,7 @@ function validatePassword(pass) {
     if (!pass)
         return false;
     const pattern = /^[a-zA-Z0-9._%+-]{2,30}$/;
-    return pattern.test(pass);
-}
+    return pattern.test(pass);  // matches only the chars. above, len 2->30
+}                               // and for the entire length^$, not substring
 
 module.exports = { validateEmail, validatePassword, validateGroup };

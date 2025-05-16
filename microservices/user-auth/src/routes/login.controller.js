@@ -20,13 +20,11 @@ async function login(req, res) {
         const token = encrypt(`${user.id}|${user.role}|${user.tag || null}|${user.yeartag || null}|${Date.now() + 3600000 * 24}`, process.env.SECRET_KEY);
 
         res.cookie('default', token, { // name value options
-            httpOnly: true,
-            secure: true,
-            sameSite: 'None',
-            path: '/',
+            httpOnly: true, // cant be accessed by js (document.cookie)
+            secure: true, // only over https
+            sameSite: 'Lax', // browser default
+            path: '/', // available to whole domain
         }); 
-        //cookie unaccessible to js, path=/ available whole domain sameS=n allows cookie to be sent; 
-               // secure is for cookie to be sent exclusively over https
 
         return res.status(200).json({ message: 'Login successful' });
     } catch (error) {

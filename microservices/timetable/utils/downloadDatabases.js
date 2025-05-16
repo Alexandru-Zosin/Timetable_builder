@@ -4,7 +4,7 @@ require("dotenv").config();
 function connectToDatabase(config) {
     return new Promise((res, rej) => {
         const connection = mysql.createConnection(config);
-        connection.connect(err => err ? rej(err) : res(connection));
+        connection.connect(err => err ? rej(err) : res(connection)); // asyncronous
     });
 }
 
@@ -30,8 +30,6 @@ async function getDatabaseAsJson() {
         };
 
         const connection = await connectToDatabase(connectionConfig);
-
-        //console.log("Connected to database. Retrieving data...");
 
         // retrieve timeslots
         const timeslots = await queryDatabase(connection, `
