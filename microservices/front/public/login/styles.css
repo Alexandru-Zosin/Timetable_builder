@@ -18,9 +18,7 @@ body {
     box-shadow: var(--shadow);
     padding: 20px;
     text-align: center;
-    max-width: 370px;
-    min-width: 350px;
-    overflow: visible;
+    min-width: 330px;
 }
 
 .form-switcher {
@@ -37,7 +35,6 @@ body {
     font-size: 14px;
     cursor: pointer;
     color: var(--light-text);
-    transition: 0.3s;
 }
 
 .form-switcher button.active {
@@ -52,7 +49,6 @@ form {
 
 form.active-form {
     display: block;
-    animation: fadeIn 0.4s forwards;
 }
 
 h2 {
@@ -93,6 +89,7 @@ select {
     overflow-wrap: break-word;
 }
 
+
 input:focus,
 select:focus {
     border-color: var(--primary-color);
@@ -109,7 +106,6 @@ select:focus {
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    transition: 0.3s;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -131,9 +127,4 @@ select:focus {
     .submit-btn {
         font-size: 13px;
     }
-}
-
-select {
-    display: block;
-    width: 100%;
 }

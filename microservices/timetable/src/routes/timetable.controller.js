@@ -36,11 +36,11 @@ async function generateNewTimetable(req, res) {
             const extra = oldTimetable?.extra_restrictions ?? null;
             const new_extra_restrictions = await parsePrompt(prompt, teacher_id, extra);
             newTimetable = (algorithm == 'bk') ? 
-            await generateBkTimetableAndClasslist(new_extra_restrictions, teacher_id, oldTimetable, timeout) :
+            await generateBkTimetableAndClasslist(new_extra_restrictions, teacher_id, oldTimetable) :
             await generateHcTimetableAndClasslist(new_extra_restrictions, oldTimetable, timeout)
         } else {
             newTimetable = (algorithm == 'bk') ? 
-            await generateBkTimetableAndClasslist(null, null, null, timeout) :
+            await generateBkTimetableAndClasslist(null, null, null) :
             await generateHcTimetableAndClasslist(null, null, timeout);
         }
 
@@ -51,6 +51,7 @@ async function generateNewTimetable(req, res) {
         await uploadTimetable(newTimetable);
         return res.status(200).json(newTimetable);
     } catch (err) {
+        console.log(err);
         return res.status(500).json({ error: "Internal server error" });
     }
 }

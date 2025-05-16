@@ -31,7 +31,7 @@ async function getDatabaseAsJson() {
 
         const connection = await connectToDatabase(connectionConfig);
 
-        console.log("Connected to database. Retrieving data...");
+        //console.log("Connected to database. Retrieving data...");
 
         // retrieve timeslots
         const timeslots = await queryDatabase(connection, `
@@ -96,7 +96,7 @@ async function getDatabaseAsJson() {
 
         // close connection
         await closeConnection(connection);
-        console.log("Data retrieval complete. Connection closed.");
+        //console.log("Data retrieval complete. Connection closed.");
 
         const finalJson = {
             timeslots,

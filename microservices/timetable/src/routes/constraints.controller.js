@@ -12,15 +12,11 @@ async function addRequest(req, res) {
     try {
         const requestMade = await userMadeRequest(teacher_id);
         if (requestMade) {
-            return res.status(409).json({
-                message: 'You already made a request. Wait until it is resolved.'
-            });
+            return res.status(409).json({ message: 'You already made a request. Wait until it is resolved.'});
         }
 
         await uploadRequest(teacher_id, name, constraint);
-        return res.status(201).json({
-            message: 'Request registered successfully.'
-        });
+        return res.status(201).json({ message: 'Request registered successfully.' });
     } catch (err) {
         return res.status(500).json({error: 'Internal server error.'});
     }

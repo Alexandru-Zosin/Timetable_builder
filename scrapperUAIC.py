@@ -27,8 +27,8 @@ urls_by_year = {
 subject_id = 1
 teacher_id = 1
 
-subjects_by_key = OrderedDict()  # (name, year) → {...}
-teachers_by_name = OrderedDict()  # name → {...}
+subjects_by_key = OrderedDict()  # (name, year) -> {...}
+teachers_by_name = OrderedDict()  # name -> {...}
 
 for year, urls in urls_by_year.items():
     print(f"\nProcessing year {year}\n")
@@ -46,7 +46,7 @@ for year, urls in urls_by_year.items():
             if any(keyword in row_text for keyword in ["Facultativ", "Educație fizică", "Impare", "Pare"]):
                 continue
 
-            # English pages (E) - only parse teachers
+            # english pages (E) - only parse teachers
             if is_english_page:
                 teachers_cell = tr.select_one("td:nth-of-type(5)")
                 if not teachers_cell:
@@ -66,10 +66,10 @@ for year, urls in urls_by_year.items():
                     t_name = " ".join(a.text.split())
 
                     if is_course and t_name in teachers_by_name and not teachers_by_name[t_name]["can_teach_course"]:
-                        print(f"    ! {t_name} teaches a course in year {year}E but has can_teach_course = false")
+                        print(f"! {t_name} teaches a course in year {year}E but has can_teach_course = false")
 
                     if t_name not in teachers_by_name:
-                        print(f"    > Teacher only found on year {year}E page: {t_name} - taught subject: {subj_name}")
+                        print(f"> Teacher only found on year {year}E page: {t_name} - taught subject: {subj_name}")
                         teachers_by_name[t_name] = {
                             "code": teacher_id,
                             "name": t_name,
@@ -100,8 +100,6 @@ for year, urls in urls_by_year.items():
                     "year": year,
                 }
                 subject_id += 1
-            else:
-                subjects_by_key[key]["is_optional"] |= is_opt
 
             subj_code = subjects_by_key[key]["code"]
 

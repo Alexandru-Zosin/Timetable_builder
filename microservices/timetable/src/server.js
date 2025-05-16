@@ -25,11 +25,11 @@ setGlobalDispatcher(agent);
 
 const app = express();
 
-// express JSON body parser (replaces custom parseJSON)
+// JSON bodyparser
 app.use(express.json({ limit: "1mb" }));
 
 // this function is designed to allow the dynamic loading of allowed origin(s) from a 
-//backing datasource, like a database.
+// backing datasource, like a database
 const corsOptions = {
     origin: (origin, callback) => { // dynamic validation of origin using a function
         if (allowedOrigins.includes(origin)) {
@@ -44,8 +44,8 @@ const corsOptions = {
     optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
-// NOTE: When using this middleware as an application level middleware (for example, app.use(cors())),
-//  pre-flight requests are already handled for all routes.
+// when using this middleware as 'use' middleware,
+//  pre-flight requests are already handled for all routes
 
 // auth helper
 async function authorizeRequest(req) {

@@ -35,8 +35,7 @@ select {
     flex-wrap: wrap;
 }
 
-.filter-btn,
-.pdf-btn {
+.filter-btn {
     padding: 8px 16px;
     border: none;
     border-radius: 20px;
@@ -47,18 +46,13 @@ select {
 }
 
 .filter-btn:hover,
-.filter-btn.active,
-.pdf-btn:hover,
-.pdf-btn.active {
+.filter-btn.active {
     background: var(--primary-color);
     color: white;
     cursor: pointer;
 }
 
-.filter-btn.active[data-filter="seminar"] {
-    background: var(--seminar-color);
-}
-
+.filter-btn.active[data-filter="seminar"],
 .filter-btn:hover[data-filter="seminar"] {
     background: var(--seminar-color);
 }
@@ -226,22 +220,6 @@ select {
     background: var(--optional-color);
 }
 
-.pdf-btn {
-    background: white;
-    color: var(--primary-color);
-    border: none;
-    padding: 10px 20px;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
-    align-self: flex-start;
-}
-
-.pdf-btn:hover {
-    background: var(--secondary-color);
-    color: white;
-}
-
 .footer {
     background: var(--primary-color);
     color: white;
@@ -310,7 +288,6 @@ select {
     margin-left: 5px;
     border-radius: 50%;
     cursor: pointer;
-    transition: color 0.3s;
 }
 
 #mic-icon.active {
@@ -356,10 +333,6 @@ body.dark .submit-btn:hover {
 
 @media (max-width: 800px) {
     .logo span {
-        display: none;
-    }
-
-    .pdf-btn {
         display: none;
     }
 }

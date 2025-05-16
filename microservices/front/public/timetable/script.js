@@ -18,7 +18,7 @@ let timetableData = {};
 let currentFilterType = 'group';   // 'group' or 'teacher'
 let currentFilterValue = null;      //  "G101" or "T2"
 let currentClassType = 'all';     //  'course', 'seminar', 'all'
-let currentYearFilter = 'all';     // === NEW ===  '1', '2', '3', 'all'
+let currentYearFilter = 'all';     // '1', '2', '3', 'all'
 
 // day order used in sorting
 const DAY_ORDER = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
@@ -26,7 +26,6 @@ const DAY_ORDER = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 /* ------------------------------------------------------------------ */
 window.addEventListener('load', async function () {
     try {
-        /* ------------ 1. authentication ------------- */
         const validationResponse = await fetch("https://localhost:3000/validate", {
             method: 'POST',
             credentials: 'include',
@@ -83,10 +82,10 @@ window.addEventListener('load', async function () {
         subjects.forEach(s => subjectMap[s.code] = s);
         timeslots.forEach(ts => timeslotMap[ts.code] = ts);
 
-        /* ------------ 4. reshape timetable ------------ */
+        //reshape timetable 
         transformData(bestTimetable, groupMap, teacherMap, roomMap, subjectMap, timeslotMap);
 
-        /* ------------ 5. UI initialisation ------------ */
+        // UI initialisation
         populateSelectors();
 
         if (role === 'student') {
@@ -95,14 +94,14 @@ window.addEventListener('load', async function () {
             currentFilterValue = 'G' + selectTag;
             document.getElementById('group-select').value = selectTag;
 
-            /* pick the student’s year automatically */
-            if (yeartag !== undefined) {                          // === NEW ===
+            // pick the student’s year automatically
+            if (yeartag !== undefined) {
                 currentYearFilter = yeartag.toString();
                 document.getElementById('year-select').value = yeartag;
             }
 
             hideConstraintForm();
-        } else { /* teacher */
+        } else { // teacher
             currentFilterType = 'teacher';
             currentFilterValue = 'T' + tag;
             document.getElementById('teacher-select').value = tag;
@@ -130,23 +129,23 @@ window.addEventListener('load', async function () {
             currentFilterType = 'group';
             currentFilterValue = (this.value === 'all') ? 'Gall' : ('G' + this.value);
 
-            /* whenever a group is picked, reset teacher selector */
+            // whenever a group is picked, reset teacher selector
             document.getElementById('teacher-select').value = 'all';
             renderFilteredTimetable();
         });
 
-        /* === NEW ===  year selector */
+        // year selector
         document.getElementById('year-select').addEventListener('change', function () {
             currentYearFilter = this.value;   // '1' / '2' / '3' / 'all'
             renderFilteredTimetable();
         });
 
-        /* teacher selector */
+        // teacher selector
         document.getElementById('teacher-select').addEventListener('change', function () {
             currentFilterType = 'teacher';
             currentFilterValue = (this.value === 'all') ? 'Tall' : ('T' + this.value);
 
-            /* whenever a teacher is picked, reset group selector */
+            // whenever a teacher is picked, reset group selector
             document.getElementById('group-select').value = 'all';
             renderFilteredTimetable();
         });
@@ -330,7 +329,7 @@ function transformData(bestTimetable, groupMap, teacherMap, roomMap, subjectMap,
         }
     }
 
-    /* ---- sort entries chronologically ---- */
+    // ---- sort entries chronologically ----
     for (let key in timetableData) {
         const dayObj = timetableData[key];
         const sortedDayObj = {};
@@ -384,7 +383,7 @@ function populateSelectors() {
 }
 
 /* ------------------------------------------------------------------ */
-/** renders the timetable based on current filters */
+// renders the timetable based on current filters
 function renderFilteredTimetable() {
     const timetableGrid = document.getElementById('timetable-grid');
     timetableGrid.innerHTML = '';
@@ -395,8 +394,8 @@ function renderFilteredTimetable() {
     const yearSelected = currentYearFilter !== 'all';
 
     if (
-        (!yearSelected && !teacherSelected) ||     // No year → must have a teacher
-        (yearSelected && !teacherSelected && !groupSelected) // Year selected → need group or teacher
+        (!yearSelected && !teacherSelected) ||     // No year -> must have a teacher
+        (yearSelected && !teacherSelected && !groupSelected) // Year selected -> need group or teacher
     ) {
         return; // Don't render anything
     }
@@ -408,7 +407,7 @@ function renderFilteredTimetable() {
         dayColumn.className = 'day-column';
 
         const entries = dataForKey[day] || [];
-        // map of interval → [rows] to group overlapping entries
+        // map of interval -> [rows] to group overlapping entries
         const intervalMap = {};
 
         entries.forEach(row => {

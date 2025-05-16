@@ -64,7 +64,7 @@ window.onload = async () => {
                     });
                 } else {
                     Swal.fire({
-                        text: `Failed to generate ${algorithm.toUpperCase()} timetable. Unauthorized. Status: ${res.status}`,
+                        text: `Failed to generate ${algorithm.toUpperCase()} timetable. Status: ${res.status}`,
                         customClass: { popup: 'custom-swal' },
                         showConfirmButton: false,
                         timer: 1500

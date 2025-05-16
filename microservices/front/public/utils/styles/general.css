@@ -1,3 +1,9 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 :root {
     --primary-color: #4a6cff;
     --primary-light: #e3e9ff;
@@ -13,12 +19,6 @@
     --border-radius: 12px;
     --swal-bg: #ffffff;
     --swal-text: #000000;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
 }
 
 body {
@@ -46,14 +46,12 @@ body.dark {
     --swal-text: #ffffff;
 }
 
-body.dark .logout-btn,
-body.dark .pdf-btn {
-    background: var(--primary-light);
-    color: var(--text-color);
+body.dark .logout-btn {
+    background: var(--primary-light);  /*re-evs var(--background) dynamically whenever --background changes */
+    color: var(--text-color);   /* when .dark gets added or removed*/
 }
 
-body.dark .logout-btn:hover,
-body.dark .pdf-btn:hover {
+body.dark .logout-btn:hover {
     background: var(--primary-color);
     color: white;
 }
@@ -103,15 +101,15 @@ body.dark .submit-btn:hover {
     cursor: pointer;
 }
 
+.logout-btn:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
 .user-info {
     display: flex;
     align-items: center;
     gap: 15px;
-}
-
-.logout-btn:hover {
-    background: var(--primary-color);
-    color: white;
 }
 
 .theme-toggle {
@@ -121,35 +119,15 @@ body.dark .submit-btn:hover {
     padding: 0;
     margin-right: 5px;
     cursor: pointer;
-    transition: color 0.3s ease, transform 0.2s ease;
 }
 
 .theme-toggle:hover {
     color: var(--light-text);
-    transform: scale(1.1);
 }
 
 .theme-toggle i {
     font-size: 24px;
-    line-height: 1;
 }
-
-.logout-btn {
-    background: var(--primary-light);
-    color: var(--primary-color);
-    border: none;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-.logout-btn:hover {
-    background: var(--primary-color);
-    color: white;
-}
-
-
 
 .custom-swal {
     background-color: var(--swal-bg);
