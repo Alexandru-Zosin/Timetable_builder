@@ -5,7 +5,7 @@ body {
 }
 
 .container {
-    flex: 1;
+    flex: 1; /* let it take all the rem. space*/
     display: flex;
     justify-content: center;
     align-items: center;
@@ -84,9 +84,6 @@ select {
     font-size: 13px;
     background: white;
     color: #000;
-
-    max-width: 100%;
-    overflow-wrap: break-word;
 }
 
 
@@ -106,9 +103,6 @@ select:focus {
     font-size: 14px;
     font-weight: 600;
     cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 }
 
 .submit-btn:hover {

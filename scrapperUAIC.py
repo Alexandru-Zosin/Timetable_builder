@@ -41,7 +41,7 @@ for year, urls in urls_by_year.items():
         is_english_page = url.endswith("E.html")
 
         for tr in soup.select("tr"):
-            row_text = tr.get_text(" ", strip=True)
+            row_text = tr.get_text(" ", strip=True) # all child text concatenated
 
             if any(keyword in row_text for keyword in ["Facultativ", "Educație fizică", "Impare", "Pare"]):
                 continue
@@ -52,15 +52,15 @@ for year, urls in urls_by_year.items():
                 if not teachers_cell:
                     continue
 
-                teachers_a = teachers_cell.select('a[href*="/participanti/"]')
+                teachers_a = teachers_cell.select('a[href*="/participanti/"]') #a elems with substrng href
                 if not teachers_a:
                     continue
 
                 tip_cell = tr.select_one("td:nth-of-type(4)")
                 is_course = tip_cell and "Curs" in tip_cell.get_text()
 
-                subj_a = tr.select_one('a[href*="/discipline/"]')
-                subj_name = subj_a.text.strip() if subj_a else "(unknown subject)"
+                subj_a = tr.select_one("td:nth-of-type(3)")
+                subj_name = subj_a.text.strip()
 
                 for a in teachers_a:
                     t_name = " ".join(a.text.split())
@@ -79,9 +79,9 @@ for year, urls in urls_by_year.items():
                         }
                         teacher_id += 1
                 continue
-
+            # else
             # romanian pages - full parsing
-            subj_a = tr.select_one('a[href*="/discipline/"]')
+            subj_a = tr.select_one("td:nth-of-type(3)")
             if not subj_a:
                 continue
             subj_name = subj_a.text.strip()
@@ -101,7 +101,7 @@ for year, urls in urls_by_year.items():
                 }
                 subject_id += 1
 
-            subj_code = subjects_by_key[key]["code"]
+            subj_code = subjects_by_key[key]["code"] # we have the subj_code
 
             teachers_cell = tr.select_one("td:nth-of-type(5)")
             if not teachers_cell:
@@ -112,7 +112,7 @@ for year, urls in urls_by_year.items():
             is_course = tip_cell and "Curs" in tip_cell.get_text()
 
             for a in teachers_a:
-                t_name = " ".join(a.text.split())
+                t_name = " ".join(a.text.split()) # and the teach_name
 
                 if t_name not in teachers_by_name:
                     teachers_by_name[t_name] = {
@@ -136,7 +136,7 @@ teachers = [
     {
         "code": t["code"],
         "name": t["name"],
-        "subjects_taught": sorted(t["subjects_taught"]),
+        "subjects_taught": sorted(t["subjects_taught"]), # we sort to check faster the data visually
         "max_hours": t["max_hours"],
         "can_teach_course": t["can_teach_course"],
     }

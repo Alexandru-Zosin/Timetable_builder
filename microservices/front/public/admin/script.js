@@ -1,3 +1,6 @@
+import { showAlert } from '../utils/scripts/customAlert.js';
+import { internalFetch } from '../utils/scripts/customFetch.js';
+
 function getTimeoutValue() {
     const sliderValue = document.getElementById("timeout-range").value;
     return sliderValue;
@@ -6,25 +9,9 @@ function getTimeoutValue() {
 window.onload = async () => {
     try {
         document.getElementById('logout-btn').addEventListener('click', async () => {
-            const logoutRequest = await fetch("https://localhost:3000/logout", {
-                method: "POST",
-                credentials: "include",
-                mode: "cors",
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({})
-            });
+            const logoutRequest = await internalFetch("https://localhost:3000/logout", "POST", {});
             if (logoutRequest.status !== 200) {
-                Swal.fire({
-                    text: `Logout failed. ${logoutRequest.status}`,
-                    customClass: {
-                        popup: 'custom-swal',
-                    },
-                    showConfirmButton: false,
-                    timer: 1500
-                });
+                showAlert({text: `Logout failed. ${logoutRequest.status}`});
                 return;
             }
             window.location.href = "https://localhost/login/index.html";
@@ -36,47 +23,25 @@ window.onload = async () => {
         document.getElementById('generate-hc-btn').addEventListener('click', async () => {
             await generateTimetable('hc');
         });
-        
+
         async function generateTimetable(algorithm) {
             try {
                 const timeout = getTimeoutValue();
-                const res = await fetch("https://localhost:3557/timetable", {
-                    method: "POST",
-                    credentials: "include",
-                    mode: "cors",
-                    headers: {
-                        "Accept": "application/json",
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        prompt: '',
-                        teacher_id: null,
-                        algorithm: algorithm,
-                        timeout: timeout
-                    })
-                });
+
+                const res = await internalFetch("https://localhost:3557/timetable", "POST", 
+                                                {
+                                                    prompt: '',
+                                                    teacher_id: null,
+                                                    algorithm: algorithm,
+                                                    timeout: timeout
+                                                });
                 if (res.ok) {
-                    Swal.fire({
-                        text: `A new ${algorithm.toUpperCase()} timetable was generated.`,
-                        customClass: { popup: 'custom-swal' },
-                        showConfirmButton: false,
-                        timer: 5000
-                    });
+                    showAlert({text: `A new ${algorithm.toUpperCase()} timetable was generated.`});
                 } else {
-                    Swal.fire({
-                        text: `Failed to generate ${algorithm.toUpperCase()} timetable. Status: ${res.status}`,
-                        customClass: { popup: 'custom-swal' },
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
+                    showAlert({text: `Failed to generate ${algorithm.toUpperCase()} timetable. Status: ${res.status}`});
                 }
             } catch (err) {
-                Swal.fire({
-                    text: "Error generating timetable. Check console.",
-                    customClass: { popup: 'custom-swal' },
-                    showConfirmButton: false,
-                    timer: 1500
-                });
+                showAlert({text: "Error generating timetable. Check console."});
                 console.error("Error generating timetable:", err);
             }
         }
@@ -85,16 +50,7 @@ window.onload = async () => {
             document.getElementById("timeout-value").textContent = `${this.value}s`;
         });        
 
-        const response = await fetch("https://localhost:3557/constraints", {
-            method: "GET",
-            credentials: "include",
-            mode: "cors",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-            },
-        });
-
+        const response = await internalFetch("https://localhost:3557/constraints", "GET");
         if (response.ok) {
             const data = await response.json();
             const constraints = data.requests || [];
@@ -145,37 +101,18 @@ window.onload = async () => {
 async function acceptConstraint(id, prompt, item, algorithm) {
     try {
         const timeout = getTimeoutValue();
-        const res = await fetch("https://localhost:3557/timetable", {
-            method: "POST",
-            credentials: "include",
-            mode: "cors",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                prompt: prompt,
-                teacher_id: id,
-                algorithm: algorithm,
-                timeout: timeout
-            })
-        });
 
+        const res = await internalFetch("https://localhost:3557/timetable", "POST", {
+            prompt: prompt,
+            teacher_id: id,
+            algorithm: algorithm,
+            timeout: timeout
+        });
         if (res.ok) {
             removeConstraint(id, item);
-            Swal.fire({
-                text: `Generated a new ${algorithm.toUpperCase()} timetable based on teacher ${id}'s request.`,
-                customClass: { popup: 'custom-swal' },
-                showConfirmButton: false,
-                timer: 3500
-            });
+            showAlert({text: `Generated a new ${algorithm.toUpperCase()} timetable based on teacher ${id}'s request.`, timer: 3500});
         } else {
-            Swal.fire({
-                text: `Failed to accept constraint #${id}`,
-                customClass: { popup: 'custom-swal' },
-                showConfirmButton: false,
-                timer: 3500
-            });
+            showAlert({text: `Failed to accept constraint #${id}`, timer: 3500});
         }
     } catch (err) {
         console.error(`Error accepting constraint #${id}:`, err);
@@ -184,27 +121,11 @@ async function acceptConstraint(id, prompt, item, algorithm) {
 
 async function removeConstraint(id, itemElement) {
     try {
-        const res = await fetch(`https://localhost:3557/constraints/${id}`, {
-            method: "DELETE",
-            credentials: "include",
-            mode: "cors",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json"
-            }
-        });
-
+        const res = await internalFetch(`https://localhost:3557/constraints/${id}`, "DELETE");
         if (res.ok) {
             itemElement.remove();
         } else {
-            Swal.fire({
-                text: `Failed to reject constraint #${id}`,
-                customClass: {
-                    popup: 'custom-swal',
-                },
-                showConfirmButton: false,
-                timer: 2500
-            });
+            showAlert({text: `Failed to reject constraint #${id}`, timer: 2500});
         }
     } catch (err) {
         console.error(`Error rejecting constraint #${id}:`, err);

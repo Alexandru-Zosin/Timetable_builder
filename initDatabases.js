@@ -22,8 +22,8 @@ function connectToDatabase(config) {
 
 function queryDatabase(connection, statement, values = []) {
     return new Promise((res, rej) => {
-        connection.query(statement, values, (err, result) => { // where id = 1 or 1 = 1 vs id = " 1 or ..."
-            if (err) {                              // used as raw data parameter
+        connection.query(statement, values, (err, result) => {
+            if (err) {                           // avoids using raw data parameter (where id = 1 or 1 = 1)
                 rej(err);
             } else {
                 res(result)
@@ -89,24 +89,11 @@ async function initializeDatabases() {
             tag VARCHAR(4) NULL DEFAULT NULL,
             yeartag INT DEFAULT NULL,
             requested BOOLEAN NOT NULL DEFAULT TRUE
-        );`; // alter table required if not good: alter table users modify column role ...
-        // select role from users where id = 1 =-> student
+        );`;
         // fixed data size is better/faster for lookups 
         await queryDatabase(usersConnection, statement);
-        console.log("users table has been created in uaicusersDB.")
+        console.log("users table has been created in uaicusersDB.")        
 
-        // const insAdmStatement = `INSERT INTO users (email, password, role, requested) VALUES(
-        //     'admin@uaic.info.ro',
-        //     '771dccfd999072a8fdbe127be9154f0bb1522fc047cd61aa4c10348190cd947e',
-        //     'admin',
-        //     FALSE)`;
-
-        // // insert request table and timetable required stuff
-        // await queryDatabase(usersConnection, insAdmStatement);
-
-        
-
-        // console.log("Admin was successfully inserted.");
         await closeConnection(usersConnection);
         console.log("uaicusers connection was successfully ended.");
         
@@ -183,18 +170,6 @@ async function initializeDatabases() {
         `);
         console.log("groups table created.");
 
-        // await queryDatabase(uaicConnection, `
-        //     CREATE TABLE extra_restrictions (
-        //         id INT PRIMARY KEY AUTO_INCREMENT,
-        //         teacher_id INT NOT NULL,
-        //         restriction_type ENUM('unpreferred_timeslots', 'max_daily_hours') NOT NULL,
-        //         timeslot_id INT NULL,
-        //         value INT NULL,
-        //         FOREIGN KEY (teacher_id) REFERENCES teachers(id) ON DELETE CASCADE,
-        //         FOREIGN KEY (timeslot_id) REFERENCES timeslots(id) ON DELETE CASCADE
-        //     );
-        // `);
-        // console.log("extra_restrictions table created.");
         await closeConnection(uaicConnection);
         console.log("uaic connection closed.");
 
@@ -343,28 +318,7 @@ async function populateDatabase() {
 
         await closeConnection(usersConnection);
         console.log("uaicusers connection was successfully ended.");
-        
-        // insert extra restrictions
-        // for ([teacherId, restrictions] of Object.entries(extraRestrictions.unpreferred_timeslots)) {
-        //     for (timeslotId of restrictions) {
-        //         await queryDatabase(connection, `
-        //             INSERT INTO extra_restrictions (teacher_id, restriction_type, timeslot_id) 
-        //             VALUES (?, 'unpreferred_timeslots', ?)`,
-        //             [teacherId, timeslotId]
-        //         );
-        //     }
-        // }
-
-        // for ([teacherId, maxHours] of Object.entries(extraRestrictions.max_daily_hours)) {
-        //     await queryDatabase(connection, `
-        //         INSERT INTO extra_restrictions (teacher_id, restriction_type, value) 
-        //         VALUES (?, 'max_daily_hours', ?)`,
-        //         [teacherId, maxHours]
-        //     );
-        // }
-        // console.log("Extra restrictions inserted.");
-
-        //await closeConnection(connection);
+      
         console.log("Database population complete. Connection closed.");
     } catch (err) {
         console.error("Error inserting data:", err);

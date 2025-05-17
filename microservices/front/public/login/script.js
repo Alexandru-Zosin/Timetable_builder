@@ -1,15 +1,9 @@
+import { showAlert } from '../utils/scripts/customAlert.js';
+import { internalFetch } from '../utils/scripts/customFetch.js';
+
 window.onload = async () => {
     try {
-        const response = await fetch("https://localhost:3000/validate", {
-            method: "POST",
-            credentials: 'include',
-            mode: "cors",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({}),
-        });
+        const response = await internalFetch("https://localhost:3000/validate", "POST", {}); 
 
         if (response.status === 200) {
             window.location.href = "https://localhost/timetable/index.html";
@@ -46,49 +40,19 @@ loginForm.addEventListener('submit', async function (event) {
     const password = document.getElementById('login-password').value;
 
     if (!email || !password) {
-        Swal.fire({
-            text: "Please fill in all fields.",
-            customClass: {
-                popup: 'custom-swal'
-            },
-            showConfirmButton: false,
-            timer: 1500
-        });
+        showAlert({text: "Please fill in all fields."});
         return;
     }
 
     try {
-        const response = await fetch("https://localhost:3000/login", {
-            method: "POST",
-            credentials: 'include',
-            mode: "cors",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email, password }),
-        });
+        const response = await internalFetch("https://localhost:3000/login", "POST", { email, password });
 
         if (response.status === 200) {
             window.location.href = "https://localhost/timetable/index.html";
         } else if (response.status === 403 || response.status === 401) {
-            Swal.fire({
-                text: "Invalid credentials.",
-                customClass: {
-                    popup: 'custom-swal',
-                },
-                showConfirmButton: false,
-                timer: 1500
-            });
+            showAlert({text: "Invalid credentials."});
         } else {
-            Swal.fire({
-                text: "Internal server error.",
-                customClass: {
-                    popup: 'custom-swal'
-                },
-                showConfirmButton: false,
-                timer: 1500
-            });
+            showAlert({text: "Internal server error."});            
         }
     } catch (error) {
         console.error("Login Error:", error);
@@ -105,66 +69,24 @@ signupForm.addEventListener('submit', async function (event) {
     const yeartag = document.getElementById('year-select').value;
 
     if (!email || !password || !confirmPassword || !grouptag || !yeartag) {
-        Swal.fire({
-            text: "Please fill in all fields.",
-            customClass: {
-                popup: 'custom-swal'
-            },
-            showConfirmButton: false,
-            timer: 1500
-        });
+        showAlert({text: "Please fill in all fields."});            
         return;
     }
 
     try {
-        const response = await fetch("https://localhost:3000/signup", {
-            method: "POST",
-            credentials: 'include',
-            mode: "cors",
-            headers: {
-                "Accept": "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email, password, confirmPassword, grouptag, yeartag }),
-        });
+        const response = await internalFetch("https://localhost:3000/signup", "POST", 
+                                            { email, password, confirmPassword, grouptag, yeartag });
 
         if (response.status === 201) {
             window.location.href = "https://localhost/login/index.html";
         } else if (response.status === 400) {
-            Swal.fire({
-                text: "Signup failed: Passwords do not match.",
-                customClass: {
-                    popup: 'custom-swal'
-                },
-                showConfirmButton: false,
-                timer: 1500
-            });
+            showAlert({text: "Signup failed: Passwords do not match."});            
         } else if (response.status === 403) {
-            Swal.fire({
-                text: "Signup failed: Invalid credentials.",
-                customClass: {
-                    popup: 'custom-swal'
-                },
-                showConfirmButton: false,
-                timer: 1500
-            });
+            showAlert({text: "Signup failed: Invalid credentials."});            
         } else if (response.status === 409) {
-            Swal.fire({
-                text: "Signup failed: User already exists.",
-                customClass: {
-                    popup: 'custom-swal'
-                },
-                showConfirmButton: false,
-                timer: 1500
-            });
+            showAlert({text: "Signup failed: User already exists."}); 
         } else {
-            Swal.fire({
-                text: "Signup failed. Please try again.",
-                customClass: {
-                    popup: 'custom-swal'
-                }, showConfirmButton: false,
-                timer: 1500
-            });
+            showAlert({text: "Signup failed. Please try again."}); 
         }
     } catch (error) {
         console.error("Signup Error:", error);

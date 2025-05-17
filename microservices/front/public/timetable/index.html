@@ -13,14 +13,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="Content-Security-Policy"
-        content= "connect-src https://localhost:3000 https://localhost:3557 https://cdnjs.cloudflare.com;">
+        content="connect-src https://localhost:3000 https://localhost:3557 https://cdnjs.cloudflare.com;">
     <title>Timetable</title>
     <link rel="stylesheet" href="/utils/styles/general.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="speech.js" defer></script>
-    <script src="script.js" defer></script>
+    <script type="module" src="script.js"></script>
     <script src="/utils/scripts/themetoggle.js" defer></script>
 </head>
 
@@ -67,38 +67,36 @@
 
         </header>
 
-        <div id="pdf-container">
-            <div class="timetable-container">
-                <div class="time-axis">
-                    <div class="time-slot">8:00</div>
-                    <div class="time-slot">9:00</div>
-                    <div class="time-slot">10:00</div>
-                    <div class="time-slot">11:00</div>
-                    <div class="time-slot">12:00</div>
-                    <div class="time-slot">13:00</div>
-                    <div class="time-slot">14:00</div>
-                    <div class="time-slot">15:00</div>
-                    <div class="time-slot">16:00</div>
-                    <div class="time-slot">17:00</div>
-                    <div class="time-slot">18:00</div>
-                    <div class="time-slot">19:00</div>
+        <div class="timetable-container">
+            <div class="time-axis">
+                <div class="time-slot">8:00</div>
+                <div class="time-slot">9:00</div>
+                <div class="time-slot">10:00</div>
+                <div class="time-slot">11:00</div>
+                <div class="time-slot">12:00</div>
+                <div class="time-slot">13:00</div>
+                <div class="time-slot">14:00</div>
+                <div class="time-slot">15:00</div>
+                <div class="time-slot">16:00</div>
+                <div class="time-slot">17:00</div>
+                <div class="time-slot">18:00</div>
+                <div class="time-slot">19:00</div>
+            </div>
+
+            <div class="timetable" id="timetable">
+                <div class="days-header">
+                    <div class="day-header">Monday</div>
+                    <div class="day-header">Tuesday</div>
+                    <div class="day-header">Wednesday</div>
+                    <div class="day-header">Thursday</div>
+                    <div class="day-header">Friday</div>
                 </div>
 
-                <div class="timetable" id="timetable">
-                    <div class="days-header">
-                        <div class="day-header">Monday</div>
-                        <div class="day-header">Tuesday</div>
-                        <div class="day-header">Wednesday</div>
-                        <div class="day-header">Thursday</div>
-                        <div class="day-header">Friday</div>
-                    </div>
-
-                    <div class="timetable-grid" id="timetable-grid">
-                        <!-- timetable content will be inserted here by the script -->
-                    </div>
+                <div class="timetable-grid" id="timetable-grid">
+                    <!-- timetable content will be inserted here by the script -->
                 </div>
             </div>
-        </div> <!-- end pdf-container-->
+        </div>
 
         <div class="legend">
             <div class="legends">
@@ -118,20 +116,18 @@
         </div>
 
         <footer id="footer">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Suggest a Timetable Change:
-                        <i id="mic-icon" class="fas fa-microphone" title="Click to speak"></i>
-                    </h3>
-                    <div id="suggestion-form" class="suggestion-form">
-                        <div class="form-group">
-                            <div class="form-group" style="position: relative;">
-                                <textarea id="suggestion-details" placeholder="Describe your suggestion..."
-                                    required></textarea>
-                            </div>
+            <div class="footer-section">
+                <h3>Suggest a Timetable Change:
+                    <i id="mic-icon" class="fas fa-microphone" title="Click to speak"></i>
+                </h3>
+                <div id="suggestion-form" class="suggestion-form">
+                    <div class="form-group">
+                        <div class="form-group" style="position: relative;">
+                            <textarea id="suggestion-details" placeholder="Describe your suggestion..."
+                                required></textarea>
                         </div>
-                        <button id="prompt-btn" type="submit" class="submit-btn">Submit</button>
                     </div>
+                    <button id="prompt-btn" type="submit" class="submit-btn">Submit</button>
                 </div>
             </div>
         </footer>

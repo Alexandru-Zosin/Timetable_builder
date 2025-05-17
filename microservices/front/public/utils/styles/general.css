@@ -2,6 +2,11 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    /*width includes border, padding*/
+}
+
+html {
+    overflow-y: scroll;
 }
 
 :root {
@@ -15,7 +20,7 @@
     --course-color: #4d6dff;
     --seminar-color: #ff4d94;
     --optional-color: #888888;
-    --shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    --shadow: 0 8px 30px rgba(0, 0, 0, 0.16);
     --border-radius: 12px;
     --swal-bg: #ffffff;
     --swal-text: #000000;
@@ -25,59 +30,53 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: var(--background);
     color: var(--text-color);
-    padding: 0;
-    margin: 0;
 }
 
 body.dark {
-    --primary-color: #90a0ff;
     --primary-light: #2b2b2b;
-    --secondary-color: #ff85a2;
     --text-color: #e0e0e0;
     --light-text: #aaaaaa;
     --background: #1e1e1e;
     --card-bg: #2a2a2a;
-    --course-color: #3a4dbf;
-    --seminar-color: #bf4d7a;
-    --optional-color: #555555;
-    --shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-    --border-radius: 12px;
     --swal-bg: #2a2a2a;
     --swal-text: #ffffff;
 }
 
-body.dark .logout-btn {
-    background: var(--primary-light);  /*re-evs var(--background) dynamically whenever --background changes */
-    color: var(--text-color);   /* when .dark gets added or removed*/
+body.dark .logout-btn,
+body.dark input,
+body.dark select,
+body.dark select option {
+    background-color: var(--primary-light);
+    /*re-evs var(--background) dynamically whenever --background changes */
+    color: var(--text-color);
 }
+
 
 body.dark .logout-btn:hover {
     background: var(--primary-color);
     color: white;
 }
 
-body.dark input,
-body.dark select,
-body.dark select option {
-    background-color: #444;
-    color: #fff;
-    border-color: #666;
-}
-
 body.dark .submit-btn:hover {
     background: var(--secondary-color);
+}
+
+body.dark input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px var(--primary-light) inset;
+    -webkit-text-fill-color: var(--text-color);
 }
 
 .navbar {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     padding: 15px 30px;
     background: var(--card-bg);
     box-shadow: var(--shadow);
-    position: sticky;
+    position: fixed;
     top: 0;
-    z-index: 3;
+    left: 0;
+    right: 0;
+    z-index: 10;
 }
 
 .logo {
@@ -99,6 +98,7 @@ body.dark .submit-btn:hover {
     border-radius: 20px;
     font-weight: 600;
     cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
 }
 
 .logout-btn:hover {
@@ -108,16 +108,13 @@ body.dark .submit-btn:hover {
 
 .user-info {
     display: flex;
-    align-items: center;
-    gap: 15px;
+    gap: 1.5em;
 }
 
 .theme-toggle {
     background: none;
     color: var(--primary-color);
     border: none;
-    padding: 0;
-    margin-right: 5px;
     cursor: pointer;
 }
 

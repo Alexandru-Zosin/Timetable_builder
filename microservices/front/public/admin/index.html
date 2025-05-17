@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="/utils/styles/general.css">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="script.js" defer></script>
+    <script type="module" src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="/utils/scripts/themetoggle.js" defer></script>
 </head>
@@ -21,11 +21,12 @@
             <span>UAIC Timetable</span>
         </div>
         <div class="user-info">
-            <!-- <div id="user-avatar"><i class="fa-solid fa-user"></i></div> -->
             <button class="theme-toggle" onclick="toggleTheme()">
                 <i class="fas fa-moon"></i>
             </button>
-            <button id="logout-btn" class="logout-btn">Logout</button>
+            <button id="logout-btn" class="logout-btn">
+                Logout
+            </button>
         </div>
     </div>
     <div class="center-container">
